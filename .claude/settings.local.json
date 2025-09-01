@@ -8,7 +8,9 @@
       "Bash(npx nuxt:*)",
       "Bash(npm run dev:*)",
       "Bash(tree:*)",
-      "Bash(npm run postinstall:*)"
+      "Bash(npm run postinstall:*)",
+      "Bash(dir \"C:\\wamp64\\www\\newandyvienuxt.fr\\app\\server\\api\\inscriptions\")",
+      "Bash(dir \"C:\\wamp64\\www\\newandyvienuxt.fr\\app\\server\")"
     ],
     "deny": [],
     "ask": []

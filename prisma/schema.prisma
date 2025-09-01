@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,111 +11,130 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
-  firstName String?
-  lastName  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  // Relations
-  dancers   Dancer[]
-  registrations Registration[]
+  role      String   @default("user")
 
   @@map("users")
 }
 
 model Dancer {
-  id              Int      @id @default(autoincrement())
-  userId          Int
-  email           String   @unique
-  firstName       String
-  lastName        String
-  birthDate       DateTime
-  postalCode      String
-  city            String
-  address         String
-  phone           String
-  schoolLevel     String
-  tshirtSize      String
-  otherInfo       String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  // Relations
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  legalGuardian   LegalGuardian?
-  emergencyContacts EmergencyContact[]
-  registrations   Registration[]
-
-  @@map("dancers")
-}
-
-model LegalGuardian {
-  id          Int      @id @default(autoincrement())
-  dancerId    Int      @unique
+  id          Int                 @id @default(autoincrement())
+  userId      Int
   email       String
   firstName   String
   lastName    String
-  address     String
+  birthDate   DateTime
   postalCode  String
   city        String
+  address     String
   phone       String
-  authorized  Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  schoolLevel dancers_schoolLevel
+  tShirtSize  dancers_tShirtSize
+  otherInfo   String?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
 
-  // Relations
-  dancer      Dancer   @relation(fields: [dancerId], references: [id], onDelete: Cascade)
-
-  @@map("legal_guardians")
+  @@index([userId], map: "dancers_userId_fkey")
+  @@map("dancers")
 }
 
 model EmergencyContact {
-  id          Int      @id @default(autoincrement())
-  dancerId    Int
-  type        String   // "emergency", "pickup", "both"
-  firstName   String
-  lastName    String
-  phone       String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int                     @id @default(autoincrement())
+  dancerId  Int
+  type      emergency_contacts_type
+  firstName String
+  lastName  String
+  phone     String
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
 
-  // Relations
-  dancer      Dancer   @relation(fields: [dancerId], references: [id], onDelete: Cascade)
-
+  @@index([dancerId], map: "emergency_contacts_dancerId_fkey")
   @@map("emergency_contacts")
 }
 
 model DanceGroup {
   id          Int      @id @default(autoincrement())
   name        String   @unique
-  ageRange    String
+  description String
   schedule    String
-  description String?
+  ageGroup    String
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  // Relations
-  registrations Registration[]
 
   @@map("dance_groups")
 }
 
 model Registration {
-  id          Int      @id @default(autoincrement())
-  userId      Int
-  dancerId    Int
+  id           Int                  @id @default(autoincrement())
+  dancerId     Int
   danceGroupId Int
-  sportCode   String?
-  status      String   @default("pending") // "pending", "approved", "rejected"
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  sportCode    String?
+  status       registrations_status @default(DRAFT)
+  submittedAt  DateTime?
+  reviewedAt   DateTime?
+  reviewedBy   Int?
+  notes        String?
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
 
-  // Relations
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  dancer      Dancer    @relation(fields: [dancerId], references: [id], onDelete: Cascade)
-  danceGroup  DanceGroup @relation(fields: [danceGroupId], references: [id])
-
-  @@unique([userId, dancerId, danceGroupId])
+  @@unique([dancerId, danceGroupId])
+  @@index([danceGroupId], map: "registrations_danceGroupId_fkey")
+  @@index([reviewedBy], map: "registrations_reviewedBy_fkey")
   @@map("registrations")
+}
+
+model guardians {
+  id         Int      @id @default(autoincrement())
+  dancerId   Int      @unique
+  email      String
+  firstName  String
+  lastName   String
+  address    String
+  postalCode String
+  city       String
+  phone      String
+  authorized Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+}
+
+enum emergency_contacts_type {
+  EMERGENCY_AND_PICKUP
+  EMERGENCY_ONLY
+  PICKUP_ONLY
+}
+
+enum registrations_status {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+enum dancers_schoolLevel {
+  CP
+  CE1
+  CE2
+  CM1
+  CM2
+  SIXIEME
+  CINQUIEME
+  QUATRIEME
+  TROISIEME
+  SECONDE
+  PREMIERE
+  TERMINALE
+  POST_BAC
+  ADULTE
+}
+
+enum dancers_tShirtSize {
+  XS
+  S
+  M
+  L
+  XL
+  XXL
 }

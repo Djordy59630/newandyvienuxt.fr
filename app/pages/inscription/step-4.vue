@@ -409,7 +409,7 @@ const handleFinalSubmit = async () => {
   loading.value = true
 
   try {
-    // Sauvegarder les données
+    // Sauvegarder l'étape 4 dans les cookies
     const formDataCookie = useCookie('registration-step4', {
       default: () => ({})
     })
@@ -418,16 +418,44 @@ const handleFinalSubmit = async () => {
       selectedDanceGroups: selectedGroups.value
     }
     
-    console.log('Step 4 data:', formDataCookie.value)
+    // Récupérer toutes les données des étapes précédentes
+    const step1Data = useCookie('registration-step1').value
+    const step2Data = useCookie('registration-step2').value
+    const step3Data = useCookie('registration-step3').value
+    const step4Data = formDataCookie.value
+
+    console.log('Envoi des données complètes:', {
+      step1: step1Data,
+      step2: step2Data,
+      step3: step3Data,
+      step4: step4Data
+    })
+
+    // Appel API pour sauvegarder en base de données
+    const response = await $fetch('/api/inscriptions/complete', {
+      method: 'POST',
+      body: {
+        step1: step1Data,
+        step2: step2Data,
+        step3: step3Data,
+        step4: step4Data
+      }
+    })
+
+    console.log('Inscription sauvegardée:', response)
+
+    // Nettoyer les cookies après sauvegarde réussie
+    useCookie('registration-step1').value = null
+    useCookie('registration-step2').value = null
+    useCookie('registration-step3').value = null
+    useCookie('registration-step4').value = null
     
-    // Simuler un appel API
-    await new Promise(resolve => setTimeout(resolve, 800))
+    // Aller à la page de confirmation
+    await navigateTo('/inscription/success')
     
-    // Aller à la page de récapitulatif
-    await navigateTo('/inscription/summary')
-    
-  } catch (err) {
-    error.value = 'Une erreur s\'est produite lors de la sauvegarde'
+  } catch (err: any) {
+    console.error('Erreur lors de la sauvegarde:', err)
+    error.value = err.data?.message || err.message || 'Une erreur s\'est produite lors de la sauvegarde'
   } finally {
     loading.value = false
   }
