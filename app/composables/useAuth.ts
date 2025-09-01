@@ -20,10 +20,21 @@ interface AuthResult {
 }
 
 export const useAuth = () => {
-  const user = useState<User | null>('auth.user', () => null)
   const token = useCookie<string | null>('auth-token', {
     default: () => null,
     maxAge: 60 * 60 * 24 * 7 // 7 jours
+  })
+  
+  const userCookie = useCookie<User | null>('auth-user', {
+    default: () => null,
+    maxAge: 60 * 60 * 24 * 7, // 7 jours
+    serialize: JSON.stringify,
+    deserialize: JSON.parse
+  })
+  
+  // Initialiser user state avec les données du cookie
+  const user = useState<User | null>('auth.user', () => {
+    return userCookie.value
   })
 
   const login = async (email: string, password: string): Promise<AuthResult> => {
@@ -35,6 +46,7 @@ export const useAuth = () => {
 
       token.value = data.token
       user.value = data.user
+      userCookie.value = data.user
 
       await navigateTo('/dashboard')
       
@@ -61,6 +73,7 @@ export const useAuth = () => {
 
       token.value = data.token
       user.value = data.user
+      userCookie.value = data.user
 
       await navigateTo('/dashboard')
       
@@ -76,6 +89,7 @@ export const useAuth = () => {
   const logout = async (): Promise<void> => {
     token.value = null
     user.value = null
+    userCookie.value = null
     await navigateTo('/')
   }
 

@@ -2,9 +2,24 @@ import { defineNuxtRouteMiddleware, navigateTo, useCookie, useState } from 'nuxt
 
 export default defineNuxtRouteMiddleware(() => {
   const token = useCookie<string | null>('auth-token')
+  const userCookie = useCookie<any>('auth-user', {
+    serialize: JSON.stringify,
+    deserialize: JSON.parse
+  })
   const user = useState<any>('auth.user')
 
-  if (!token.value || !user.value) {
+  // Si pas de token, rediriger
+  if (!token.value) {
+    return navigateTo('/')
+  }
+
+  // Si pas d'user en mémoire mais cookie présent, restaurer
+  if (!user.value && userCookie.value) {
+    user.value = userCookie.value
+  }
+
+  // Vérification finale
+  if (!user.value) {
     return navigateTo('/')
   }
 })
