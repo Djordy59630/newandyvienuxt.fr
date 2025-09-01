@@ -261,7 +261,7 @@ const form = ref({
   phone: ''
 })
 
-const fullText = "Nous avançons bien ! Pour ta sécurité, j'ai besoin d'ajouter des contacts d'urgence. Commençons par le premier contact. 🚨"
+const fullText = "Excellent ! On avance bien dans ton inscription ! 🎯 Pour ta sécurité, j'ai maintenant besoin d'ajouter tes contacts d'urgence. C'est important en cas de besoin ! 🚨"
 
 const goBack = () => {
   navigateTo('/inscription/step-2')

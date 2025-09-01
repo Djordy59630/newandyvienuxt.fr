@@ -90,10 +90,10 @@
             </div>
             <div v-else>
               <p v-if="currentStep === 'dance-selection'" class="text-gray-800 text-lg leading-relaxed">
-                Génial ! Nous arrivons à la dernière étape. Tu peux choisir un ou plusieurs groupes de danse selon tes envies ! 💃🕺
+                Alors, qu'est-ce qui te fait vibrer ? Hip-hop, breakdance, ou peut-être les deux ? Choisis selon tes envies ! 🎵✨
               </p>
               <p v-else-if="currentStep === 'group-details' && selectedGroups.length > 0" class="text-gray-800 text-lg leading-relaxed">
-                {{ selectedGroups.length === 1 ? 'Excellent choix' : 'Excellents choix' }} ! Tu as sélectionné {{ selectedGroups.length }} groupe{{ selectedGroups.length > 1 ? 's' : '' }}. Es-tu prêt(e) à finaliser ton inscription ?
+                {{ selectedGroups.length === 1 ? 'Excellent choix' : 'Excellents choix' }} ! Tu as sélectionné {{ selectedGroups.length }} groupe{{ selectedGroups.length > 1 ? 's' : '' }}. Es-tu prêt(e) à finaliser ton inscription ? 🚀
               </p>
             </div>
           </div>
@@ -126,7 +126,7 @@
                   </div>
                   <h3 class="font-semibold text-gray-900 text-sm">{{ group.name }}</h3>
                 </div>
-                <span class="price-tag">{{ group.price }}€</span>
+                <span class="category-tag">{{ group.category }}</span>
               </div>
               
               <!-- Card Content -->
@@ -135,6 +135,7 @@
                 <div class="flex flex-wrap gap-1">
                   <span class="info-badge bg-blue-100 text-blue-700">{{ group.ageRange }}</span>
                   <span class="info-badge bg-green-100 text-green-700">{{ group.level }}</span>
+                  <span class="info-badge bg-purple-100 text-purple-700">{{ group.category }}</span>
                 </div>
                 <p class="text-xs text-gray-500">{{ group.schedule }}</p>
               </div>
@@ -175,7 +176,7 @@
                   <div class="text-sm text-gray-600">
                     <div><strong>Âge :</strong> {{ group.ageRange }}</div>
                     <div><strong>Horaire :</strong> {{ group.schedule }}</div>
-                    <div><strong>Prix :</strong> {{ group.price }}€ {{ group.period }}</div>
+                    <div><strong>Catégorie :</strong> {{ group.category }}</div>
                     <div><strong>Niveau :</strong> {{ group.level }}</div>
                   </div>
                 </div>
@@ -183,12 +184,12 @@
             </div>
           </div>
           
-          <!-- Total Price -->
+          <!-- Selected Groups Summary -->
           <div class="bg-gradient-to-r from-slate-100 to-blue-100 border border-slate-200 rounded-xl p-4">
             <div class="text-center">
-              <p class="text-gray-700 text-sm mb-1">Prix total mensuel</p>
-              <p class="text-2xl font-bold text-slate-800">{{ totalPrice }}€</p>
-              <p class="text-xs text-gray-600 mt-1">{{ selectedGroups.length }} groupe{{ selectedGroups.length > 1 ? 's' : '' }} sélectionné{{ selectedGroups.length > 1 ? 's' : '' }}</p>
+              <p class="text-gray-700 text-sm mb-1">Groupes sélectionnés</p>
+              <p class="text-2xl font-bold text-slate-800">{{ selectedGroups.length }}</p>
+              <p class="text-xs text-gray-600 mt-1">{{ selectedGroups.length }} groupe{{ selectedGroups.length > 1 ? 's' : '' }} choisi{{ selectedGroups.length > 1 ? 's' : '' }}</p>
             </div>
           </div>
           
@@ -247,64 +248,128 @@ const error = ref('')
 const selectedGroups = ref<any[]>([])
 const selectedGroupIds = ref<number[]>([])
 
-const totalPrice = computed(() => {
-  return selectedGroups.value.reduce((total, group) => total + group.price, 0)
-})
 
 const danceGroups = ref([
   {
     id: 1,
-    name: "HIPHOP ENFANTS",
-    description: "Initiation au hip-hop avec des bases ludiques",
-    ageRange: "6-10 ans",
-    schedule: "Mercredi 14h-15h",
+    name: "Les Kids",
+    description: "Pour les plus jeunes danseurs, découverte du hip-hop en s'amusant",
+    ageRange: "CP / CE1",
+    schedule: "Samedi 12h-13h",
     level: "Débutant",
-    price: 25,
-    period: "par mois"
+    category: "HIPHOP"
   },
   {
     id: 2,
-    name: "HIPHOP ADOS",
-    description: "Hip-hop dynamique pour adolescents",
-    ageRange: "11-15 ans", 
-    schedule: "Mercredi 15h-16h30",
-    level: "Tous niveaux",
-    price: 30,
-    period: "par mois"
+    name: "La Relève",
+    description: "Apprentissage des bases du hip-hop avec technique et créativité",
+    ageRange: "CE2 / CM1 / CM2",
+    schedule: "Samedi 10h-11h",
+    level: "Débutant",
+    category: "HIPHOP"
   },
   {
     id: 3,
-    name: "HIPHOP ADULTES",
-    description: "Sessions hip-hop pour adultes débutants et confirmés",
-    ageRange: "16+ ans",
-    schedule: "Jeudi 19h-20h30",
-    level: "Tous niveaux", 
-    price: 35,
-    period: "par mois"
+    name: "Les Espoirs",
+    description: "Développement technique et expression personnelle",
+    ageRange: "6ᵉ - 5ᵉ",
+    schedule: "Samedi 11h-12h",
+    level: "Intermédiaire",
+    category: "HIPHOP"
   },
   {
     id: 4,
-    name: "BREAKDANCE",
-    description: "L'art du breaking avec figures au sol",
-    ageRange: "12+ ans",
-    schedule: "Samedi 14h-15h30",
+    name: "Les Initiés",
+    description: "Perfectionnement et styles avancés du hip-hop",
+    ageRange: "4ᵉ - 3ᵉ",
+    schedule: "Samedi 13h-14h",
     level: "Intermédiaire",
-    price: 40,
-    period: "par mois"
+    category: "HIPHOP"
   },
   {
     id: 5,
-    name: "HOUSE DANCE",
-    description: "Danse house énergique et technique", 
-    ageRange: "14+ ans",
-    schedule: "Vendredi 18h-19h30",
+    name: "Les Confirmés",
+    description: "Niveau avancé avec chorégraphies complexes et battles",
+    ageRange: "Lycéens à 25 ans",
+    schedule: "Vendredi 19h-20h",
     level: "Avancé",
-    price: 35,
-    period: "par mois"
+    category: "HIPHOP"
+  },
+  {
+    id: 6,
+    name: "Les Funky",
+    description: "Hip-hop pour adultes dans une ambiance décontractée",
+    ageRange: "+25 ans",
+    schedule: "Mercredi 18h15-19h15",
+    level: "Tous niveaux",
+    category: "HIPHOP"
+  },
+  {
+    id: 7,
+    name: "Les Élites",
+    description: "Groupe d'excellence avec entraînement intensif",
+    ageRange: "Sur sélection",
+    schedule: "À définir avec Damien",
+    level: "Expert",
+    category: "HIPHOP"
+  },
+  {
+    id: 8,
+    name: "Les No Limit",
+    description: "Danse inclusive pour personnes en situation de handicap",
+    ageRange: "Dès 14 ans",
+    schedule: "Vendredi 18h-19h",
+    level: "Tous niveaux",
+    category: "INCLUSIF"
+  },
+  {
+    id: 9,
+    name: "Les Rookies",
+    description: "Initiation à la danse pour jeunes en situation de handicap",
+    ageRange: "6 à 13 ans",
+    schedule: "Vendredi 17h-18h",
+    level: "Débutant",
+    category: "INCLUSIF"
+  },
+  {
+    id: 10,
+    name: "Break Débutants",
+    description: "Découverte du breakdance et premières figures",
+    ageRange: "Collège et +",
+    schedule: "Samedi 10h-11h",
+    level: "Débutant",
+    category: "BREAKDANCE"
+  },
+  {
+    id: 11,
+    name: "Break Intermédiaire",
+    description: "Perfectionnement des mouvements et enchaînements",
+    ageRange: "CE2 au CM2",
+    schedule: "Samedi 11h-12h",
+    level: "Intermédiaire",
+    category: "BREAKDANCE"
+  },
+  {
+    id: 12,
+    name: "Show Break",
+    description: "Préparation spectacles et compétitions de breaking",
+    ageRange: "Tous âges",
+    schedule: "Samedi 12h-13h",
+    level: "Débutant/Inter",
+    category: "BREAKDANCE"
+  },
+  {
+    id: 13,
+    name: "Break Confirmés",
+    description: "Entraînement libre et perfectionnement avancé",
+    ageRange: "Tous âges",
+    schedule: "Mercredi & Vendredi 18h-20h",
+    level: "Confirmé",
+    category: "BREAKDANCE"
   }
 ])
 
-const fullText = "Nous y sommes presque ! C'est le moment de choisir ton ou tes groupes de danse. Tu peux en sélectionner plusieurs si tu veux explorer différents styles ! 🕺💃"
+const fullText = "Et voilà ! On arrive à la dernière étape ! 🎉 C'est le moment de choisir ton ou tes groupes de danse. Tu peux en sélectionner plusieurs si tu veux explorer différents styles ! 🕺💃"
 
 const goBack = () => {
   navigateTo('/inscription/step-3')
@@ -600,7 +665,7 @@ useHead({
   box-shadow: 0 1px 4px rgba(59, 130, 246, 0.15);
 }
 
-.price-tag {
+.category-tag {
   background: linear-gradient(135deg, #475569, #2563eb);
   color: white;
   font-size: 0.75rem;
@@ -610,7 +675,7 @@ useHead({
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.group-card.selected .price-tag {
+.group-card.selected .category-tag {
   background: linear-gradient(135deg, #1d4ed8, #4f46e5);
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
 }

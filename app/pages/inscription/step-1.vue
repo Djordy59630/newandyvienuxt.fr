@@ -403,7 +403,7 @@ const form = ref({
   phone: ''
 })
 
-const fullText = "Salut ! Moi c'est Kali, ton assistante virtuelle pour l'inscription Square630. Je vais t'accompagner étape par étape pour que tout se passe parfaitement ! Commençons par faire connaissance. 😊"
+const fullText = "Salut ! Moi c'est Kali, ton assistante virtuelle pour Square630 ! 🤖✨ Je vais t'accompagner dans ton inscription étape par étape. C'est parti, commençons par faire connaissance ! 😊"
 
 const goBack = () => {
   navigateTo('/dashboard')

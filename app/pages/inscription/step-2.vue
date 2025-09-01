@@ -90,7 +90,7 @@
             </div>
             <div v-else>
               <p v-if="currentStep === 'guardian-info'" class="text-gray-800 text-lg leading-relaxed">
-                Comme tu es mineur(e), j'ai besoin des informations de ton responsable légal. Quel est son email ?
+                Super ! Maintenant j'ai besoin de l'email de ton responsable légal pour finaliser ton dossier. 📧
               </p>
               <p v-else-if="currentStep === 'no-guardian'" class="text-gray-800 text-lg leading-relaxed">
                 Parfait ! Tu es majeur(e), nous pouvons passer directement à l'étape suivante.
@@ -293,9 +293,9 @@ onMounted(() => {
     
     // Définir le message de Kali selon l'âge
     if (isUserMinor) {
-      fullText = `Salut ${step1Data.firstName} ! Je vois que tu as ${getAge(step1Data.birthDate)} ans. Comme tu es mineur(e), j'ai besoin des coordonnées de ton responsable légal pour valider ton inscription. 👨‍👩‍👧‍👦`
+      fullText = `Re-salut ${step1Data.firstName} ! 👋 J'ai calculé ton âge : ${getAge(step1Data.birthDate)} ans. Comme tu es mineur(e), j'ai besoin des coordonnées de ton responsable légal pour finaliser l'inscription. C'est une obligation légale ! 👨‍👩‍👧‍👦`
     } else {
-      fullText = `Salut ${step1Data.firstName} ! Je vois que tu as ${getAge(step1Data.birthDate)} ans. Parfait, tu es majeur(e) ! Nous pouvons passer directement à l'étape suivante. 🎉`
+      fullText = `Re-salut ${step1Data.firstName} ! 👋 J'ai calculé ton âge : ${getAge(step1Data.birthDate)} ans. Parfait, tu es majeur(e) ! On peut passer directement à l'étape suivante. 🎉`
     }
   } else {
     navigateTo('/inscription/step-1')
