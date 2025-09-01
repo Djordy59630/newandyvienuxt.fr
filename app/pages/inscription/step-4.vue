@@ -100,12 +100,12 @@
         </div>
 
         <!-- Dance Group Selection -->
-        <div v-if="currentStep === 'dance-selection'" class="space-y-6">
-          <div class="grid grid-cols-1 gap-4 max-h-96 overflow-y-auto">
+        <div v-if="currentStep === 'dance-selection'" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <label
               v-for="group in danceGroups"
               :key="group.id"
-              class="group-checkbox-container"
+              class="group-card"
               :class="{ 'selected': selectedGroups.find(g => g.id === group.id) }"
             >
               <input
@@ -115,29 +115,28 @@
                 @change="updateSelectedGroups"
                 class="hidden"
               />
-              <div class="flex items-start p-4">
-                <!-- Custom Checkbox -->
-                <div class="custom-checkbox">
-                  <div class="checkbox-inner">
+              
+              <!-- Card Header -->
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center">
+                  <div class="custom-checkbox mr-2">
                     <svg v-if="selectedGroups.find(g => g.id === group.id)" class="checkmark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
                     </svg>
                   </div>
+                  <h3 class="font-semibold text-gray-900 text-sm">{{ group.name }}</h3>
                 </div>
-                
-                <!-- Group Icon -->
-                <div class="w-8 h-8 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 ml-4">
-                  <span class="text-white text-sm font-bold">{{ group.name.substring(0, 2) }}</span>
+                <span class="price-tag">{{ group.price }}€</span>
+              </div>
+              
+              <!-- Card Content -->
+              <div class="space-y-2">
+                <p class="text-xs text-gray-600 leading-relaxed">{{ group.description }}</p>
+                <div class="flex flex-wrap gap-1">
+                  <span class="info-badge bg-blue-100 text-blue-700">{{ group.ageRange }}</span>
+                  <span class="info-badge bg-green-100 text-green-700">{{ group.level }}</span>
                 </div>
-                
-                <!-- Group Info -->
-                <div class="text-left flex-1">
-                  <div class="font-semibold text-gray-900">{{ group.name }}</div>
-                  <div class="text-sm text-gray-600 mb-1">{{ group.description }}</div>
-                  <div class="text-xs text-blue-600 font-medium">
-                    {{ group.ageRange }} • {{ group.schedule }} • {{ group.price }}€
-                  </div>
-                </div>
+                <p class="text-xs text-gray-500">{{ group.schedule }}</p>
               </div>
             </label>
           </div>
@@ -524,72 +523,103 @@ useHead({
   animation: pulse-slow 3s ease-in-out infinite;
 }
 
-/* Custom Checkbox Styles */
-.group-checkbox-container {
+/* Group Card Styles */
+.group-card {
   display: block;
   cursor: pointer;
   background-color: white;
-  border: 2px solid #e2e8f0;
-  border-radius: 1rem;
-  transition: all 0.3s ease;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  transition: all 0.25s ease;
   outline: none;
+  position: relative;
+  min-height: 120px;
 }
 
-.group-checkbox-container:hover {
+.group-card:hover {
   border-color: #93c5fd;
-  background-color: #f8fafc;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+  background-color: #fafbff;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.1);
+  transform: translateY(-2px);
 }
 
-.group-checkbox-container.selected {
+.group-card.selected {
   border-color: #3b82f6;
-  background-color: #eff6ff;
-  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
+  background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
+  transform: translateY(-2px);
+}
+
+.group-card.selected::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  border-radius: 0.75rem 0.75rem 0 0;
 }
 
 .custom-checkbox {
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
   border: 2px solid #d1d5db;
   background-color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   flex-shrink: 0;
 }
 
-.group-checkbox-container.selected .custom-checkbox {
+.group-card.selected .custom-checkbox {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   border-color: #1d4ed8;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
-}
-
-.checkbox-inner {
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
 }
 
 .checkmark {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   color: white;
   opacity: 0;
-  transform: scale(0.5);
-  transition: all 0.2s ease;
+  transform: scale(0.3);
+  transition: all 0.15s ease;
 }
 
-.group-checkbox-container.selected .checkmark {
+.group-card.selected .checkmark {
   opacity: 1;
   transform: scale(1);
 }
 
-.group-checkbox-container:hover .custom-checkbox {
+.group-card:hover .custom-checkbox {
   border-color: #93c5fd;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 1px 4px rgba(59, 130, 246, 0.15);
+}
+
+.price-tag {
+  background: linear-gradient(135deg, #475569, #2563eb);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.group-card.selected .price-tag {
+  background: linear-gradient(135deg, #1d4ed8, #4f46e5);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.info-badge {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.375rem;
+  display: inline-block;
 }
 </style>
