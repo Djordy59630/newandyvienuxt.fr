@@ -303,12 +303,12 @@ const handleRegister = async () => {
   loading.value = true
 
   try {
-    const result = await register({
-      email: email.value,
-      password: password.value,
-      firstName: firstName.value || null,
-      lastName: lastName.value || null
-    })
+    const result = await register(
+      email.value,
+      password.value,
+      firstName.value || undefined,
+      lastName.value || undefined
+    )
     
     if (!result.success) {
       error.value = result.error || 'Erreur lors de la création du compte'

@@ -19,5 +19,106 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Relations
+  dancers   Dancer[]
+  registrations Registration[]
+
   @@map("users")
+}
+
+model Dancer {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  email           String   @unique
+  firstName       String
+  lastName        String
+  birthDate       DateTime
+  postalCode      String
+  city            String
+  address         String
+  phone           String
+  schoolLevel     String
+  tshirtSize      String
+  otherInfo       String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  legalGuardian   LegalGuardian?
+  emergencyContacts EmergencyContact[]
+  registrations   Registration[]
+
+  @@map("dancers")
+}
+
+model LegalGuardian {
+  id          Int      @id @default(autoincrement())
+  dancerId    Int      @unique
+  email       String
+  firstName   String
+  lastName    String
+  address     String
+  postalCode  String
+  city        String
+  phone       String
+  authorized  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  dancer      Dancer   @relation(fields: [dancerId], references: [id], onDelete: Cascade)
+
+  @@map("legal_guardians")
+}
+
+model EmergencyContact {
+  id          Int      @id @default(autoincrement())
+  dancerId    Int
+  type        String   // "emergency", "pickup", "both"
+  firstName   String
+  lastName    String
+  phone       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  dancer      Dancer   @relation(fields: [dancerId], references: [id], onDelete: Cascade)
+
+  @@map("emergency_contacts")
+}
+
+model DanceGroup {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  ageRange    String
+  schedule    String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  registrations Registration[]
+
+  @@map("dance_groups")
+}
+
+model Registration {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  dancerId    Int
+  danceGroupId Int
+  sportCode   String?
+  status      String   @default("pending") // "pending", "approved", "rejected"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dancer      Dancer    @relation(fields: [dancerId], references: [id], onDelete: Cascade)
+  danceGroup  DanceGroup @relation(fields: [danceGroupId], references: [id])
+
+  @@unique([userId, dancerId, danceGroupId])
+  @@map("registrations")
 }

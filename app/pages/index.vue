@@ -29,10 +29,10 @@
           </div>
           <h1 class="text-4xl font-black text-white mb-2 tracking-tight">
             <span class="bg-gradient-to-r from-white via-slate-200 to-blue-200 bg-clip-text text-transparent">
-              PORTAIL
+              SQUARE630
             </span>
           </h1>
-          <p class="text-slate-200 font-medium text-lg">Connectez-vous à votre univers</p>
+          <p class="text-slate-200 font-medium text-lg">Hip-Hop • Danse • Passion</p>
         </div>
 
         <!-- Login Card -->
@@ -172,7 +172,7 @@
         <!-- Footer -->
         <div class="mt-8 text-center animate-slide-in-delay">
           <p class="text-sm text-slate-300/80 font-medium">
-            © 2024 Portail • 
+            © 2024 Square630 • Association Andyvie • 
             <span class="bg-gradient-to-r from-slate-300 to-blue-300 bg-clip-text text-transparent">
               Tous droits réservés
             </span>
