@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(npm install:*)",
+      "Bash(npx prisma:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(npx nuxt:*)",
+      "Bash(npm run dev:*)",
+      "Bash(tree:*)",
+      "Bash(npm run postinstall:*)"
     ],
     "deny": [],
     "ask": []

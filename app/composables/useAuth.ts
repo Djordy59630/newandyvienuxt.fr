@@ -1,0 +1,93 @@
+import { computed, readonly } from 'vue'
+import { useState, useCookie, navigateTo } from 'nuxt/app'
+
+interface User {
+  id: number
+  email: string
+  firstName?: string | null
+  lastName?: string | null
+}
+
+interface AuthResponse {
+  success: boolean
+  token: string
+  user: User
+}
+
+interface AuthResult {
+  success: boolean
+  error?: string
+}
+
+export const useAuth = () => {
+  const user = useState<User | null>('auth.user', () => null)
+  const token = useCookie<string | null>('auth-token', {
+    default: () => null,
+    maxAge: 60 * 60 * 24 * 7 // 7 jours
+  })
+
+  const login = async (email: string, password: string): Promise<AuthResult> => {
+    try {
+      const data = await $fetch<AuthResponse>('/api/auth/login', {
+        method: 'POST',
+        body: { email, password }
+      })
+
+      token.value = data.token
+      user.value = data.user
+
+      await navigateTo('/dashboard')
+      
+      return { success: true }
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.data?.statusMessage || error.statusMessage || 'Erreur de connexion'
+      }
+    }
+  }
+
+  const register = async (
+    email: string, 
+    password: string, 
+    firstName?: string, 
+    lastName?: string
+  ): Promise<AuthResult> => {
+    try {
+      const data = await $fetch<AuthResponse>('/api/auth/register', {
+        method: 'POST',
+        body: { email, password, firstName, lastName }
+      })
+
+      token.value = data.token
+      user.value = data.user
+
+      await navigateTo('/dashboard')
+      
+      return { success: true }
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.data?.statusMessage || error.statusMessage || 'Erreur lors de l\'inscription'
+      }
+    }
+  }
+
+  const logout = async (): Promise<void> => {
+    token.value = null
+    user.value = null
+    await navigateTo('/')
+  }
+
+  const isAuthenticated = computed(() => {
+    return !!token.value && !!user.value
+  })
+
+  return {
+    user: readonly(user),
+    login,
+    register,
+    logout,
+    isAuthenticated
+  }
+}
