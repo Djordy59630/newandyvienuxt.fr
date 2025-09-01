@@ -90,30 +90,47 @@
             </div>
             <div v-else>
               <p v-if="currentStep === 'dance-selection'" class="text-gray-800 text-lg leading-relaxed">
-                Génial ! Nous arrivons à la dernière étape. Il est temps de choisir ton groupe de danse ! Quel style t'intéresse le plus ?
+                Génial ! Nous arrivons à la dernière étape. Tu peux choisir un ou plusieurs groupes de danse selon tes envies ! 💃🕺
               </p>
-              <p v-else-if="currentStep === 'group-details' && selectedGroup" class="text-gray-800 text-lg leading-relaxed">
-                Excellent choix ! {{ selectedGroup.name }} - {{ selectedGroup.description }}. Es-tu prêt(e) à rejoindre ce groupe ?
+              <p v-else-if="currentStep === 'group-details' && selectedGroups.length > 0" class="text-gray-800 text-lg leading-relaxed">
+                {{ selectedGroups.length === 1 ? 'Excellent choix' : 'Excellents choix' }} ! Tu as sélectionné {{ selectedGroups.length }} groupe{{ selectedGroups.length > 1 ? 's' : '' }}. Es-tu prêt(e) à finaliser ton inscription ?
               </p>
             </div>
           </div>
         </div>
 
         <!-- Dance Group Selection -->
-        <div v-if="currentStep === 'dance-selection'" class="space-y-4">
+        <div v-if="currentStep === 'dance-selection'" class="space-y-6">
           <div class="grid grid-cols-1 gap-4 max-h-96 overflow-y-auto">
-            <button
+            <label
               v-for="group in danceGroups"
               :key="group.id"
-              @click="handleGroupSelection(group)"
-              :disabled="loading"
-              class="option-button"
-              :class="{ 'selected': selectedGroup?.id === group.id }"
+              class="group-checkbox-container"
+              :class="{ 'selected': selectedGroups.find(g => g.id === group.id) }"
             >
-              <div class="flex items-start">
-                <div class="w-8 h-8 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+              <input
+                type="checkbox"
+                :value="group.id"
+                v-model="selectedGroupIds"
+                @change="updateSelectedGroups"
+                class="hidden"
+              />
+              <div class="flex items-start p-4">
+                <!-- Custom Checkbox -->
+                <div class="custom-checkbox">
+                  <div class="checkbox-inner">
+                    <svg v-if="selectedGroups.find(g => g.id === group.id)" class="checkmark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                    </svg>
+                  </div>
+                </div>
+                
+                <!-- Group Icon -->
+                <div class="w-8 h-8 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 ml-4">
                   <span class="text-white text-sm font-bold">{{ group.name.substring(0, 2) }}</span>
                 </div>
+                
+                <!-- Group Info -->
                 <div class="text-left flex-1">
                   <div class="font-semibold text-gray-900">{{ group.name }}</div>
                   <div class="text-sm text-gray-600 mb-1">{{ group.description }}</div>
@@ -122,27 +139,57 @@
                   </div>
                 </div>
               </div>
+            </label>
+          </div>
+          
+          <!-- Continue Button -->
+          <div class="flex justify-center">
+            <button
+              @click="proceedToDetails"
+              :disabled="loading || selectedGroups.length === 0"
+              class="btn-primary"
+            >
+              <span>Continuer avec {{ selectedGroups.length }} groupe{{ selectedGroups.length > 1 ? 's' : '' }}</span>
+              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
             </button>
           </div>
         </div>
 
-        <!-- Group Confirmation -->
+        <!-- Groups Confirmation -->
         <div v-if="currentStep === 'group-details'" class="space-y-6">
-          <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
-            <div class="flex items-start">
-              <div class="w-12 h-12 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
-                <span class="text-white text-lg font-bold">{{ selectedGroup?.name.substring(0, 2) }}</span>
-              </div>
-              <div>
-                <h3 class="text-lg font-bold text-gray-900 mb-1">{{ selectedGroup?.name }}</h3>
-                <p class="text-gray-700 mb-2">{{ selectedGroup?.description }}</p>
-                <div class="text-sm text-gray-600">
-                  <div><strong>Âge :</strong> {{ selectedGroup?.ageRange }}</div>
-                  <div><strong>Horaire :</strong> {{ selectedGroup?.schedule }}</div>
-                  <div><strong>Prix :</strong> {{ selectedGroup?.price }}€ {{ selectedGroup?.period }}</div>
-                  <div><strong>Niveau :</strong> {{ selectedGroup?.level }}</div>
+          <!-- Selected Groups List -->
+          <div class="space-y-4">
+            <div 
+              v-for="group in selectedGroups" 
+              :key="group.id" 
+              class="bg-blue-50 border border-blue-200 rounded-xl p-4"
+            >
+              <div class="flex items-start">
+                <div class="w-12 h-12 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                  <span class="text-white text-lg font-bold">{{ group.name.substring(0, 2) }}</span>
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-lg font-bold text-gray-900 mb-1">{{ group.name }}</h3>
+                  <p class="text-gray-700 mb-2">{{ group.description }}</p>
+                  <div class="text-sm text-gray-600">
+                    <div><strong>Âge :</strong> {{ group.ageRange }}</div>
+                    <div><strong>Horaire :</strong> {{ group.schedule }}</div>
+                    <div><strong>Prix :</strong> {{ group.price }}€ {{ group.period }}</div>
+                    <div><strong>Niveau :</strong> {{ group.level }}</div>
+                  </div>
                 </div>
               </div>
+            </div>
+          </div>
+          
+          <!-- Total Price -->
+          <div class="bg-gradient-to-r from-slate-100 to-blue-100 border border-slate-200 rounded-xl p-4">
+            <div class="text-center">
+              <p class="text-gray-700 text-sm mb-1">Prix total mensuel</p>
+              <p class="text-2xl font-bold text-slate-800">{{ totalPrice }}€</p>
+              <p class="text-xs text-gray-600 mt-1">{{ selectedGroups.length }} groupe{{ selectedGroups.length > 1 ? 's' : '' }} sélectionné{{ selectedGroups.length > 1 ? 's' : '' }}</p>
             </div>
           </div>
           
@@ -155,7 +202,7 @@
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
               </svg>
-              Changer de groupe
+              Modifier la sélection
             </button>
             
             <button
@@ -183,7 +230,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useHead, navigateTo, useCookie } from 'nuxt/app'
 
 definePageMeta({
@@ -198,7 +245,12 @@ const displayText = ref('')
 const showCursor = ref(true)
 const loading = ref(false)
 const error = ref('')
-const selectedGroup = ref<any>(null)
+const selectedGroups = ref<any[]>([])
+const selectedGroupIds = ref<number[]>([])
+
+const totalPrice = computed(() => {
+  return selectedGroups.value.reduce((total, group) => total + group.price, 0)
+})
 
 const danceGroups = ref([
   {
@@ -253,7 +305,7 @@ const danceGroups = ref([
   }
 ])
 
-const fullText = "Nous y sommes presque ! C'est le moment de choisir ton groupe de danse. Chaque groupe a sa propre personnalité et son niveau. Lequel t'appelle le plus ? 🕺💃"
+const fullText = "Nous y sommes presque ! C'est le moment de choisir ton ou tes groupes de danse. Tu peux en sélectionner plusieurs si tu veux explorer différents styles ! 🕺💃"
 
 const goBack = () => {
   navigateTo('/inscription/step-3')
@@ -274,11 +326,18 @@ const typeText = () => {
   }, 20)
 }
 
-const handleGroupSelection = (group: any) => {
-  selectedGroup.value = group
-  setTimeout(() => {
-    currentStep.value = 'group-details'
-  }, 500)
+const updateSelectedGroups = () => {
+  selectedGroups.value = danceGroups.value.filter(group => 
+    selectedGroupIds.value.includes(group.id)
+  )
+}
+
+const proceedToDetails = () => {
+  if (selectedGroups.value.length > 0) {
+    setTimeout(() => {
+      currentStep.value = 'group-details'
+    }, 300)
+  }
 }
 
 const handleFinalSubmit = async () => {
@@ -292,7 +351,7 @@ const handleFinalSubmit = async () => {
     })
     
     formDataCookie.value = {
-      selectedDanceGroup: selectedGroup.value
+      selectedDanceGroups: selectedGroups.value
     }
     
     console.log('Step 4 data:', formDataCookie.value)
@@ -463,5 +522,74 @@ useHead({
 
 .animate-pulse-slow {
   animation: pulse-slow 3s ease-in-out infinite;
+}
+
+/* Custom Checkbox Styles */
+.group-checkbox-container {
+  display: block;
+  cursor: pointer;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.group-checkbox-container:hover {
+  border-color: #93c5fd;
+  background-color: #f8fafc;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+}
+
+.group-checkbox-container.selected {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
+}
+
+.custom-checkbox {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 2px solid #d1d5db;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.group-checkbox-container.selected .custom-checkbox {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  border-color: #1d4ed8;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.checkbox-inner {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkmark {
+  width: 14px;
+  height: 14px;
+  color: white;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.2s ease;
+}
+
+.group-checkbox-container.selected .checkmark {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.group-checkbox-container:hover .custom-checkbox {
+  border-color: #93c5fd;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
 }
 </style>
