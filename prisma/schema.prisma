@@ -14,13 +14,17 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   role      String   @default("user")
+  
+  // Relations
+  dancers        Dancer[]
+  registrations  Registration[] @relation("ReviewedBy")
 
   @@map("users")
 }
 
 model Dancer {
   id          Int                 @id @default(autoincrement())
-  userId      Int
+  userId      Int                 @unique
   email       String
   firstName   String
   lastName    String
@@ -34,6 +38,12 @@ model Dancer {
   otherInfo   String?
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt
+  
+  // Relations
+  user              User               @relation(fields: [userId], references: [id])
+  emergencyContacts EmergencyContact[]
+  registrations     Registration[]
+  guardian          guardians?
 
   @@index([userId], map: "dancers_userId_fkey")
   @@map("dancers")
@@ -48,6 +58,9 @@ model EmergencyContact {
   phone     String
   createdAt DateTime                @default(now())
   updatedAt DateTime                @updatedAt
+  
+  // Relations
+  dancer Dancer @relation(fields: [dancerId], references: [id])
 
   @@index([dancerId], map: "emergency_contacts_dancerId_fkey")
   @@map("emergency_contacts")
@@ -62,6 +75,9 @@ model DanceGroup {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  
+  // Relations
+  registrations Registration[]
 
   @@map("dance_groups")
 }
@@ -78,6 +94,11 @@ model Registration {
   notes        String?
   createdAt    DateTime             @default(now())
   updatedAt    DateTime             @updatedAt
+  
+  // Relations
+  dancer     Dancer     @relation(fields: [dancerId], references: [id])
+  danceGroup DanceGroup @relation(fields: [danceGroupId], references: [id])
+  reviewer   User?      @relation("ReviewedBy", fields: [reviewedBy], references: [id])
 
   @@unique([dancerId, danceGroupId])
   @@index([danceGroupId], map: "registrations_danceGroupId_fkey")
@@ -97,7 +118,10 @@ model guardians {
   phone      String
   authorized Boolean  @default(false)
   createdAt  DateTime @default(now())
-  updatedAt  DateTime
+  updatedAt  DateTime @updatedAt
+  
+  // Relations
+  dancer Dancer @relation(fields: [dancerId], references: [id])
 }
 
 enum emergency_contacts_type {

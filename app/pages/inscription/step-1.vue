@@ -366,6 +366,28 @@
           </div>
         </div>
 
+        <!-- Already Registered Message -->
+        <div v-if="hasExistingRegistration && currentStep === 'greeting'" class="space-y-6 mt-8">
+          <div class="bg-orange-50 border border-orange-200 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-orange-800 mb-2">Inscription déjà existante</h3>
+            <p class="text-orange-700 mb-4">Tu as déjà une demande d'inscription en cours. Si tu souhaites la modifier, contacte l'administration.</p>
+            <div class="flex space-x-4">
+              <button
+                @click="navigateTo('/dashboard')"
+                class="bg-orange-100 hover:bg-orange-200 text-orange-800 font-semibold py-2 px-4 rounded-lg transition-all duration-300"
+              >
+                Retour au tableau de bord
+              </button>
+              <a
+                href="mailto:contact@square630.fr"
+                class="bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300"
+              >
+                Contacter l'administration
+              </a>
+            </div>
+          </div>
+        </div>
+
         <!-- Error Message -->
         <div v-if="error" class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">
           {{ error }}
@@ -403,7 +425,9 @@ const form = ref({
   phone: ''
 })
 
-const fullText = "Salut ! Moi c'est Kali, ton assistante virtuelle pour Square630 ! 🤖✨ Je vais t'accompagner dans ton inscription étape par étape. C'est parti, commençons par faire connaissance ! 😊"
+const fullText = ref("Salut ! Moi c'est Kali, ton assistante virtuelle pour Square630 ! 🤖✨ Je vais t'accompagner dans ton inscription étape par étape. C'est parti, commençons par faire connaissance ! 😊")
+const hasExistingRegistration = ref(false)
+const existingDancer = ref<any>(null)
 
 const goBack = () => {
   navigateTo('/dashboard')
@@ -422,17 +446,36 @@ const isMinor = computed(() => {
   return age < 18
 })
 
+const checkExistingRegistration = async () => {
+  try {
+    const response = await $fetch('/api/inscriptions/check-existing')
+    if (response.hasExistingRegistration) {
+      hasExistingRegistration.value = true
+      existingDancer.value = response.dancer
+      fullText.value = `Bonjour ${response.dancer.firstName} ! 👋 Je vois que tu as déjà une demande d'inscription en cours. Tu ne peux avoir qu'un seul dossier d'inscription par compte. Si tu souhaites modifier ton inscription, contacte l'administration. 📧`
+      typeText()
+      return true
+    }
+    return false
+  } catch (err) {
+    console.error('Erreur vérification inscription:', err)
+    return false
+  }
+}
+
 const typeText = () => {
   let index = 0
   const interval = setInterval(() => {
-    if (index < fullText.length) {
-      displayText.value += fullText[index]
+    if (index < fullText.value.length) {
+      displayText.value += fullText.value[index]
       index++
     } else {
       clearInterval(interval)
-      setTimeout(() => {
-        currentStep.value = 'firstName'
-      }, 800)
+      if (!hasExistingRegistration.value) {
+        setTimeout(() => {
+          currentStep.value = 'firstName'
+        }, 800)
+      }
     }
   }, 20)
 }
@@ -502,11 +545,16 @@ const handleFinalSubmit = async () => {
   }
 }
 
-onMounted(() => {
-  // Démarrer l'animation de frappe
-  setTimeout(() => {
-    typeText()
-  }, 1000)
+onMounted(async () => {
+  // Vérifier d'abord si l'utilisateur a déjà une inscription
+  const hasExisting = await checkExistingRegistration()
+  
+  if (!hasExisting) {
+    // Démarrer l'animation de frappe normale
+    setTimeout(() => {
+      typeText()
+    }, 1000)
+  }
 
   // Cursor blinking
   setInterval(() => {

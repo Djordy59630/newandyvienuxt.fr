@@ -1,87 +1,95 @@
 import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
 const danceGroups = [
   {
     name: "Les Kids",
-    ageRange: "CP / CE1",
-    schedule: "Samedi 12h-13h"
+    ageGroup: "CP / CE1",
+    schedule: "Samedi 12h-13h",
+    description: "Pour les plus jeunes danseurs, découverte du hip-hop en s'amusant"
   },
   {
     name: "La Relève",
-    ageRange: "CE2 / CM1 / CM2",
-    schedule: "Samedi 10h-11h"
+    ageGroup: "CE2 / CM1 / CM2",
+    schedule: "Samedi 13h-14h",
+    description: "Apprentissage des bases du hip-hop avec créativité"
   },
   {
     name: "Les Espoirs",
-    ageRange: "Collégiens 6ᵉ – 5ᵉ",
-    schedule: "Samedi 11h-12h"
-  },
-  {
-    name: "Les Initiés",
-    ageRange: "Collégiens 4ᵉ – 3ᵉ",
-    schedule: "Samedi 13h-14h"
+    ageGroup: "6e / 5e",
+    schedule: "Samedi 14h-15h",
+    description: "Développement technique et style personnel"
   },
   {
     name: "Les Confirmés",
-    ageRange: "Lycéens à 25 ans",
-    schedule: "Vendredi 19h-20h"
+    ageGroup: "4e / 3e",
+    schedule: "Samedi 15h-16h",
+    description: "Perfectionnement et préparation aux battles"
   },
   {
-    name: "Les Funky",
-    ageRange: "+25 ans",
-    schedule: "Mercredi 18h15-19h15"
+    name: "Hiphop Battle",
+    ageGroup: "Lycée",
+    schedule: "Samedi 16h-17h30",
+    description: "Entraînement intensif pour les compétitions"
   },
   {
-    name: "Les Élites",
-    ageRange: "Sur sélection",
-    schedule: "Sur rendez-vous avec Damien"
+    name: "Hiphop Advanced",
+    ageGroup: "Adulte",
+    schedule: "Samedi 17h30-19h",
+    description: "Cours avancé pour adultes passionnés"
   },
   {
-    name: "Les No Limit",
-    ageRange: "Personnes en situation de handicap, dès 14 ans",
-    schedule: "Vendredi 18h-19h"
-  },
-  {
-    name: "Les Rookies",
-    ageRange: "Personnes en situation de handicap de 6 à 13 ans",
-    schedule: "Vendredi 17h-18h"
-  },
-  {
-    name: "Cours Général",
-    ageRange: "Collège et +",
-    schedule: "Samedi 10h-11h"
-  },
-  {
-    name: "Débutants/Inter",
-    ageRange: "CE2 au CM2",
-    schedule: "Samedi 11h-12h"
-  },
-  {
-    name: "Show Break Débutants/Inter",
-    ageRange: "Tous niveaux",
-    schedule: "Samedi 12h-13h"
-  },
-  {
-    name: "Cours Confirmés / Entraînement libre",
-    ageRange: "Niveau confirmé",
-    schedule: "Mercredi & Vendredi 18h-20h"
+    name: "Danses Du Monde / K-pop",
+    ageGroup: "Tout âge",
+    schedule: "Dimanche 14h-15h",
+    description: "Découverte de différents styles de danse"
   }
 ]
 
 async function main() {
-  console.log('🌱 Initialisation des groupes de danse...')
+  console.log('🌱 Initialisation de la base de données...')
   
+  // Créer un utilisateur de test
+  const hashedPassword = await bcrypt.hash('test123', 10)
+  
+  const testUser = await prisma.user.upsert({
+    where: { email: 'test@square630.fr' },
+    update: {},
+    create: {
+      email: 'test@square630.fr',
+      password: hashedPassword,
+      role: 'user'
+    }
+  })
+  console.log('✅ Utilisateur de test créé:', testUser.email)
+
+  // Créer un utilisateur admin
+  const adminPassword = await bcrypt.hash('admin123', 10)
+  
+  const adminUser = await prisma.user.upsert({
+    where: { email: 'admin@square630.fr' },
+    update: {},
+    create: {
+      email: 'admin@square630.fr',
+      password: adminPassword,
+      role: 'admin'
+    }
+  })
+  console.log('✅ Utilisateur admin créé:', adminUser.email)
+  
+  // Créer les groupes de danse
   for (const group of danceGroups) {
     await prisma.danceGroup.upsert({
       where: { name: group.name },
       update: {},
       create: group
     })
+    console.log(`✅ Groupe de danse créé: ${group.name}`)
   }
   
-  console.log('✅ Groupes de danse initialisés avec succès!')
+  console.log('🎉 Base de données initialisée avec succès!')
 }
 
 main()

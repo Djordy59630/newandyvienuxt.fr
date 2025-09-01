@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { PrismaClient } from '@prisma/client'
 
@@ -6,7 +6,7 @@ const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
-  const { email, password, firstName, lastName } = body
+  const { email, password } = body
 
   if (!email || !password) {
     throw createError({
@@ -36,8 +36,7 @@ export default defineEventHandler(async (event) => {
       data: {
         email,
         password: hashedPassword,
-        firstName: firstName || null,
-        lastName: lastName || null
+        role: 'user'
       }
     })
 
@@ -54,14 +53,16 @@ export default defineEventHandler(async (event) => {
       user: {
         id: user.id,
         email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName
+        role: user.role
       }
     }
   } catch (error: any) {
+    console.error('Erreur inscription:', error)
     throw createError({
       statusCode: error.statusCode || 500,
       statusMessage: error.statusMessage || 'Erreur lors de l\'inscription'
     })
+  } finally {
+    await prisma.$disconnect()
   }
 })

@@ -10,7 +10,10 @@
       "Bash(tree:*)",
       "Bash(npm run postinstall:*)",
       "Bash(dir \"C:\\wamp64\\www\\newandyvienuxt.fr\\app\\server\\api\\inscriptions\")",
-      "Bash(dir \"C:\\wamp64\\www\\newandyvienuxt.fr\\app\\server\")"
+      "Bash(dir \"C:\\wamp64\\www\\newandyvienuxt.fr\\app\\server\")",
+      "Bash(dir)",
+      "Bash(del:*)",
+      "Bash(npx tsx:*)"
     ],
     "deny": [],
     "ask": []

@@ -17,6 +17,49 @@ export default defineEventHandler(async (event) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as any
     const userId = decoded.userId
+    const userEmail = decoded.email
+
+    // Vérifier si l'utilisateur a déjà une inscription COMPLETE (SUBMITTED, APPROVED, REJECTED)
+    // @ts-ignore - Modèle Prisma généré
+    const existingCompleteRegistration = await prisma.registration.findFirst({
+      where: { 
+        dancer: {
+          userId: userId
+        },
+        status: {
+          in: ['SUBMITTED', 'APPROVED', 'REJECTED']
+        }
+      }
+    })
+
+    if (existingCompleteRegistration) {
+      throw createError({
+        statusCode: 409,
+        statusMessage: 'Vous avez déjà une demande d\'inscription validée. Un seul dossier par utilisateur est autorisé.'
+      })
+    }
+
+    // Supprimer les inscriptions DRAFT existantes pour ce user (permet de recommencer)
+    // @ts-ignore - Modèle Prisma généré
+    const existingDraftDancer = await prisma.dancer.findFirst({
+      where: { userId: userId }
+    })
+
+    if (existingDraftDancer) {
+      // Supprimer toutes les données liées en cascade
+      await prisma.registration.deleteMany({
+        where: { dancerId: existingDraftDancer.id }
+      })
+      await prisma.emergencyContact.deleteMany({
+        where: { dancerId: existingDraftDancer.id }
+      })
+      await prisma.guardians.deleteMany({
+        where: { dancerId: existingDraftDancer.id }
+      })
+      await prisma.dancer.delete({
+        where: { id: existingDraftDancer.id }
+      })
+    }
 
     // Récupérer les données du body
     const body = await readBody(event)
@@ -34,7 +77,7 @@ export default defineEventHandler(async (event) => {
     const dancer = await prisma.dancer.create({
       data: {
         userId: userId,
-        email: step1.email || `${step1.firstName}.${step1.lastName}@temp.com`,
+        email: userEmail,
         firstName: step1.firstName,
         lastName: step1.lastName,
         birthDate: new Date(step1.birthDate),
@@ -111,8 +154,8 @@ export default defineEventHandler(async (event) => {
             dancerId: dancer.id,
             danceGroupId: danceGroup.id,
             sportCode: null,
-            status: 'DRAFT', // Utiliser l'enum correct
-            submittedAt: null,
+            status: 'SUBMITTED', // Marquer comme SUBMITTED car l'inscription est complète
+            submittedAt: new Date(),
             reviewedAt: null,
             reviewedBy: null,
             notes: null

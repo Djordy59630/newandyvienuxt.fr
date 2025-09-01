@@ -42,41 +42,6 @@
           
           <div class="relative">
             <form @submit.prevent="handleRegister" class="space-y-5">
-              <!-- Name Fields Row -->
-              <div class="grid grid-cols-2 gap-4">
-                <!-- First Name -->
-                <div class="space-y-2">
-                  <label class="block text-sm font-bold text-gray-800">
-                    <span class="bg-gradient-to-r from-slate-600 to-blue-600 bg-clip-text text-transparent">
-                      Prénom
-                    </span>
-                  </label>
-                  <input
-                    v-model="firstName"
-                    type="text"
-                    placeholder="Jean"
-                    :disabled="loading"
-                    class="w-full px-4 py-3 rounded-2xl bg-gradient-to-r from-gray-50 to-blue-50/50 border-2 border-slate-200/50 focus:border-blue-500 focus:bg-white text-gray-800 font-medium placeholder-slate-400 transition-all duration-300 focus:shadow-lg focus:shadow-blue-500/20"
-                  />
-                </div>
-
-                <!-- Last Name -->
-                <div class="space-y-2">
-                  <label class="block text-sm font-bold text-gray-800">
-                    <span class="bg-gradient-to-r from-indigo-600 to-slate-600 bg-clip-text text-transparent">
-                      Nom
-                    </span>
-                  </label>
-                  <input
-                    v-model="lastName"
-                    type="text"
-                    placeholder="Dupont"
-                    :disabled="loading"
-                    class="w-full px-4 py-3 rounded-2xl bg-gradient-to-r from-gray-50 to-indigo-50/50 border-2 border-slate-200/50 focus:border-indigo-500 focus:bg-white text-gray-800 font-medium placeholder-slate-400 transition-all duration-300 focus:shadow-lg focus:shadow-indigo-500/20"
-                  />
-                </div>
-              </div>
-
               <!-- Email Field -->
               <div class="space-y-3">
                 <label class="block text-sm font-bold text-gray-800">
@@ -268,8 +233,6 @@ if (isAuthenticated.value) {
   await navigateTo('/dashboard')
 }
 
-const firstName = ref('')
-const lastName = ref('')
 const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
@@ -305,9 +268,7 @@ const handleRegister = async () => {
   try {
     const result = await register(
       email.value,
-      password.value,
-      firstName.value || undefined,
-      lastName.value || undefined
+      password.value
     )
     
     if (!result.success) {
