@@ -1,19 +1,19 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 relative overflow-hidden">
+  <div class="min-h-screen bg-gradient-to-br from-orange-900 via-red-900 to-pink-900 relative overflow-hidden">
     <!-- Animated Background Elements -->
     <div class="absolute inset-0">
-      <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-gradient-to-r from-blue-400/20 to-indigo-400/20 rounded-full blur-3xl animate-pulse"></div>
-      <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-indigo-400/20 to-slate-400/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
-      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-slate-400/15 to-blue-400/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+      <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-gradient-to-r from-orange-400/20 to-red-400/20 rounded-full blur-3xl animate-pulse"></div>
+      <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-red-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-orange-400/15 to-red-400/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
     </div>
     
     <!-- Floating particles -->
     <div class="absolute inset-0 overflow-hidden">
       <div class="absolute top-10 left-10 w-2 h-2 bg-white/30 rounded-full animate-bounce"></div>
-      <div class="absolute top-32 right-20 w-1 h-1 bg-blue-300/40 rounded-full animate-ping"></div>
-      <div class="absolute bottom-20 left-32 w-1.5 h-1.5 bg-indigo-300/40 rounded-full animate-pulse"></div>
-      <div class="absolute top-40 left-1/2 w-1 h-1 bg-slate-300/40 rounded-full animate-bounce" style="animation-delay: 1s;"></div>
-      <div class="absolute bottom-40 right-10 w-2 h-2 bg-blue-300/30 rounded-full animate-ping" style="animation-delay: 2s;"></div>
+      <div class="absolute top-32 right-20 w-1 h-1 bg-orange-300/40 rounded-full animate-ping"></div>
+      <div class="absolute bottom-20 left-32 w-1.5 h-1.5 bg-red-300/40 rounded-full animate-pulse"></div>
+      <div class="absolute top-40 left-1/2 w-1 h-1 bg-orange-300/40 rounded-full animate-bounce" style="animation-delay: 1s;"></div>
+      <div class="absolute bottom-40 right-10 w-2 h-2 bg-red-300/30 rounded-full animate-ping" style="animation-delay: 2s;"></div>
     </div>
 
     <!-- Navigation Header -->
@@ -22,13 +22,13 @@
         <div class="flex justify-between items-center h-20">
           <!-- Logo -->
           <div class="flex items-center">
-            <div class="w-12 h-12 bg-gradient-to-br from-slate-600 via-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+            <div class="w-12 h-12 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
               <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
             </div>
             <span class="ml-4 text-2xl font-black text-white tracking-tight">
-              <span class="bg-gradient-to-r from-white via-slate-200 to-blue-200 bg-clip-text text-transparent">
+              <span class="bg-gradient-to-r from-white via-orange-200 to-red-200 bg-clip-text text-transparent">
                 SQUARE630
               </span>
             </span>
@@ -58,11 +58,11 @@
       <!-- Header Section -->
       <div class="mb-12 animate-fade-in text-center">
         <h1 class="text-5xl font-black text-white mb-4 tracking-tight">
-          <span class="bg-gradient-to-r from-white via-slate-200 to-blue-200 bg-clip-text text-transparent">
+          <span class="bg-gradient-to-r from-white via-orange-200 to-red-200 bg-clip-text text-transparent">
             Tableau de bord
           </span>
         </h1>
-        <p class="text-slate-200 text-xl font-medium">
+        <p class="text-orange-200 text-xl font-medium">
           Association Andyvie • Square630
         </p>
       </div>
@@ -77,7 +77,7 @@
         
         <!-- Status Badge -->
         <div class="text-center mb-8">
-          <div class="inline-flex items-center space-x-3 bg-green-100 text-green-800 px-6 py-3 rounded-2xl border border-green-200">
+          <div class="inline-flex items-center space-x-3 bg-orange-100 text-orange-800 px-6 py-3 rounded-2xl border border-orange-200">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
@@ -90,10 +90,10 @@
           
           <!-- Informations personnelles -->
           <div class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 relative overflow-hidden group hover:scale-105 transition-all duration-300">
-            <div class="absolute inset-0 bg-gradient-to-br from-slate-500/5 via-blue-500/5 to-indigo-500/5 rounded-3xl"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-red-500/5 to-pink-500/5 rounded-3xl"></div>
             <div class="relative">
               <div class="flex items-center space-x-4 mb-6">
-                <div class="w-14 h-14 bg-gradient-to-br from-slate-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
                   <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                   </svg>
@@ -105,19 +105,19 @@
               </div>
               <div class="space-y-3">
                 <div class="flex items-center space-x-3">
-                  <div class="w-2 h-2 bg-slate-400 rounded-full"></div>
+                  <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
                   <span class="text-gray-700">{{ registration.registration.dancer.email }}</span>
                 </div>
                 <div class="flex items-center space-x-3">
-                  <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+                  <div class="w-2 h-2 bg-red-400 rounded-full"></div>
                   <span class="text-gray-700">{{ registration.registration.dancer.phone }}</span>
                 </div>
                 <div class="flex items-center space-x-3">
-                  <div class="w-2 h-2 bg-indigo-400 rounded-full"></div>
+                  <div class="w-2 h-2 bg-pink-400 rounded-full"></div>
                   <span class="text-gray-700">{{ registration.registration.dancer.address }}, {{ registration.registration.dancer.postalCode }} {{ registration.registration.dancer.city }}</span>
                 </div>
                 <div class="flex items-center space-x-3">
-                  <div class="w-2 h-2 bg-slate-400 rounded-full"></div>
+                  <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
                   <span class="text-gray-700">Né(e) le {{ formatDate(registration.registration.dancer.birthDate) }}</span>
                 </div>
                 <div class="pt-4 border-t border-gray-200">
@@ -183,7 +183,7 @@
                   </div>
                   <div>
                     <h3 class="text-2xl font-bold text-gray-800">Contacts d'urgence</h3>
-                    <p class="text-slate-600">{{ registration.registration.emergencyContacts.length }} contact(s)</p>
+                    <p class="text-orange-600">{{ registration.registration.emergencyContacts.length }} contact(s)</p>
                   </div>
                 </div>
                 <div class="space-y-3">
@@ -199,20 +199,20 @@
 
             <!-- Responsable légal -->
             <div v-if="registration.registration.guardian" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 relative overflow-hidden group hover:scale-105 transition-all duration-300">
-              <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-teal-500/5 to-cyan-500/5 rounded-3xl"></div>
+              <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-red-500/5 to-pink-500/5 rounded-3xl"></div>
               <div class="relative">
                 <div class="flex items-center space-x-4 mb-6">
-                  <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
                     <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                     </svg>
                   </div>
                   <div>
                     <h3 class="text-2xl font-bold text-gray-800">Responsable légal</h3>
-                    <p class="text-slate-600">Tuteur légal</p>
+                    <p class="text-orange-600">Tuteur légal</p>
                   </div>
                 </div>
-                <div class="bg-gradient-to-r from-emerald-50 to-teal-50 p-4 rounded-2xl border border-emerald-200/50">
+                <div class="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-2xl border border-orange-200/50">
                   <div class="flex items-center justify-between mb-3">
                     <p class="font-semibold text-gray-800">{{ registration.registration.guardian.firstName }} {{ registration.registration.guardian.lastName }}</p>
                     <span class="px-3 py-1 rounded-full text-xs font-bold" 
@@ -234,8 +234,8 @@
           <div class="inline-block bg-white/95 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20">
             <p class="text-gray-700 mb-2">Inscription soumise le <span class="font-semibold">{{ formatDate(registration.registration.dancer.createdAt) }}</span></p>
             <div class="flex items-center justify-center space-x-2">
-              <div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-              <span class="text-lg font-bold text-blue-700">En attente de validation</span>
+              <div class="w-3 h-3 bg-orange-500 rounded-full animate-pulse"></div>
+              <span class="text-lg font-bold text-orange-700">En attente de validation</span>
             </div>
           </div>
         </div>
