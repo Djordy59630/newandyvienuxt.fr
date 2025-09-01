@@ -51,295 +51,275 @@
       </div>
     </nav>
 
-    <div class="relative flex min-h-screen items-center justify-center px-4 py-12">
-      <div class="w-full max-w-lg">
-        <!-- Logo Section -->
-        <div class="text-center mb-8 animate-fade-in">
-          <div class="mx-auto w-20 h-20 bg-gradient-to-br from-white via-slate-50 to-blue-50 rounded-3xl flex items-center justify-center mb-6 shadow-2xl border border-white/20 backdrop-blur-sm">
-            <div class="w-12 h-12 bg-gradient-to-br from-slate-600 via-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <span class="text-white text-xl font-bold">3</span>
-            </div>
-          </div>
-          <h1 class="text-4xl font-black text-white mb-2 tracking-tight">
-            <span class="bg-gradient-to-r from-white via-slate-200 to-blue-200 bg-clip-text text-transparent">
-              CONTACTS
-            </span>
-          </h1>
-          <p class="text-slate-200 font-medium text-lg">Personnes de confiance</p>
-        </div>
-
-        <!-- Info Card -->
-        <div class="bg-white/95 backdrop-blur-xl rounded-3xl p-6 mb-8 animate-slide-in shadow-2xl border border-white/20 relative overflow-hidden">
-          <!-- Card glow effect -->
-          <div class="absolute inset-0 bg-gradient-to-r from-slate-500/10 via-blue-500/10 to-indigo-500/10 rounded-3xl"></div>
-          
-          <div class="relative text-center">
-            <div class="w-12 h-12 bg-gradient-to-br from-slate-600 via-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-            </div>
-            <p class="text-gray-700 text-sm leading-relaxed">
-              <span class="font-semibold text-slate-800">Pourquoi ces infos ?</span><br>
-              Contacts prévenus en urgence et personnes autorisées à te récupérer
-            </p>
-          </div>
-        </div>
-
-        <!-- Contacts List -->
-        <div class="space-y-6 mb-8">
-          <div v-for="(contact, index) in contacts" :key="index" class="bg-white/95 backdrop-blur-xl rounded-3xl p-6 animate-slide-in shadow-2xl border border-white/20 relative overflow-hidden">
-            <!-- Card glow effect -->
-            <div class="absolute inset-0 bg-gradient-to-r from-slate-500/10 via-blue-500/10 to-indigo-500/10 rounded-3xl"></div>
-            
-            <div class="relative">
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-bold text-gray-800">
-                  <span class="bg-gradient-to-r from-slate-600 to-blue-600 bg-clip-text text-transparent">
-                    Contact {{ index + 1 }}
-                  </span>
-                </h3>
-                <button
-                  v-if="contacts.length > 1"
-                  @click="removeContact(index)"
-                  class="bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-xl transition-all duration-300 transform hover:scale-110"
-                >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                  </svg>
-                </button>
-              </div>
-
-              <div class="space-y-4">
-                <!-- Type de contact -->
-                <div class="space-y-2">
-                  <label class="block text-sm font-semibold text-slate-700">
-                    Type de contact
-                  </label>
-                  <div class="grid grid-cols-1 gap-2">
-                    <button
-                      type="button"
-                      @click="contact.type = 'emergency'"
-                      :class="[
-                        'py-2 px-4 rounded-xl font-medium text-sm transition-all duration-300 border-2 transform hover:scale-105',
-                        contact.type === 'emergency' 
-                          ? 'bg-gradient-to-r from-slate-600 via-blue-600 to-indigo-600 text-white border-blue-600 shadow-lg shadow-blue-500/25' 
-                          : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
-                      ]"
-                    >
-                      Contact d'urgence
-                    </button>
-                    <button
-                      type="button"
-                      @click="contact.type = 'pickup'"
-                      :class="[
-                        'py-2 px-4 rounded-xl font-medium text-sm transition-all duration-300 border-2 transform hover:scale-105',
-                        contact.type === 'pickup' 
-                          ? 'bg-gradient-to-r from-slate-600 via-blue-600 to-indigo-600 text-white border-blue-600 shadow-lg shadow-blue-500/25' 
-                          : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
-                      ]"
-                    >
-                      Récupération uniquement
-                    </button>
-                    <button
-                      type="button"
-                      @click="contact.type = 'both'"
-                      :class="[
-                        'py-2 px-4 rounded-xl font-medium text-sm transition-all duration-300 border-2 transform hover:scale-105',
-                        contact.type === 'both' 
-                          ? 'bg-gradient-to-r from-slate-600 via-blue-600 to-indigo-600 text-white border-blue-600 shadow-lg shadow-blue-500/25' 
-                          : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
-                      ]"
-                    >
-                      Les deux
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Name Fields Row -->
-                <div class="grid grid-cols-2 gap-3">
-                  <div class="space-y-2">
-                    <label class="block text-sm font-bold text-gray-800">
-                      <span class="bg-gradient-to-r from-slate-600 to-blue-600 bg-clip-text text-transparent">
-                        Prénom
-                      </span>
-                    </label>
-                    <input
-                      v-model="contact.firstName"
-                      type="text"
-                      placeholder="Pierre"
-                      :disabled="loading"
-                      class="w-full px-3 py-2 rounded-xl bg-white border-2 border-slate-200/50 focus:border-blue-500 focus:bg-white text-gray-800 font-medium placeholder-slate-400 transition-all duration-300 focus:shadow-lg focus:shadow-blue-500/20"
-                      required
-                    />
-                  </div>
-
-                  <div class="space-y-2">
-                    <label class="block text-sm font-bold text-gray-800">
-                      <span class="bg-gradient-to-r from-indigo-600 to-slate-600 bg-clip-text text-transparent">
-                        Nom
-                      </span>
-                    </label>
-                    <input
-                      v-model="contact.lastName"
-                      type="text"
-                      placeholder="Martin"
-                      :disabled="loading"
-                      class="w-full px-3 py-2 rounded-xl bg-white border-2 border-slate-200/50 focus:border-indigo-500 focus:bg-white text-gray-800 font-medium placeholder-slate-400 transition-all duration-300 focus:shadow-lg focus:shadow-indigo-500/20"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <!-- Phone -->
-                <div class="space-y-3">
-                  <label class="block text-sm font-bold text-gray-800">
-                    <span class="bg-gradient-to-r from-slate-600 to-blue-600 bg-clip-text text-transparent">
-                      Téléphone
-                    </span>
-                  </label>
-                  <div class="relative group">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <div class="w-4 h-4 text-slate-400 group-focus-within:text-blue-600 transition-colors">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                        </svg>
-                      </div>
-                    </div>
-                    <input
-                      v-model="contact.phone"
-                      type="tel"
-                      placeholder="06 12 34 56 78"
-                      :disabled="loading"
-                      class="w-full pl-10 pr-3 py-3 rounded-xl bg-white border-2 border-slate-200/50 focus:border-blue-500 focus:bg-white text-gray-800 font-medium placeholder-slate-400 transition-all duration-300 focus:shadow-lg focus:shadow-blue-500/20"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Add Contact Button -->
-        <div class="text-center mb-8">
-          <button
-            @click="addContact"
-            class="bg-gradient-to-r from-gray-100 to-blue-50 hover:from-blue-50 hover:to-indigo-50 border-2 border-slate-200 hover:border-blue-400 text-slate-700 hover:text-blue-800 font-semibold py-3 px-6 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg inline-flex items-center space-x-2"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            <span>Ajouter un contact</span>
-          </button>
-        </div>
-
-        <!-- Form Actions -->
-        <div class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 animate-slide-in shadow-2xl border border-white/20 relative overflow-hidden">
-          <div class="absolute inset-0 bg-gradient-to-r from-slate-500/10 via-blue-500/10 to-indigo-500/10 rounded-3xl"></div>
-          
+    <!-- Main Content -->
+    <div class="relative z-10 max-w-4xl mx-auto px-8 pb-12 flex flex-col items-center justify-center min-h-[calc(100vh-120px)]">
+      
+      <!-- Kali Avatar -->
+      <div class="mb-8">
+        <div class="w-32 h-32 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse-slow relative">
+          <!-- Glow effect -->
+          <div class="absolute inset-0 bg-gradient-to-br from-slate-400 via-blue-400 to-indigo-400 rounded-full blur-lg opacity-30 animate-pulse"></div>
           <div class="relative">
-            <!-- Error Alert -->
-            <div v-if="error" class="bg-red-50 border border-red-200 p-4 rounded-xl mb-6">
-              <div class="flex items-center">
-                <div class="w-5 h-5 text-red-600 mr-3 flex-shrink-0">
-                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L5.232 16.5c-.77.833.192 2.5 1.732 2.5z"/>
-                  </svg>
-                </div>
-                <p class="text-red-800 font-medium text-sm">{{ error }}</p>
-              </div>
-            </div>
+            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <h2 class="text-2xl font-bold text-white mb-2">Kali</h2>
+          <div class="bg-gradient-to-r from-green-400 to-green-500 text-white text-sm px-3 py-1 rounded-full inline-block">
+            En ligne
+          </div>
+        </div>
+      </div>
 
-            <!-- Submit Button -->
-            <button
-              @click="handleSubmit"
-              :disabled="loading || !isFormValid"
-              class="w-full py-4 px-6 rounded-2xl font-bold text-lg bg-gradient-to-r from-slate-600 via-blue-600 to-indigo-600 hover:from-slate-700 hover:via-blue-700 hover:to-indigo-700 text-white disabled:opacity-50 disabled:cursor-not-allowed relative transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/25 group overflow-hidden"
-            >
-              <!-- Shine effect -->
-              <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-              
-              <div v-if="loading" class="absolute inset-0 flex items-center justify-center">
-                <div class="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
+      <!-- Conversation Interface -->
+      <div class="w-full max-w-2xl space-y-6">
+        
+        <!-- Kali Message -->
+        <div class="flex items-start space-x-4">
+          <div class="w-12 h-12 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
+            </svg>
+          </div>
+          <div class="bg-white/95 backdrop-blur-sm rounded-2xl rounded-tl-md p-6 shadow-xl border border-white/20 flex-1">
+            <div v-if="currentStep === 'greeting'" class="typewriter">
+              {{ displayText }}
+              <span v-if="showCursor" class="cursor">|</span>
+            </div>
+            <div v-else>
+              <p v-if="currentStep === 'contact-name'" class="text-gray-800 text-lg leading-relaxed">
+                Quel est le nom de ton {{ contacts.length === 0 ? 'premier' : contacts.length === 1 ? 'deuxième' : 'prochain' }} contact d'urgence ?
+              </p>
+              <p v-else-if="currentStep === 'contact-phone'" class="text-gray-800 text-lg leading-relaxed">
+                Merci {{ form.name }} ! Quel est son numéro de téléphone ?
+              </p>
+              <p v-else-if="currentStep === 'add-more'" class="text-gray-800 text-lg leading-relaxed">
+                Super ! Veux-tu ajouter un autre contact d'urgence ? (recommandé d'avoir au moins 2 contacts)
+              </p>
+              <p v-else-if="currentStep === 'contact-list'" class="text-gray-800 text-lg leading-relaxed">
+                Voici tes contacts d'urgence ajoutés :
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contacts List Display -->
+        <div v-if="currentStep === 'contact-list' && contacts.length > 0" class="space-y-4">
+          <div v-for="(contact, index) in contacts" :key="index" class="bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-semibold text-gray-800">{{ contact.name }}</p>
+                <p class="text-gray-600">{{ contact.phone }}</p>
               </div>
-              <span :class="{ 'invisible': loading }" class="relative flex items-center justify-center space-x-2">
-                <span>{{ loading ? 'Sauvegarde...' : 'Étape suivante' }}</span>
+              <button
+                @click="removeContact(index)"
+                class="text-red-500 hover:text-red-700 p-2"
+                title="Supprimer ce contact"
+              >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                 </svg>
-              </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add More Contact Buttons -->
+        <div v-if="currentStep === 'add-more'" class="space-y-4">
+          <div class="flex space-x-4">
+            <button
+              @click="addAnotherContact"
+              class="btn-primary flex-1"
+              :disabled="loading"
+            >
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+              </svg>
+              Oui, ajouter un contact
+            </button>
+            <button
+              @click="finishContacts"
+              class="btn-secondary flex-1"
+              :disabled="loading || contacts.length === 0"
+            >
+              {{ contacts.length === 0 ? 'Au moins 1 contact requis' : 'Terminer' }}
             </button>
           </div>
         </div>
 
-        <!-- Footer -->
-        <div class="mt-8 text-center animate-slide-in-delay">
-          <p class="text-sm text-slate-300/80 font-medium">
-            © 2024 Square630 • Association Andyvie • 
-            <span class="bg-gradient-to-r from-slate-300 to-blue-300 bg-clip-text text-transparent">
-              Tous droits réservés
-            </span>
-          </p>
+        <!-- Contact Name Input -->
+        <div v-if="currentStep === 'contact-name'" class="space-y-6">
+          <div>
+            <input
+              v-model="form.name"
+              type="text"
+              class="answer-input"
+              placeholder="Nom complet du contact"
+              @keyup.enter="handleNameSubmit"
+              :disabled="loading"
+              required
+            />
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <button
+              @click="handleBack"
+              class="btn-secondary"
+              :disabled="loading"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Retour
+            </button>
+            
+            <button
+              @click="handleNameSubmit"
+              :disabled="loading || !form.name"
+              class="btn-primary"
+            >
+              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+              <span v-else>Continuer</span>
+              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
         </div>
+
+        <!-- Contact Phone Input -->
+        <div v-if="currentStep === 'contact-phone'" class="space-y-6">
+          <div>
+            <input
+              v-model="form.phone"
+              type="tel"
+              class="answer-input"
+              placeholder="06 12 34 56 78"
+              @keyup.enter="handlePhoneSubmit"
+              :disabled="loading"
+              required
+            />
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <button
+              @click="currentStep = 'contact-name'"
+              class="btn-secondary"
+              :disabled="loading"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Retour
+            </button>
+            
+            <button
+              @click="handlePhoneSubmit"
+              :disabled="loading || !form.phone"
+              class="btn-primary"
+            >
+              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+              <span v-else>Continuer</span>
+              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div v-if="error" class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">
+          {{ error }}
+        </div>
+
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useHead, navigateTo } from 'nuxt/app'
+import { ref, onMounted } from 'vue'
+import { useHead, navigateTo, useCookie } from 'nuxt/app'
 
 definePageMeta({
   middleware: 'auth'
 })
 
-interface Contact {
-  type: string
-  firstName: string
-  lastName: string
-  phone: string
-}
+// @ts-ignore - Nuxt auto-import
+const { user } = useAuth()
 
+const currentStep = ref('greeting')
+const displayText = ref('')
+const showCursor = ref(true)
 const loading = ref(false)
 const error = ref('')
-
-const contacts = ref<Contact[]>([
-  {
-    type: '',
-    firstName: '',
-    lastName: '',
-    phone: ''
-  }
-])
-
-const isFormValid = computed(() => {
-  return contacts.value.every(contact => 
-    contact.type && 
-    contact.firstName.trim() && 
-    contact.lastName.trim() && 
-    contact.phone.trim()
-  )
+const contacts = ref([])
+const form = ref({
+  name: '',
+  phone: ''
 })
 
-const addContact = () => {
-  contacts.value.push({
-    type: '',
-    firstName: '',
-    lastName: '',
-    phone: ''
-  })
-}
-
-const removeContact = (index: number) => {
-  if (contacts.value.length > 1) {
-    contacts.value.splice(index, 1)
-  }
-}
+const fullText = "Nous avançons bien ! Pour ta sécurité, j'ai besoin d'ajouter des contacts d'urgence. Commençons par le premier contact. 🚨"
 
 const goBack = () => {
   navigateTo('/inscription/step-2')
+}
+
+const typeText = () => {
+  let index = 0
+  const interval = setInterval(() => {
+    if (index < fullText.length) {
+      displayText.value += fullText[index]
+      index++
+    } else {
+      clearInterval(interval)
+      setTimeout(() => {
+        currentStep.value = 'contact-name'
+      }, 800)
+    }
+  }, 20)
+}
+
+const addAnotherContact = () => {
+  form.value = { name: '', phone: '' }
+  currentStep.value = 'contact-name'
+}
+
+const finishContacts = async () => {
+  if (contacts.value.length > 0) {
+    await handleSubmit()
+  }
+}
+
+const removeContact = (index: number) => {
+  contacts.value.splice(index, 1)
+}
+
+const handleNameSubmit = () => {
+  if (!form.value.name) return
+  setTimeout(() => {
+    currentStep.value = 'contact-phone'
+  }, 500)
+}
+
+const handlePhoneSubmit = () => {
+  if (!form.value.phone) return
+  
+  // Ajouter le contact à la liste
+  contacts.value.push({
+    name: form.value.name,
+    phone: form.value.phone
+  })
+  
+  // Réinitialiser le formulaire
+  form.value = { name: '', phone: '' }
+  
+  // Aller à l'étape "add-more"
+  setTimeout(() => {
+    currentStep.value = 'add-more'
+  }, 500)
 }
 
 const handleSubmit = async () => {
@@ -347,19 +327,21 @@ const handleSubmit = async () => {
   loading.value = true
 
   try {
-    // Validation
-    if (!isFormValid.value) {
-      error.value = 'Veuillez remplir tous les champs obligatoires pour chaque contact'
-      return
+    // Sauvegarder les données
+    const formDataCookie = useCookie('registration-step3', {
+      default: () => ({})
+    })
+    
+    formDataCookie.value = {
+      emergencyContacts: contacts.value
     }
-
-    // Ici on sauvegardera les données plus tard
-    console.log('Emergency contacts data:', contacts.value)
+    
+    console.log('Step 3 data:', formDataCookie.value)
     
     // Simuler un appel API
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await new Promise(resolve => setTimeout(resolve, 800))
     
-    // Rediriger vers l'étape 4
+    // Aller à l'étape 4
     await navigateTo('/inscription/step-4')
     
   } catch (err) {
@@ -369,11 +351,157 @@ const handleSubmit = async () => {
   }
 }
 
+onMounted(() => {
+  // Vérifier les données des étapes précédentes
+  const step1Data = useCookie('registration-step1').value
+  const step2Data = useCookie('registration-step2').value
+  
+  if (!step1Data || !step1Data.firstName) {
+    navigateTo('/inscription/step-1')
+    return
+  }
+
+  // Démarrer l'animation de frappe
+  setTimeout(() => {
+    typeText()
+  }, 1000)
+
+  // Cursor blinking
+  setInterval(() => {
+    showCursor.value = !showCursor.value
+  }, 500)
+})
+
 // Meta
 useHead({
-  title: 'Étape 3 - Contacts d\'urgence • Square630',
+  title: 'Étape 3 - Contact d\'urgence • Square630',
   meta: [
-    { name: 'description', content: 'Ajoutez vos contacts d\'urgence pour votre inscription aux cours de hip-hop' }
+    { name: 'description', content: 'Kali, ton assistante virtuelle pour l\'inscription Square630' }
   ]
 })
 </script>
+
+<style scoped>
+.typewriter {
+  color: #1f2937;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.cursor {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.answer-input {
+  width: 100%;
+  padding: 1.5rem;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 1rem;
+  color: #1e293b;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.answer-input::placeholder {
+  color: #94a3b8;
+}
+
+.answer-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.option-button {
+  width: 100%;
+  padding: 1rem;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 1rem;
+  text-align: left;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.option-button:hover {
+  border-color: #93c5fd;
+  background-color: #eff6ff;
+}
+
+.option-button:focus {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.option-button.selected {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: linear-gradient(to right, #475569, #2563eb, #4f46e5);
+  color: white;
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  border-radius: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  transform: scale(1);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(to right, #334155, #1d4ed8, #4338ca);
+  transform: scale(1.05);
+  box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.25);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: scale(1);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  color: #374151;
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  border-color: #cbd5e1;
+  background-color: #f8fafc;
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+</style>

@@ -51,169 +51,132 @@
       </div>
     </nav>
 
-    <div class="relative flex min-h-screen items-center justify-center px-4 py-12">
-      <div class="w-full max-w-2xl">
-        <!-- Logo Section -->
-        <div class="text-center mb-8 animate-fade-in">
-          <div class="mx-auto w-20 h-20 bg-gradient-to-br from-white via-slate-50 to-blue-50 rounded-3xl flex items-center justify-center mb-6 shadow-2xl border border-white/20 backdrop-blur-sm">
-            <div class="w-12 h-12 bg-gradient-to-br from-slate-600 via-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <span class="text-white text-xl font-bold">4</span>
-            </div>
-          </div>
-          <h1 class="text-4xl font-black text-white mb-2 tracking-tight">
-            <span class="bg-gradient-to-r from-white via-slate-200 to-blue-200 bg-clip-text text-transparent">
-              TON GROUPE
-            </span>
-          </h1>
-          <p class="text-slate-200 font-medium text-lg">Choisis ton style !</p>
-        </div>
-
-        <!-- Groups Selection -->
-        <div class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 mb-8 animate-slide-in shadow-2xl border border-white/20 relative overflow-hidden">
-          <!-- Card glow effect -->
-          <div class="absolute inset-0 bg-gradient-to-r from-slate-500/10 via-blue-500/10 to-indigo-500/10 rounded-3xl"></div>
-          
+    <!-- Main Content -->
+    <div class="relative z-10 max-w-4xl mx-auto px-8 pb-12 flex flex-col items-center justify-center min-h-[calc(100vh-120px)]">
+      
+      <!-- Kali Avatar -->
+      <div class="mb-8">
+        <div class="w-32 h-32 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse-slow relative">
+          <!-- Glow effect -->
+          <div class="absolute inset-0 bg-gradient-to-br from-slate-400 via-blue-400 to-indigo-400 rounded-full blur-lg opacity-30 animate-pulse"></div>
           <div class="relative">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div 
-                v-for="group in danceGroups" 
-                :key="group.id"
-                @click="selectGroup(group)"
-                :class="[
-                  'p-4 rounded-2xl cursor-pointer transition-all duration-300 transform hover:scale-105 border-2',
-                  selectedGroup?.id === group.id 
-                    ? 'bg-gradient-to-r from-slate-600 via-blue-600 to-indigo-600 text-white border-blue-600 shadow-lg shadow-blue-500/25' 
-                    : 'bg-white hover:bg-gray-50 text-gray-700 border-gray-300 hover:border-blue-400'
-                ]"
-              >
-                <!-- Selection indicator -->
-                <div v-if="selectedGroup?.id === group.id" class="flex items-center justify-between mb-3">
-                  <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                    </svg>
-                  </div>
-                </div>
+            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <h2 class="text-2xl font-bold text-white mb-2">Kali</h2>
+          <div class="bg-gradient-to-r from-green-400 to-green-500 text-white text-sm px-3 py-1 rounded-full inline-block">
+            En ligne
+          </div>
+        </div>
+      </div>
 
-                <!-- Group info -->
-                <h3 :class="['text-lg font-bold mb-2', selectedGroup?.id === group.id ? 'text-white' : 'text-gray-800']">
-                  {{ group.name }}
-                </h3>
-                
-                <div class="space-y-2">
-                  <div class="flex items-center space-x-2">
-                    <svg :class="['w-4 h-4 flex-shrink-0', selectedGroup?.id === group.id ? 'text-white/80' : 'text-gray-500']" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                    </svg>
-                    <span :class="['text-sm font-medium', selectedGroup?.id === group.id ? 'text-white/80' : 'text-gray-600']">{{ group.ageRange }}</span>
-                  </div>
-                  
-                  <div class="flex items-center space-x-2">
-                    <svg :class="['w-4 h-4 flex-shrink-0', selectedGroup?.id === group.id ? 'text-white/80' : 'text-gray-500']" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <span :class="['text-sm font-medium', selectedGroup?.id === group.id ? 'text-white/80' : 'text-gray-600']">{{ group.schedule }}</span>
-                  </div>
-                </div>
-              </div>
+      <!-- Conversation Interface -->
+      <div class="w-full max-w-2xl space-y-6">
+        
+        <!-- Kali Message -->
+        <div class="flex items-start space-x-4">
+          <div class="w-12 h-12 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
+            </svg>
+          </div>
+          <div class="bg-white/95 backdrop-blur-sm rounded-2xl rounded-tl-md p-6 shadow-xl border border-white/20 flex-1">
+            <div v-if="currentStep === 'greeting'" class="typewriter">
+              {{ displayText }}
+              <span v-if="showCursor" class="cursor">|</span>
+            </div>
+            <div v-else>
+              <p v-if="currentStep === 'dance-selection'" class="text-gray-800 text-lg leading-relaxed">
+                Génial ! Nous arrivons à la dernière étape. Il est temps de choisir ton groupe de danse ! Quel style t'intéresse le plus ?
+              </p>
+              <p v-else-if="currentStep === 'group-details' && selectedGroup" class="text-gray-800 text-lg leading-relaxed">
+                Excellent choix ! {{ selectedGroup.name }} - {{ selectedGroup.description }}. Es-tu prêt(e) à rejoindre ce groupe ?
+              </p>
             </div>
           </div>
         </div>
 
-        <!-- Sport Code Section (si groupe sélectionné) -->
-        <div v-if="selectedGroup" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 mb-8 animate-slide-in shadow-2xl border border-white/20 relative overflow-hidden">
-          <!-- Card glow effect -->
-          <div class="absolute inset-0 bg-gradient-to-r from-slate-500/10 via-blue-500/10 to-indigo-500/10 rounded-3xl"></div>
-          
-          <div class="relative">
-            <div class="space-y-4">
-              <!-- Groupe sélectionné -->
-              <div class="text-center mb-6">
-                <div class="w-12 h-12 bg-gradient-to-br from-slate-600 via-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">
-                  <span class="bg-gradient-to-r from-slate-700 to-blue-700 bg-clip-text text-transparent">
-                    {{ selectedGroup.name }}
-                  </span>
-                </h3>
-                <p class="text-gray-600">{{ selectedGroup.ageRange }} • {{ selectedGroup.schedule }}</p>
-              </div>
-
-              <!-- Sport Code -->
-              <div class="space-y-2">
-                <label class="block text-sm font-semibold text-slate-700">
-                  Code Sport (optionnel)
-                </label>
-                <input
-                  v-model="sportCode"
-                  type="text"
-                  placeholder="Ton code sport si tu en as un"
-                  :disabled="loading"
-                  class="w-full px-4 py-3 rounded-xl bg-white border-2 border-slate-200/50 focus:border-blue-500 focus:bg-white text-gray-800 font-medium placeholder-slate-400 transition-all duration-300 focus:shadow-lg focus:shadow-blue-500/20"
-                />
-                <p class="text-gray-500 text-sm">
-                  Renseigne ton code sport uniquement si tu en possèdes un
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Form Actions -->
-        <div class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 animate-slide-in shadow-2xl border border-white/20 relative overflow-hidden">
-          <div class="absolute inset-0 bg-gradient-to-r from-slate-500/10 via-blue-500/10 to-indigo-500/10 rounded-3xl"></div>
-          
-          <div class="relative">
-            <!-- Error Alert -->
-            <div v-if="error" class="bg-red-50 border border-red-200 p-4 rounded-xl mb-6">
-              <div class="flex items-center">
-                <div class="w-5 h-5 text-red-600 mr-3 flex-shrink-0">
-                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L5.232 16.5c-.77.833.192 2.5 1.732 2.5z"/>
-                  </svg>
-                </div>
-                <p class="text-red-800 font-medium text-sm">{{ error }}</p>
-              </div>
-            </div>
-
-            <!-- Submit Button -->
+        <!-- Dance Group Selection -->
+        <div v-if="currentStep === 'dance-selection'" class="space-y-4">
+          <div class="grid grid-cols-1 gap-4 max-h-96 overflow-y-auto">
             <button
-              @click="handleSubmit"
-              :disabled="loading || !selectedGroup"
-              class="w-full py-4 px-6 rounded-2xl font-bold text-lg bg-gradient-to-r from-slate-600 via-blue-600 to-indigo-600 hover:from-slate-700 hover:via-blue-700 hover:to-indigo-700 text-white disabled:opacity-50 disabled:cursor-not-allowed relative transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/25 group overflow-hidden"
+              v-for="group in danceGroups"
+              :key="group.id"
+              @click="handleGroupSelection(group)"
+              :disabled="loading"
+              class="option-button"
+              :class="{ 'selected': selectedGroup?.id === group.id }"
             >
-              <!-- Shine effect -->
-              <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-              
-              <div v-if="loading" class="absolute inset-0 flex items-center justify-center">
-                <div class="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
+              <div class="flex items-start">
+                <div class="w-8 h-8 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                  <span class="text-white text-sm font-bold">{{ group.name.substring(0, 2) }}</span>
+                </div>
+                <div class="text-left flex-1">
+                  <div class="font-semibold text-gray-900">{{ group.name }}</div>
+                  <div class="text-sm text-gray-600 mb-1">{{ group.description }}</div>
+                  <div class="text-xs text-blue-600 font-medium">
+                    {{ group.ageRange }} • {{ group.schedule }} • {{ group.price }}€
+                  </div>
+                </div>
               </div>
-              <span :class="{ 'invisible': loading }" class="relative flex items-center justify-center space-x-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <span>{{ loading ? 'Finalisation...' : 'Finaliser mon inscription' }}</span>
-              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Group Confirmation -->
+        <div v-if="currentStep === 'group-details'" class="space-y-6">
+          <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+            <div class="flex items-start">
+              <div class="w-12 h-12 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                <span class="text-white text-lg font-bold">{{ selectedGroup?.name.substring(0, 2) }}</span>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-1">{{ selectedGroup?.name }}</h3>
+                <p class="text-gray-700 mb-2">{{ selectedGroup?.description }}</p>
+                <div class="text-sm text-gray-600">
+                  <div><strong>Âge :</strong> {{ selectedGroup?.ageRange }}</div>
+                  <div><strong>Horaire :</strong> {{ selectedGroup?.schedule }}</div>
+                  <div><strong>Prix :</strong> {{ selectedGroup?.price }}€ {{ selectedGroup?.period }}</div>
+                  <div><strong>Niveau :</strong> {{ selectedGroup?.level }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <button
+              @click="currentStep = 'dance-selection'"
+              class="btn-secondary"
+              :disabled="loading"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Changer de groupe
             </button>
             
-            <p class="text-center text-gray-500 text-sm mt-4">
-              En cliquant sur ce bouton, tu valides ton inscription qui sera transmise pour validation
-            </p>
+            <button
+              @click="handleFinalSubmit"
+              :disabled="loading"
+              class="btn-primary"
+            >
+              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+              <span v-else>Terminer l'inscription</span>
+              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+            </button>
           </div>
         </div>
 
-        <!-- Footer -->
-        <div class="mt-8 text-center animate-slide-in-delay">
-          <p class="text-sm text-slate-300/80 font-medium">
-            © 2024 Square630 • Association Andyvie • 
-            <span class="bg-gradient-to-r from-slate-300 to-blue-300 bg-clip-text text-transparent">
-              Tous droits réservés
-            </span>
-          </p>
+        <!-- Error Message -->
+        <div v-if="error" class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">
+          {{ error }}
         </div>
+
       </div>
     </div>
   </div>
@@ -221,149 +184,284 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useHead, navigateTo } from 'nuxt/app'
+import { useHead, navigateTo, useCookie } from 'nuxt/app'
 
 definePageMeta({
   middleware: 'auth'
 })
 
-interface DanceGroup {
-  id: number
-  name: string
-  ageRange: string
-  schedule: string
-  description?: string
-}
+// @ts-ignore - Nuxt auto-import
+const { user } = useAuth()
 
+const currentStep = ref('greeting')
+const displayText = ref('')
+const showCursor = ref(true)
 const loading = ref(false)
 const error = ref('')
-const selectedGroup = ref<DanceGroup | null>(null)
-const sportCode = ref('')
+const selectedGroup = ref<any>(null)
 
-// Ces données viendront de l'API plus tard
-const danceGroups = ref<DanceGroup[]>([
+const danceGroups = ref([
   {
     id: 1,
-    name: "Les Kids",
-    ageRange: "CP / CE1",
-    schedule: "Samedi 12h-13h"
+    name: "HIPHOP ENFANTS",
+    description: "Initiation au hip-hop avec des bases ludiques",
+    ageRange: "6-10 ans",
+    schedule: "Mercredi 14h-15h",
+    level: "Débutant",
+    price: 25,
+    period: "par mois"
   },
   {
     id: 2,
-    name: "La Relève",
-    ageRange: "CE2 / CM1 / CM2",
-    schedule: "Samedi 10h-11h"
+    name: "HIPHOP ADOS",
+    description: "Hip-hop dynamique pour adolescents",
+    ageRange: "11-15 ans", 
+    schedule: "Mercredi 15h-16h30",
+    level: "Tous niveaux",
+    price: 30,
+    period: "par mois"
   },
   {
     id: 3,
-    name: "Les Espoirs",
-    ageRange: "Collégiens 6ᵉ – 5ᵉ",
-    schedule: "Samedi 11h-12h"
+    name: "HIPHOP ADULTES",
+    description: "Sessions hip-hop pour adultes débutants et confirmés",
+    ageRange: "16+ ans",
+    schedule: "Jeudi 19h-20h30",
+    level: "Tous niveaux", 
+    price: 35,
+    period: "par mois"
   },
   {
     id: 4,
-    name: "Les Initiés",
-    ageRange: "Collégiens 4ᵉ – 3ᵉ",
-    schedule: "Samedi 13h-14h"
+    name: "BREAKDANCE",
+    description: "L'art du breaking avec figures au sol",
+    ageRange: "12+ ans",
+    schedule: "Samedi 14h-15h30",
+    level: "Intermédiaire",
+    price: 40,
+    period: "par mois"
   },
   {
     id: 5,
-    name: "Les Confirmés",
-    ageRange: "Lycéens à 25 ans",
-    schedule: "Vendredi 19h-20h"
-  },
-  {
-    id: 6,
-    name: "Les Funky",
-    ageRange: "+25 ans",
-    schedule: "Mercredi 18h15-19h15"
-  },
-  {
-    id: 7,
-    name: "Les Élites",
-    ageRange: "Sur sélection",
-    schedule: "RDV avec Damien"
-  },
-  {
-    id: 8,
-    name: "Les No Limit",
-    ageRange: "Handicap, dès 14 ans",
-    schedule: "Vendredi 18h-19h"
-  },
-  {
-    id: 9,
-    name: "Les Rookies",
-    ageRange: "Handicap, 6-13 ans",
-    schedule: "Vendredi 17h-18h"
-  },
-  {
-    id: 10,
-    name: "Cours Général",
-    ageRange: "Collège et +",
-    schedule: "Samedi 10h-11h"
-  },
-  {
-    id: 11,
-    name: "Débutants/Inter",
-    ageRange: "CE2 au CM2",
-    schedule: "Samedi 11h-12h"
-  },
-  {
-    id: 12,
-    name: "Show Break",
-    ageRange: "Tous niveaux",
-    schedule: "Samedi 12h-13h"
-  },
-  {
-    id: 13,
-    name: "Confirmés Libre",
-    ageRange: "Niveau confirmé",
-    schedule: "Mer & Ven 18h-20h"
+    name: "HOUSE DANCE",
+    description: "Danse house énergique et technique", 
+    ageRange: "14+ ans",
+    schedule: "Vendredi 18h-19h30",
+    level: "Avancé",
+    price: 35,
+    period: "par mois"
   }
 ])
 
-const selectGroup = (group: DanceGroup) => {
-  selectedGroup.value = group
-}
+const fullText = "Nous y sommes presque ! C'est le moment de choisir ton groupe de danse. Chaque groupe a sa propre personnalité et son niveau. Lequel t'appelle le plus ? 🕺💃"
 
 const goBack = () => {
   navigateTo('/inscription/step-3')
 }
 
-const handleSubmit = async () => {
+const typeText = () => {
+  let index = 0
+  const interval = setInterval(() => {
+    if (index < fullText.length) {
+      displayText.value += fullText[index]
+      index++
+    } else {
+      clearInterval(interval)
+      setTimeout(() => {
+        currentStep.value = 'dance-selection'
+      }, 800)
+    }
+  }, 20)
+}
+
+const handleGroupSelection = (group: any) => {
+  selectedGroup.value = group
+  setTimeout(() => {
+    currentStep.value = 'group-details'
+  }, 500)
+}
+
+const handleFinalSubmit = async () => {
   error.value = ''
   loading.value = true
 
   try {
-    if (!selectedGroup.value) {
-      error.value = 'Veuillez sélectionner un groupe de danse'
-      return
-    }
-
-    // Ici on sauvegardera les données plus tard
-    console.log('Registration data:', {
-      groupId: selectedGroup.value.id,
-      sportCode: sportCode.value || null
+    // Sauvegarder les données
+    const formDataCookie = useCookie('registration-step4', {
+      default: () => ({})
     })
     
-    // Simuler un appel API
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    formDataCookie.value = {
+      selectedDanceGroup: selectedGroup.value
+    }
     
-    // Rediriger vers la page de récapitulatif
+    console.log('Step 4 data:', formDataCookie.value)
+    
+    // Simuler un appel API
+    await new Promise(resolve => setTimeout(resolve, 800))
+    
+    // Aller à la page de récapitulatif
     await navigateTo('/inscription/summary')
     
   } catch (err) {
-    error.value = 'Une erreur s\'est produite lors de la finalisation'
+    error.value = 'Une erreur s\'est produite lors de la sauvegarde'
   } finally {
     loading.value = false
   }
 }
 
+onMounted(() => {
+  // Vérifier les données des étapes précédentes
+  const step1Data = useCookie('registration-step1').value
+  const step2Data = useCookie('registration-step2').value
+  const step3Data = useCookie('registration-step3').value
+  
+  if (!step1Data || !step1Data.firstName) {
+    navigateTo('/inscription/step-1')
+    return
+  }
+
+  // Démarrer l'animation de frappe
+  setTimeout(() => {
+    typeText()
+  }, 1000)
+
+  // Cursor blinking
+  setInterval(() => {
+    showCursor.value = !showCursor.value
+  }, 500)
+})
+
 // Meta
 useHead({
   title: 'Étape 4 - Choix du groupe • Square630',
   meta: [
-    { name: 'description', content: 'Sélectionnez votre groupe de danse hip-hop selon votre âge et niveau' }
+    { name: 'description', content: 'Kali, ton assistante virtuelle pour l\'inscription Square630' }
   ]
 })
 </script>
+
+<style scoped>
+.typewriter {
+  color: #1f2937;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.cursor {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.answer-input {
+  width: 100%;
+  padding: 1.5rem;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 1rem;
+  color: #1e293b;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.answer-input::placeholder {
+  color: #94a3b8;
+}
+
+.answer-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.option-button {
+  width: 100%;
+  padding: 1rem;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 1rem;
+  text-align: left;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.option-button:hover {
+  border-color: #93c5fd;
+  background-color: #eff6ff;
+}
+
+.option-button:focus {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.option-button.selected {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: linear-gradient(to right, #475569, #2563eb, #4f46e5);
+  color: white;
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  border-radius: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  transform: scale(1);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(to right, #334155, #1d4ed8, #4338ca);
+  transform: scale(1.05);
+  box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.25);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: scale(1);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  color: #374151;
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  border-color: #cbd5e1;
+  background-color: #f8fafc;
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+</style>

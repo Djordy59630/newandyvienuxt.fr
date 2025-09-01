@@ -51,314 +51,127 @@
       </div>
     </nav>
 
-    <div class="relative flex min-h-screen items-center justify-center px-4 py-12">
-      <div class="w-full max-w-md">
-        <!-- Logo Section -->
-        <div class="text-center mb-8 animate-fade-in">
-          <div class="mx-auto w-20 h-20 bg-gradient-to-br from-white via-slate-50 to-blue-50 rounded-3xl flex items-center justify-center mb-6 shadow-2xl border border-white/20 backdrop-blur-sm">
-            <div class="w-12 h-12 bg-gradient-to-br from-slate-600 via-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <span class="text-white text-xl font-bold">2</span>
-            </div>
-          </div>
-          <h1 class="text-4xl font-black text-white mb-2 tracking-tight">
-            <span class="bg-gradient-to-r from-white via-slate-200 to-blue-200 bg-clip-text text-transparent">
-              RESPONSABLE
-            </span>
-          </h1>
-          <p class="text-slate-200 font-medium text-lg">Si tu es mineur</p>
-        </div>
-
-        <!-- Age Check Card -->
-        <div class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 mb-8 animate-slide-in shadow-2xl border border-white/20 relative overflow-hidden">
-          <!-- Card glow effect -->
-          <div class="absolute inset-0 bg-gradient-to-r from-slate-500/10 via-blue-500/10 to-indigo-500/10 rounded-3xl"></div>
-          
+    <!-- Main Content -->
+    <div class="relative z-10 max-w-4xl mx-auto px-8 pb-12 flex flex-col items-center justify-center min-h-[calc(100vh-120px)]">
+      
+      <!-- Kali Avatar -->
+      <div class="mb-8">
+        <div class="w-32 h-32 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse-slow relative">
+          <!-- Glow effect -->
+          <div class="absolute inset-0 bg-gradient-to-br from-slate-400 via-blue-400 to-indigo-400 rounded-full blur-lg opacity-30 animate-pulse"></div>
           <div class="relative">
-            <div class="mb-6">
-              <h2 class="text-2xl font-bold text-gray-800 mb-4">
-                <span class="bg-gradient-to-r from-slate-700 to-blue-700 bg-clip-text text-transparent">
-                  Es-tu mineur ?
-                </span>
-              </h2>
-              
-              <div class="flex flex-col gap-4">
-                <button
-                  @click="setIsMinor(true)"
-                  :class="[
-                    'flex items-center justify-center py-4 px-6 rounded-2xl font-semibold text-lg transition-all duration-300 border-2 transform hover:scale-105',
-                    isMinor === true 
-                      ? 'bg-gradient-to-r from-slate-600 via-blue-600 to-indigo-600 text-white border-blue-600 shadow-lg shadow-blue-500/25' 
-                      : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
-                  ]"
-                >
-                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                  Oui, j'ai moins de 18 ans
-                </button>
-                <button
-                  @click="setIsMinor(false)"
-                  :class="[
-                    'flex items-center justify-center py-4 px-6 rounded-2xl font-semibold text-lg transition-all duration-300 border-2 transform hover:scale-105',
-                    isMinor === false 
-                      ? 'bg-gradient-to-r from-slate-600 via-blue-600 to-indigo-600 text-white border-blue-600 shadow-lg shadow-blue-500/25' 
-                      : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400'
-                  ]"
-                >
-                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                  Non, j'ai 18 ans ou plus
-                </button>
-              </div>
+            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <h2 class="text-2xl font-bold text-white mb-2">Kali</h2>
+          <div class="bg-gradient-to-r from-green-400 to-green-500 text-white text-sm px-3 py-1 rounded-full inline-block">
+            En ligne
+          </div>
+        </div>
+      </div>
+
+      <!-- Conversation Interface -->
+      <div class="w-full max-w-2xl space-y-6">
+        
+        <!-- Kali Message -->
+        <div class="flex items-start space-x-4">
+          <div class="w-12 h-12 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
+            </svg>
+          </div>
+          <div class="bg-white/95 backdrop-blur-sm rounded-2xl rounded-tl-md p-6 shadow-xl border border-white/20 flex-1">
+            <div v-if="currentStep === 'greeting'" class="typewriter">
+              {{ displayText }}
+              <span v-if="showCursor" class="cursor">|</span>
+            </div>
+            <div v-else>
+              <p v-if="currentStep === 'guardian-info'" class="text-gray-800 text-lg leading-relaxed">
+                Comme tu es mineur(e), j'ai besoin des informations de ton responsable légal. Quel est son email ?
+              </p>
+              <p v-else-if="currentStep === 'no-guardian'" class="text-gray-800 text-lg leading-relaxed">
+                Parfait ! Tu es majeur(e), nous pouvons passer directement à l'étape suivante.
+              </p>
             </div>
           </div>
         </div>
 
-        <!-- Form Card (visible seulement si mineur) -->
-        <div v-if="isMinor === true" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 animate-slide-in shadow-2xl border border-white/20 relative overflow-hidden">
-          <!-- Card glow effect -->
-          <div class="absolute inset-0 bg-gradient-to-r from-slate-500/10 via-blue-500/10 to-indigo-500/10 rounded-3xl"></div>
-          
-          <div class="relative">
-            <form @submit.prevent="handleSubmit" class="space-y-5">
-              
-              <!-- Email du responsable -->
-              <div class="space-y-3">
-                <label class="block text-sm font-bold text-gray-800">
-                  <span class="bg-gradient-to-r from-slate-600 to-blue-600 bg-clip-text text-transparent">
-                    Email du responsable légal
-                  </span>
-                </label>
-                <div class="relative group">
-                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <div class="w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition-colors">
-                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
-                      </svg>
-                    </div>
-                  </div>
-                  <input
-                    v-model="form.email"
-                    type="email"
-                    placeholder="parent@exemple.com"
-                    :disabled="loading"
-                    class="w-full pl-12 pr-4 py-4 rounded-2xl bg-white border-2 border-slate-200/50 focus:border-blue-500 focus:bg-white text-gray-800 font-medium placeholder-slate-400 transition-all duration-300 focus:shadow-lg focus:shadow-blue-500/20"
-                    required
-                  />
-                </div>
-              </div>
+        <!-- Response Area -->
 
-              <!-- Name Fields Row -->
-              <div class="grid grid-cols-2 gap-4">
-                <!-- First Name -->
-                <div class="space-y-2">
-                  <label class="block text-sm font-bold text-gray-800">
-                    <span class="bg-gradient-to-r from-slate-600 to-blue-600 bg-clip-text text-transparent">
-                      Prénom
-                    </span>
-                  </label>
-                  <input
-                    v-model="form.firstName"
-                    type="text"
-                    placeholder="Marie"
-                    :disabled="loading"
-                    class="w-full px-4 py-3 rounded-2xl bg-white border-2 border-slate-200/50 focus:border-blue-500 focus:bg-white text-gray-800 font-medium placeholder-slate-400 transition-all duration-300 focus:shadow-lg focus:shadow-blue-500/20"
-                    required
-                  />
-                </div>
-
-                <!-- Last Name -->
-                <div class="space-y-2">
-                  <label class="block text-sm font-bold text-gray-800">
-                    <span class="bg-gradient-to-r from-indigo-600 to-slate-600 bg-clip-text text-transparent">
-                      Nom
-                    </span>
-                  </label>
-                  <input
-                    v-model="form.lastName"
-                    type="text"
-                    placeholder="Dupont"
-                    :disabled="loading"
-                    class="w-full px-4 py-3 rounded-2xl bg-white border-2 border-slate-200/50 focus:border-indigo-500 focus:bg-white text-gray-800 font-medium placeholder-slate-400 transition-all duration-300 focus:shadow-lg focus:shadow-indigo-500/20"
-                    required
-                  />
-                </div>
-              </div>
-
-              <!-- Address -->
-              <div class="space-y-3">
-                <label class="block text-sm font-bold text-gray-800">
-                  <span class="bg-gradient-to-r from-slate-600 to-blue-600 bg-clip-text text-transparent">
-                    Adresse
-                  </span>
-                </label>
-                <div class="relative group">
-                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <div class="w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition-colors">
-                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                      </svg>
-                    </div>
-                  </div>
-                  <input
-                    v-model="form.address"
-                    type="text"
-                    placeholder="12 rue de la République"
-                    :disabled="loading"
-                    class="w-full pl-12 pr-4 py-4 rounded-2xl bg-white border-2 border-slate-200/50 focus:border-blue-500 focus:bg-white text-gray-800 font-medium placeholder-slate-400 transition-all duration-300 focus:shadow-lg focus:shadow-blue-500/20"
-                    required
-                  />
-                </div>
-              </div>
-
-              <!-- Postal Code and City Row -->
-              <div class="grid grid-cols-2 gap-4">
-                <div class="space-y-2">
-                  <label class="block text-sm font-bold text-gray-800">
-                    <span class="bg-gradient-to-r from-slate-600 to-blue-600 bg-clip-text text-transparent">
-                      Code postal
-                    </span>
-                  </label>
-                  <input
-                    v-model="form.postalCode"
-                    type="text"
-                    placeholder="75000"
-                    pattern="[0-9]{5}"
-                    :disabled="loading"
-                    class="w-full px-4 py-3 rounded-2xl bg-white border-2 border-slate-200/50 focus:border-blue-500 focus:bg-white text-gray-800 font-medium placeholder-slate-400 transition-all duration-300 focus:shadow-lg focus:shadow-blue-500/20"
-                    required
-                  />
-                </div>
-
-                <div class="space-y-2">
-                  <label class="block text-sm font-bold text-gray-800">
-                    <span class="bg-gradient-to-r from-indigo-600 to-slate-600 bg-clip-text text-transparent">
-                      Ville
-                    </span>
-                  </label>
-                  <input
-                    v-model="form.city"
-                    type="text"
-                    placeholder="Paris"
-                    :disabled="loading"
-                    class="w-full px-4 py-3 rounded-2xl bg-white border-2 border-slate-200/50 focus:border-indigo-500 focus:bg-white text-gray-800 font-medium placeholder-slate-400 transition-all duration-300 focus:shadow-lg focus:shadow-indigo-500/20"
-                    required
-                  />
-                </div>
-              </div>
-
-              <!-- Phone -->
-              <div class="space-y-3">
-                <label class="block text-sm font-bold text-gray-800">
-                  <span class="bg-gradient-to-r from-slate-600 to-blue-600 bg-clip-text text-transparent">
-                    Téléphone
-                  </span>
-                </label>
-                <div class="relative group">
-                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <div class="w-5 h-5 text-slate-400 group-focus-within:text-blue-600 transition-colors">
-                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                      </svg>
-                    </div>
-                  </div>
-                  <input
-                    v-model="form.phone"
-                    type="tel"
-                    placeholder="06 12 34 56 78"
-                    :disabled="loading"
-                    class="w-full pl-12 pr-4 py-4 rounded-2xl bg-white border-2 border-slate-200/50 focus:border-blue-500 focus:bg-white text-gray-800 font-medium placeholder-slate-400 transition-all duration-300 focus:shadow-lg focus:shadow-blue-500/20"
-                    required
-                  />
-                </div>
-              </div>
-
-              <!-- Autorisation parentale -->
-              <div class="space-y-4">
-                <div class="bg-gradient-to-br from-slate-50 to-blue-50 p-6 rounded-2xl border-2 border-slate-200/50">
-                  <div class="flex items-start space-x-4">
-                    <input
-                      v-model="form.authorized"
-                      type="checkbox"
-                      id="authorization"
-                      :disabled="loading"
-                      class="mt-1 w-5 h-5 text-blue-600 rounded focus:ring-blue-500 border-slate-300"
-                      required
-                    />
-                    <label for="authorization" class="text-gray-700 font-medium leading-relaxed cursor-pointer">
-                      <span class="font-bold text-slate-800">J'autorise mon fils/ma fille à participer à l'activité danse hip-hop organisée par l'association Andyvie.</span>
-                      <br><br>
-                      <span class="text-sm text-gray-600">En cochant cette case, je donne mon consentement parental pour la participation de mon enfant aux cours de danse hip-hop.</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Error Alert -->
-              <div v-if="error" class="bg-red-50 border border-red-200 p-4 rounded-xl">
-                <div class="flex items-center">
-                  <div class="w-5 h-5 text-red-600 mr-3 flex-shrink-0">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L5.232 16.5c-.77.833.192 2.5 1.732 2.5z"/>
-                    </svg>
-                  </div>
-                  <p class="text-red-800 font-medium text-sm">{{ error }}</p>
-                </div>
-              </div>
-
-              <!-- Submit Button -->
-              <button
-                type="submit"
-                :disabled="loading"
-                class="w-full py-4 px-6 rounded-2xl font-bold text-lg bg-gradient-to-r from-slate-600 via-blue-600 to-indigo-600 hover:from-slate-700 hover:via-blue-700 hover:to-indigo-700 text-white disabled:opacity-50 disabled:cursor-not-allowed relative transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/25 group overflow-hidden"
-              >
-                <!-- Shine effect -->
-                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-                
-                <div v-if="loading" class="absolute inset-0 flex items-center justify-center">
-                  <div class="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
-                </div>
-                <span :class="{ 'invisible': loading }" class="relative flex items-center justify-center space-x-2">
-                  <span>{{ loading ? 'Sauvegarde...' : 'Étape suivante' }}</span>
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                  </svg>
-                </span>
-              </button>
-            </form>
+        <!-- No Guardian Needed -->
+        <div v-if="currentStep === 'no-guardian'" class="space-y-6">
+          <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+            <div class="flex items-center text-green-700">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span class="font-medium">Tu es majeur(e), aucune autorisation parentale nécessaire !</span>
+            </div>
           </div>
-        </div>
-
-        <!-- Skip Button (si majeur) -->
-        <div v-if="isMinor === false" class="text-center animate-slide-in">
-          <button
-            @click="skipStep"
-            :disabled="loading"
-            class="py-4 px-8 rounded-2xl font-bold text-lg bg-gradient-to-r from-slate-600 via-blue-600 to-indigo-600 hover:from-slate-700 hover:via-blue-700 hover:to-indigo-700 text-white disabled:opacity-50 disabled:cursor-not-allowed relative transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/25 group overflow-hidden"
-          >
-            <!-- Shine effect -->
-            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-            <span class="relative flex items-center justify-center space-x-2">
-              <span>Passer à l'étape suivante</span>
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          
+          <div class="flex justify-center">
+            <button
+              @click="handleNoGuardianSubmit"
+              :disabled="loading"
+              class="btn-primary"
+            >
+              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+              <span v-else>Continuer</span>
+              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
               </svg>
-            </span>
-          </button>
-          <p class="text-slate-300 mt-4 text-sm">Tu es majeur, cette étape ne te concerne pas.</p>
+            </button>
+          </div>
         </div>
 
-        <!-- Footer -->
-        <div class="mt-8 text-center animate-slide-in-delay">
-          <p class="text-sm text-slate-300/80 font-medium">
-            © 2024 Square630 • Association Andyvie • 
-            <span class="bg-gradient-to-r from-slate-300 to-blue-300 bg-clip-text text-transparent">
-              Tous droits réservés
-            </span>
-          </p>
+        <!-- Guardian Info Form -->
+        <div v-if="currentStep === 'guardian-info'" class="space-y-6">
+          <div>
+            <input
+              v-model="form.email"
+              type="email"
+              class="answer-input"
+              placeholder="parent@exemple.com"
+              @keyup.enter="handleEmailSubmit"
+              :disabled="loading"
+              required
+            />
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <button
+              @click="currentStep = 'minor-check'"
+              class="btn-secondary"
+              :disabled="loading"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Retour
+            </button>
+            
+            <button
+              @click="handleEmailSubmit"
+              :disabled="loading || !form.email"
+              class="btn-primary"
+            >
+              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+              <span v-else>Continuer</span>
+              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
         </div>
+
+        <!-- Error Message -->
+        <div v-if="error" class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">
+          {{ error }}
+        </div>
+
       </div>
     </div>
   </div>
@@ -375,74 +188,88 @@ definePageMeta({
 // @ts-ignore - Nuxt auto-import
 const { user } = useAuth()
 
-// Vérifier si l'utilisateur doit être ici
-onMounted(() => {
-  const step1Data = useCookie('registration-step1').value
-  if (!step1Data || !step1Data.isMinor) {
-    // Si pas mineur, rediriger vers l'étape 3
-    navigateTo('/inscription/step-3')
-  }
-})
-
+const currentStep = ref('greeting')
+const displayText = ref('')
+const showCursor = ref(true)
 const loading = ref(false)
 const error = ref('')
 const isMinor = ref<boolean | null>(null)
 
 const form = ref({
-  email: '',
-  firstName: '',
-  lastName: '',
-  address: '',
-  postalCode: '',
-  city: '',
-  phone: '',
-  authorized: false
+  email: ''
 })
 
-const setIsMinor = (value: boolean) => {
-  isMinor.value = value
-  if (value === false) {
-    // Reset form if user is not minor
-    form.value = {
-      email: '',
-      firstName: '',
-      lastName: '',
-      address: '',
-      postalCode: '',
-      city: '',
-      phone: '',
-      authorized: false
-    }
+// Calculer si mineur depuis les données de l'étape 1
+let fullText = ""
+let isUserMinor = false
+
+const calculateAge = (birthDate: string) => {
+  if (!birthDate) return false
+  const today = new Date()
+  const birth = new Date(birthDate)
+  const age = today.getFullYear() - birth.getFullYear()
+  const monthDiff = today.getMonth() - birth.getMonth()
+  
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    return (age - 1) < 18
   }
+  return age < 18
 }
 
 const goBack = () => {
   navigateTo('/inscription/step-1')
 }
 
-const skipStep = async () => {
-  // Aller directement à l'étape 3 si majeur
-  await navigateTo('/inscription/step-3')
+const typeText = () => {
+  let index = 0
+  const interval = setInterval(() => {
+    if (index < fullText.length) {
+      displayText.value += fullText[index]
+      index++
+    } else {
+      clearInterval(interval)
+      setTimeout(() => {
+        // Déterminer automatiquement si mineur ou majeur
+        if (isUserMinor) {
+          currentStep.value = 'guardian-info'
+        } else {
+          currentStep.value = 'no-guardian'
+        }
+      }, 800)
+    }
+  }, 20)
 }
 
-const handleSubmit = async () => {
+const handleNoGuardianSubmit = async () => {
+  await handleSubmit(false)
+}
+
+const handleEmailSubmit = async () => {
+  if (!form.value.email) return
+  await handleSubmit(true)
+}
+
+const handleSubmit = async (isMinorValue: boolean) => {
   error.value = ''
   loading.value = true
 
   try {
-    // Vérifier que l'autorisation est cochée
-    if (!form.value.authorized) {
-      error.value = 'L\'autorisation parentale est obligatoire'
-      return
+    // Sauvegarder les données
+    const formDataCookie = useCookie('registration-step2', {
+      default: () => ({})
+    })
+    
+    formDataCookie.value = {
+      isMinor: isMinorValue,
+      guardianEmail: isMinorValue ? form.value.email : null
     }
-
-    // Ici on sauvegardera les données plus tard
-    console.log('Legal guardian data:', form.value)
+    
+    console.log('Step 2 data:', formDataCookie.value)
     
     // Simuler un appel API
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await new Promise(resolve => setTimeout(resolve, 800))
     
-    // Rediriger vers l'étape 3
+    // Aller à l'étape 3
     await navigateTo('/inscription/step-3')
     
   } catch (err) {
@@ -452,11 +279,184 @@ const handleSubmit = async () => {
   }
 }
 
+onMounted(() => {
+  // Vérifier les données de l'étape 1
+  const step1Data = useCookie('registration-step1').value
+  if (!step1Data || !step1Data.firstName) {
+    navigateTo('/inscription/step-1')
+    return
+  }
+
+  // Calculer si l'utilisateur est mineur depuis ses données
+  if (step1Data.birthDate) {
+    isUserMinor = calculateAge(step1Data.birthDate)
+    
+    // Définir le message de Kali selon l'âge
+    if (isUserMinor) {
+      fullText = `Salut ${step1Data.firstName} ! Je vois que tu as ${getAge(step1Data.birthDate)} ans. Comme tu es mineur(e), j'ai besoin des coordonnées de ton responsable légal pour valider ton inscription. 👨‍👩‍👧‍👦`
+    } else {
+      fullText = `Salut ${step1Data.firstName} ! Je vois que tu as ${getAge(step1Data.birthDate)} ans. Parfait, tu es majeur(e) ! Nous pouvons passer directement à l'étape suivante. 🎉`
+    }
+  } else {
+    navigateTo('/inscription/step-1')
+    return
+  }
+
+  // Démarrer l'animation de frappe
+  setTimeout(() => {
+    typeText()
+  }, 1000)
+
+  // Cursor blinking
+  setInterval(() => {
+    showCursor.value = !showCursor.value
+  }, 500)
+})
+
+// Fonction pour calculer l'âge exact
+const getAge = (birthDate: string) => {
+  if (!birthDate) return 0
+  const today = new Date()
+  const birth = new Date(birthDate)
+  let age = today.getFullYear() - birth.getFullYear()
+  const monthDiff = today.getMonth() - birth.getMonth()
+  
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--
+  }
+  return age
+}
+
 // Meta
 useHead({
   title: 'Étape 2 - Responsable légal • Square630',
   meta: [
-    { name: 'description', content: 'Informations du responsable légal pour les participants mineurs' }
+    { name: 'description', content: 'Kali, ton assistante virtuelle pour l\'inscription Square630' }
   ]
 })
 </script>
+
+<style scoped>
+.typewriter {
+  color: #1f2937;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.cursor {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.answer-input {
+  width: 100%;
+  padding: 1.5rem;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 1rem;
+  color: #1e293b;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.answer-input::placeholder {
+  color: #94a3b8;
+}
+
+.answer-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.option-button {
+  width: 100%;
+  padding: 1rem;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 1rem;
+  text-align: left;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.option-button:hover {
+  border-color: #93c5fd;
+  background-color: #eff6ff;
+}
+
+.option-button:focus {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.option-button.selected {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: linear-gradient(to right, #475569, #2563eb, #4f46e5);
+  color: white;
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  border-radius: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  transform: scale(1);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(to right, #334155, #1d4ed8, #4338ca);
+  transform: scale(1.05);
+  box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.25);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: scale(1);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  color: #374151;
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  border-color: #cbd5e1;
+  background-color: #f8fafc;
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+</style>
