@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const body = await readBody(event)
-    const { schoolYear, personalData, guardianData, healthData, selectedGroups } = body
+    const { schoolYear, personalData, guardianData, emergencyContacts, healthData, selectedGroups } = body
 
     if (!schoolYear || !personalData || !healthData || !selectedGroups || selectedGroups.length === 0) {
       throw createError({
@@ -178,6 +178,30 @@ export default defineEventHandler(async (event) => {
             city: personalData.city
           }
         })
+      }
+    }
+
+    // Mettre à jour les contacts d'urgence si fournis
+    if (emergencyContacts && Array.isArray(emergencyContacts)) {
+      // Supprimer les anciens contacts d'urgence
+      await prisma.emergencyContact.deleteMany({
+        where: { dancerId: existingDancer.id }
+      })
+
+      // Créer les nouveaux contacts d'urgence
+      for (const contact of emergencyContacts) {
+        if (contact.firstName && contact.lastName && contact.phone && contact.relationship) {
+          await prisma.emergencyContact.create({
+            data: {
+              dancerId: existingDancer.id,
+              firstName: contact.firstName,
+              lastName: contact.lastName,
+              phone: contact.phone,
+              relationship: contact.relationship,
+              type: 'EMERGENCY'
+            }
+          })
+        }
       }
     }
 

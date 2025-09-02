@@ -133,27 +133,27 @@
               <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
-                  <input v-model="editForm.firstName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <input v-model="editForm.firstName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
-                  <input v-model="editForm.lastName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <input v-model="editForm.lastName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                  <input v-model="editForm.email" type="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <input v-model="editForm.email" type="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
-                  <input v-model="editForm.phone" type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <input v-model="editForm.phone" type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Date de naissance *</label>
-                  <input v-model="editForm.birthDate" type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <input v-model="editForm.birthDate" type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Niveau scolaire *</label>
-                  <select v-model="editForm.schoolLevel" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <select v-model="editForm.schoolLevel" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                     <option value="">Sélectionner...</option>
                     <option value="CP">CP</option>
                     <option value="CE1">CE1</option>
@@ -173,7 +173,7 @@
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Taille T-shirt *</label>
-                  <select v-model="editForm.tShirtSize" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <select v-model="editForm.tShirtSize" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                     <option value="">Sélectionner...</option>
                     <option value="XS">XS</option>
                     <option value="S">S</option>
@@ -185,19 +185,19 @@
                 </div>
                 <div class="md:col-span-2">
                   <label class="block text-sm font-medium text-gray-700 mb-1">Adresse *</label>
-                  <input v-model="editForm.address" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <input v-model="editForm.address" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Code postal *</label>
-                  <input v-model="editForm.postalCode" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <input v-model="editForm.postalCode" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Ville *</label>
-                  <input v-model="editForm.city" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <input v-model="editForm.city" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                 </div>
                 <div class="md:col-span-2">
                   <label class="block text-sm font-medium text-gray-700 mb-1">Autres informations</label>
-                  <textarea v-model="editForm.otherInfo" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" rows="3" placeholder="Informations complémentaires (allergies, traitements médicaux, etc.)"></textarea>
+                  <textarea v-model="editForm.otherInfo" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" rows="3" placeholder="Informations complémentaires (allergies, traitements médicaux, etc.)"></textarea>
                 </div>
               </div>
             </div>
@@ -223,23 +223,23 @@
               <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
-                  <input v-model="editGuardianForm.firstName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <input v-model="editGuardianForm.firstName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
-                  <input v-model="editGuardianForm.lastName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <input v-model="editGuardianForm.lastName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                  <input v-model="editGuardianForm.email" type="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <input v-model="editGuardianForm.email" type="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
-                  <input v-model="editGuardianForm.phone" type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <input v-model="editGuardianForm.phone" type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Relation *</label>
-                  <select v-model="editGuardianForm.relationship" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                  <select v-model="editGuardianForm.relationship" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
                     <option value="Parent">Parent</option>
                     <option value="Tuteur légal">Tuteur légal</option>
                     <option value="Autre">Autre</option>
@@ -247,22 +247,78 @@
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Autorisé à récupérer</label>
-                  <input v-model="editGuardianForm.authorized" type="checkbox" class="w-4 h-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded">
+                  <input v-model="editGuardianForm.authorized" type="checkbox" class="w-4 h-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
                 </div>
               </div>
             </div>
 
             <!-- Emergency Contacts -->
-            <div v-if="emergencyContacts?.length > 0" class="bg-gray-50 rounded-xl p-6">
-              <h3 class="text-xl font-bold text-gray-800 mb-4">Contacts d'urgence</h3>
-              <div class="space-y-4">
-                <div v-for="(contact, index) in emergencyContacts" :key="index" class="bg-white rounded-lg p-4">
-                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div><strong>Nom :</strong> {{ contact.firstName }} {{ contact.lastName }}</div>
-                    <div><strong>Téléphone :</strong> {{ contact.phone }}</div>
-                    <div><strong>Relation :</strong> {{ contact.relationship }}</div>
+            <div class="bg-gray-50 rounded-xl p-6">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Contacts d'urgence</h3>
+                <button @click="editEmergencyContacts = !editEmergencyContacts" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-4 py-2 rounded-xl font-medium transition-all duration-300 shadow-lg">
+                  {{ editEmergencyContacts ? 'Annuler' : 'Modifier' }}
+                </button>
+              </div>
+              
+              <!-- Display mode -->
+              <div v-if="!editEmergencyContacts">
+                <div v-if="emergencyContacts?.length > 0" class="space-y-4">
+                  <div v-for="(contact, index) in emergencyContacts" :key="index" class="bg-white rounded-lg p-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div><strong>Nom :</strong> {{ contact.firstName }} {{ contact.lastName }}</div>
+                      <div><strong>Téléphone :</strong> {{ contact.phone }}</div>
+                      <div><strong>Relation :</strong> {{ contact.relationship }}</div>
+                    </div>
                   </div>
                 </div>
+                <div v-else class="text-gray-500 text-center py-4">
+                  Aucun contact d'urgence enregistré
+                </div>
+              </div>
+
+              <!-- Edit mode -->
+              <div v-else class="space-y-4">
+                <div v-for="(contact, index) in editEmergencyContactsForm" :key="index" class="bg-white rounded-lg p-4 border">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
+                      <input v-model="contact.firstName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
+                      <input v-model="contact.lastName" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
+                      <input v-model="contact.phone" type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Relation *</label>
+                      <select v-model="contact.relationship" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
+                        <option value="">Sélectionner...</option>
+                        <option value="Parent">Parent</option>
+                        <option value="Grand-parent">Grand-parent</option>
+                        <option value="Oncle/Tante">Oncle/Tante</option>
+                        <option value="Ami proche">Ami proche</option>
+                        <option value="Voisin">Voisin</option>
+                        <option value="Autre">Autre</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="flex justify-end mt-3">
+                    <button @click="removeEmergencyContact(index)" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm transition-colors">
+                      Supprimer
+                    </button>
+                  </div>
+                </div>
+                
+                <button @click="addEmergencyContact" class="w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                  </svg>
+                  Ajouter un contact d'urgence
+                </button>
               </div>
             </div>
           </div>
@@ -304,7 +360,7 @@
                     id="health1" 
                     v-model="healthForm.hasHealthProblems" 
                     type="checkbox" 
-                    class="mt-1 w-4 h-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                    class="mt-1 w-4 h-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
                   >
                   <label for="health1" class="text-sm text-gray-700">
                     Au cours des douze derniers mois, avez-vous ressenti une douleur dans la poitrine lors d'un effort physique ?
@@ -316,7 +372,7 @@
                     id="health2" 
                     v-model="healthForm.hasCardiacProblems" 
                     type="checkbox" 
-                    class="mt-1 w-4 h-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                    class="mt-1 w-4 h-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
                   >
                   <label for="health2" class="text-sm text-gray-700">
                     Au cours des douze derniers mois, avez-vous eu des étourdissements lors d'un effort physique ?
@@ -328,7 +384,7 @@
                     id="health3" 
                     v-model="healthForm.takesMedication" 
                     type="checkbox" 
-                    class="mt-1 w-4 h-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                    class="mt-1 w-4 h-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
                   >
                   <label for="health3" class="text-sm text-gray-700">
                     Prenez-vous actuellement un traitement médical ?
@@ -344,7 +400,7 @@
                   id="healthDeclaration" 
                   v-model="healthForm.healthDeclaration" 
                   type="checkbox" 
-                  class="mt-1 w-4 h-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                  class="mt-1 w-4 h-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
                   required
                 >
                 <label for="healthDeclaration" class="text-sm text-gray-700">
@@ -539,6 +595,7 @@ const currentSchoolYear = ref(getCurrentSchoolYear())
 // Forms
 const editPersonalInfo = ref(false)
 const editGuardianInfo = ref(false)
+const editEmergencyContacts = ref(false)
 
 // Original data from API
 const dancerData = ref(null)
@@ -579,6 +636,22 @@ const healthForm = ref({
 })
 
 const selectedGroups = ref([])
+
+// Emergency contacts edit form
+const editEmergencyContactsForm = ref([])
+
+const addEmergencyContact = () => {
+  editEmergencyContactsForm.value.push({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    relationship: ''
+  })
+}
+
+const removeEmergencyContact = (index) => {
+  editEmergencyContactsForm.value.splice(index, 1)
+}
 
 // Computed
 const fullAddress = computed(() => {
@@ -648,6 +721,14 @@ const loadData = async () => {
       previousDanceGroups.value = renewalData.previousDanceGroups
 
       console.log('Dancer data loaded:', dancerData.value)
+
+      // Initialize emergency contacts edit form
+      editEmergencyContactsForm.value = emergencyContacts.value.map(contact => ({
+        firstName: contact.firstName || '',
+        lastName: contact.lastName || '',
+        phone: contact.phone || '',
+        relationship: contact.relationship || ''
+      }))
 
       // Initialize edit forms with current data
       editForm.value = {
@@ -728,6 +809,21 @@ const validatePersonalInfoAndContinue = () => {
       return
     }
   }
+  
+  if (editEmergencyContacts.value) {
+    // Validate emergency contacts
+    for (let i = 0; i < editEmergencyContactsForm.value.length; i++) {
+      const contact = editEmergencyContactsForm.value[i]
+      const requiredContactFields = ['firstName', 'lastName', 'phone', 'relationship']
+      const missingContactFields = requiredContactFields.filter(field => !contact[field] || contact[field].trim() === '')
+      
+      if (missingContactFields.length > 0) {
+        alert(`Contact d'urgence ${i + 1} : veuillez remplir tous les champs obligatoires : ${missingContactFields.join(', ')}`)
+        return
+      }
+    }
+  }
+  
   currentStep.value = 2
 }
 
@@ -769,12 +865,16 @@ const submitRenewal = async () => {
       }
     ) : null
 
+    // Use edited emergency contacts if available, otherwise use original data
+    const emergencyContactsToSend = editEmergencyContacts.value ? editEmergencyContactsForm.value : emergencyContacts.value
+
     const { data: result } = await useFetch('/api/inscriptions/renew-complete', {
       method: 'POST',
       body: {
         schoolYear: currentSchoolYear.value,
         personalData,
         guardianData: guardianDataToSend,
+        emergencyContacts: emergencyContactsToSend,
         healthData: healthForm.value,
         selectedGroups: selectedGroups.value.map(g => ({
           id: g.id,
