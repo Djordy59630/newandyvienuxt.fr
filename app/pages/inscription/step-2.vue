@@ -261,7 +261,7 @@ const calculateAge = (birthDate: string) => {
 }
 
 const goBack = () => {
-  navigateTo('/inscription/step-1')
+  navigateTo('/inscription/sante')
 }
 
 const typeText = () => {

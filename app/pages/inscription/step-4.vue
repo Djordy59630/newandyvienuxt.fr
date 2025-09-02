@@ -347,12 +347,14 @@ const handleFinalSubmit = async () => {
     
     // Récupérer toutes les données des étapes précédentes
     const step1Data = useCookie('registration-step1').value
+    const healthData = useCookie('registration-health').value
     const step2Data = useCookie('registration-step2').value
     const step3Data = useCookie('registration-step3').value
     const step4Data = formDataCookie.value
 
     console.log('Envoi des données complètes:', {
       step1: step1Data,
+      health: healthData,
       step2: step2Data,
       step3: step3Data,
       step4: step4Data
@@ -363,6 +365,7 @@ const handleFinalSubmit = async () => {
       method: 'POST',
       body: {
         step1: step1Data,
+        health: healthData,
         step2: step2Data,
         step3: step3Data,
         step4: step4Data
@@ -391,11 +394,17 @@ const handleFinalSubmit = async () => {
 onMounted(async () => {
   // Vérifier les données des étapes précédentes
   const step1Data = useCookie('registration-step1').value
+  const healthData = useCookie('registration-health').value
   const step2Data = useCookie('registration-step2').value
   const step3Data = useCookie('registration-step3').value
   
   if (!step1Data || !step1Data.firstName) {
     navigateTo('/inscription/step-1')
+    return
+  }
+
+  if (!healthData || !healthData.healthDeclaration) {
+    navigateTo('/inscription/sante')
     return
   }
 

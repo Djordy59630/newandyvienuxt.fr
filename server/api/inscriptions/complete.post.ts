@@ -63,12 +63,20 @@ export default defineEventHandler(async (event) => {
 
     // Récupérer les données du body
     const body = await readBody(event)
-    const { step1, step2, step3, step4 } = body
+    const { step1, health, step2, step3, step4 } = body
 
-    if (!step1 || !step4) {
+    if (!step1 || !health || !step4) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Données d\'inscription incomplètes'
+        statusMessage: 'Données d\'inscription incomplètes (étape 1, questionnaire santé ou étape 4 manquante)'
+      })
+    }
+
+    // Vérifier la déclaration santé
+    if (!health.healthDeclaration) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'La déclaration sur le questionnaire santé est obligatoire'
       })
     }
 
@@ -117,6 +125,18 @@ export default defineEventHandler(async (event) => {
         otherInfo: step1.otherInfo || null,
       }
     })
+
+    // Stocker le statut de santé dans otherInfo ou une note
+    if (health.requiresCertificate) {
+      // Mettre à jour le danseur pour noter qu'un certificat médical est requis
+      // @ts-ignore - Modèle Prisma généré
+      await prisma.dancer.update({
+        where: { id: dancer.id },
+        data: {
+          otherInfo: (dancer.otherInfo || '') + '\n[CERTIFICAT MÉDICAL REQUIS - Déclaré le ' + new Date().toISOString() + ']'
+        }
+      })
+    }
 
     // 2. Créer le responsable légal si mineur
     if (step2 && step2.guardianEmail) {

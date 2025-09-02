@@ -763,8 +763,8 @@ const handleFinalSubmit = async () => {
     // Simuler un appel API
     await new Promise(resolve => setTimeout(resolve, 800))
     
-    // Aller à l'étape 2
-    await navigateTo('/inscription/step-2')
+    // Aller à l'étape santé
+    await navigateTo('/inscription/sante')
     
   } catch (err) {
     error.value = 'Une erreur s\'est produite lors de la sauvegarde'
