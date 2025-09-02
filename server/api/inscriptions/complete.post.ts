@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
       await prisma.emergencyContact.deleteMany({
         where: { dancerId: existingDraftDancer.id }
       })
-      await prisma.guardians.deleteMany({
+      await prisma.guardian.deleteMany({
         where: { dancerId: existingDraftDancer.id }
       })
       await prisma.dancer.delete({
@@ -94,7 +94,7 @@ export default defineEventHandler(async (event) => {
     // 2. Créer le responsable légal si mineur
     if (step2 && step2.guardianEmail) {
       // @ts-ignore - Modèle Prisma généré  
-      await prisma.guardians.create({
+      await prisma.guardian.create({
         data: {
           dancerId: dancer.id,
           email: step2.guardianEmail,
@@ -104,7 +104,8 @@ export default defineEventHandler(async (event) => {
           postalCode: step1.postalCode,
           city: step1.city || 'Non spécifié',
           phone: step1.phone,
-          authorized: step2.guardianAuthorized || false
+          authorized: step2.guardianAuthorized || false,
+          relationship: step2.guardianRelationship || 'Parent'
         }
       })
     }
@@ -119,7 +120,8 @@ export default defineEventHandler(async (event) => {
             type: contact.type || 'EMERGENCY_ONLY', // Utiliser le type fourni
             firstName: contact.firstName || '',
             lastName: contact.lastName || '',
-            phone: contact.phone
+            phone: contact.phone,
+            relationship: contact.relationship || 'Proche'
           }
         })
       }

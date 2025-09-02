@@ -44,25 +44,27 @@ const progressWidth = computed(() => {
 <style scoped>
 .progress-container {
   position: relative;
-  width: 200px;
+  width: 220px;
 }
 
 .progress-bar {
   width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
   overflow: hidden;
   backdrop-filter: blur(10px);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(to right, #475569, #2563eb, #4f46e5);
-  border-radius: 3px;
-  transition: width 0.8s ease;
+  background: linear-gradient(135deg, #ea580c, #dc2626, #e11d48);
+  border-radius: 4px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.3);
 }
 
 .progress-fill::after {
@@ -72,7 +74,7 @@ const progressWidth = computed(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
   animation: progress-shimmer 2s infinite;
 }
 
@@ -104,10 +106,11 @@ const progressWidth = computed(() => {
 }
 
 .step-dot.active {
-  background: linear-gradient(to right, #475569, #2563eb, #4f46e5);
+  background: linear-gradient(135deg, #ea580c, #dc2626, #e11d48);
   color: white;
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
   transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.4);
 }
 
 .step-dot.completed {
