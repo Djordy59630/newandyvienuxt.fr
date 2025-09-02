@@ -80,7 +80,9 @@
                 <div><strong>Téléphone :</strong> {{ dancerData?.phone || 'Non renseigné' }}</div>
                 <div><strong>Date de naissance :</strong> {{ formatDate(dancerData?.birthDate) || 'Non renseigné' }}</div>
                 <div><strong>Niveau scolaire :</strong> {{ formatSchoolLevel(dancerData?.schoolLevel) || 'Non renseigné' }}</div>
+                <div><strong>Taille T-shirt :</strong> {{ dancerData?.tShirtSize || 'Non renseigné' }}</div>
                 <div class="md:col-span-2"><strong>Adresse :</strong> {{ fullAddress || 'Non renseigné' }}</div>
+                <div v-if="dancerData?.otherInfo" class="md:col-span-2"><strong>Autres informations :</strong> {{ dancerData.otherInfo }}</div>
               </div>
 
               <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -100,6 +102,42 @@
                   <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
                   <input v-model="editForm.phone" type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
                 </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Date de naissance *</label>
+                  <input v-model="editForm.birthDate" type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Niveau scolaire *</label>
+                  <select v-model="editForm.schoolLevel" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                    <option value="">Sélectionner...</option>
+                    <option value="CP">CP</option>
+                    <option value="CE1">CE1</option>
+                    <option value="CE2">CE2</option>
+                    <option value="CM1">CM1</option>
+                    <option value="CM2">CM2</option>
+                    <option value="SIXIEME">6ème</option>
+                    <option value="CINQUIEME">5ème</option>
+                    <option value="QUATRIEME">4ème</option>
+                    <option value="TROISIEME">3ème</option>
+                    <option value="SECONDE">Seconde</option>
+                    <option value="PREMIERE">Première</option>
+                    <option value="TERMINALE">Terminale</option>
+                    <option value="POST_BAC">Post-Bac</option>
+                    <option value="ADULTE">Adulte</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Taille T-shirt *</label>
+                  <select v-model="editForm.tShirtSize" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                    <option value="">Sélectionner...</option>
+                    <option value="XS">XS</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
+                  </select>
+                </div>
                 <div class="md:col-span-2">
                   <label class="block text-sm font-medium text-gray-700 mb-1">Adresse *</label>
                   <input v-model="editForm.address" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
@@ -111,6 +149,10 @@
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Ville *</label>
                   <input v-model="editForm.city" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" required>
+                </div>
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Autres informations</label>
+                  <textarea v-model="editForm.otherInfo" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500" rows="3" placeholder="Informations complémentaires (allergies, traitements médicaux, etc.)"></textarea>
                 </div>
               </div>
             </div>
@@ -181,7 +223,7 @@
           </div>
 
           <div class="flex justify-end mt-8">
-            <button @click="currentStep = 2" class="bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg">
+            <button @click="validatePersonalInfoAndContinue" class="bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg">
               Continuer
               <svg class="w-5 h-5 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
@@ -194,7 +236,17 @@
         <div v-if="currentStep === 2" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
           <div class="text-center mb-8">
             <h2 class="text-3xl font-bold text-gray-800 mb-4">Questionnaire santé</h2>
-            <p class="text-gray-600">Ce questionnaire doit être rempli à nouveau pour chaque renouvellement.</p>
+            <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mx-auto max-w-2xl">
+              <div class="flex items-start space-x-3">
+                <svg class="w-6 h-6 text-amber-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.081 18.5C3.311 20.333 4.273 22 5.813 22z"/>
+                </svg>
+                <div class="text-left">
+                  <p class="text-amber-800 font-medium">Questionnaire obligatoire</p>
+                  <p class="text-amber-700 text-sm">Ce questionnaire santé doit être rempli à nouveau pour chaque renouvellement d'inscription, conformément à la réglementation sportive.</p>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="space-y-6">
@@ -299,19 +351,32 @@
           <!-- Previous groups -->
           <div v-if="previousDanceGroups?.length > 0" class="mb-8">
             <h3 class="text-lg font-bold text-gray-800 mb-4">Vos groupes précédents</h3>
+            <div class="bg-blue-50 rounded-xl p-4 mb-4">
+              <div class="flex items-center space-x-2 mb-2">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <p class="text-blue-800 font-medium">Vous pouvez reprendre vos groupes précédents ou en choisir de nouveaux</p>
+              </div>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div v-for="group in previousDanceGroups" :key="group.id" class="bg-gray-100 rounded-lg p-4">
                 <div class="flex justify-between items-center">
                   <div>
                     <h4 class="font-bold text-gray-800">{{ group.name }}</h4>
                     <p class="text-sm text-gray-600">{{ group.ageGroup }} • {{ group.schedule }}</p>
-                    <p class="text-xs text-gray-500">Année {{ group.schoolYear }}</p>
+                    <p class="text-xs text-gray-500">Année {{ group.schoolYear }} • Statut: {{ formatStatus(group.status) }}</p>
                   </div>
                   <button 
                     @click="selectSameGroup(group)"
-                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors"
+                    :disabled="selectedGroups.some(g => availableGroups.find(ag => ag.name === group.name && ag.id === g.id))"
+                    :class="`px-3 py-1 rounded text-sm transition-colors ${
+                      selectedGroups.some(g => availableGroups.find(ag => ag.name === group.name && ag.id === g.id))
+                        ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                        : 'bg-blue-500 hover:bg-blue-600 text-white'
+                    }`"
                   >
-                    Reprendre
+                    {{ selectedGroups.some(g => availableGroups.find(ag => ag.name === group.name && ag.id === g.id)) ? 'Déjà sélectionné' : 'Reprendre' }}
                   </button>
                 </div>
               </div>
@@ -443,9 +508,13 @@ const editForm = ref({
   lastName: '',
   email: '',
   phone: '',
+  birthDate: '',
+  schoolLevel: '',
+  tShirtSize: '',
   address: '',
   postalCode: '',
-  city: ''
+  city: '',
+  otherInfo: ''
 })
 
 const editGuardianForm = ref({
@@ -505,19 +574,35 @@ const formatSchoolLevel = (level) => {
   return mapping[level] || level
 }
 
+const formatStatus = (status) => {
+  const mapping = {
+    'DRAFT': 'Brouillon',
+    'SUBMITTED': 'Soumise',
+    'APPROVED': 'Approuvée',
+    'REJECTED': 'Refusée'
+  }
+  return mapping[status] || status
+}
+
 const loadData = async () => {
   try {
-    // Load renewal data
-    const { data: renewalData } = await useFetch('/api/inscriptions/renew', {
+    loading.value = true
+    
+    // Load renewal data using $fetch instead of useFetch
+    const renewalData = await $fetch('/api/inscriptions/renew', {
       method: 'POST',
       body: { schoolYear: currentSchoolYear.value }
     })
 
-    if (renewalData.value?.success) {
-      dancerData.value = renewalData.value.dancer
-      guardianData.value = renewalData.value.guardian
-      emergencyContacts.value = renewalData.value.emergencyContacts
-      previousDanceGroups.value = renewalData.value.previousDanceGroups
+    console.log('Renewal data response:', renewalData)
+
+    if (renewalData?.success) {
+      dancerData.value = renewalData.dancer
+      guardianData.value = renewalData.guardian
+      emergencyContacts.value = renewalData.emergencyContacts
+      previousDanceGroups.value = renewalData.previousDanceGroups
+
+      console.log('Dancer data loaded:', dancerData.value)
 
       // Initialize edit forms with current data
       editForm.value = {
@@ -525,9 +610,13 @@ const loadData = async () => {
         lastName: dancerData.value.lastName || '',
         email: dancerData.value.email || '',
         phone: dancerData.value.phone || '',
+        birthDate: dancerData.value.birthDate ? new Date(dancerData.value.birthDate).toISOString().split('T')[0] : '',
+        schoolLevel: dancerData.value.schoolLevel || '',
+        tShirtSize: dancerData.value.tShirtSize || '',
         address: dancerData.value.address || '',
         postalCode: dancerData.value.postalCode || '',
-        city: dancerData.value.city || ''
+        city: dancerData.value.city || '',
+        otherInfo: dancerData.value.otherInfo || ''
       }
 
       if (guardianData.value) {
@@ -540,14 +629,18 @@ const loadData = async () => {
           authorized: guardianData.value.authorized || false
         }
       }
+    } else {
+      console.error('API returned success: false')
+      throw new Error('Impossible de récupérer les données de renouvellement')
     }
 
     // Load available dance groups
-    const { data: groupsData } = await useFetch('/api/dance-groups')
-    availableGroups.value = groupsData.value?.groups || []
+    const groupsData = await $fetch('/api/dance-groups')
+    availableGroups.value = groupsData?.groups || []
 
   } catch (error) {
     console.error('Error loading renewal data:', error)
+    alert('Erreur lors du chargement des données. Redirection vers le tableau de bord.')
     // Redirect back to dashboard on error
     router.push('/dashboard')
   } finally {
@@ -579,6 +672,20 @@ const selectSameGroup = (previousGroup) => {
   }
 }
 
+const validatePersonalInfoAndContinue = () => {
+  if (editPersonalInfo.value) {
+    // Validate required fields
+    const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'birthDate', 'schoolLevel', 'tShirtSize', 'address', 'postalCode', 'city']
+    const missingFields = requiredFields.filter(field => !editForm.value[field] || editForm.value[field].trim() === '')
+    
+    if (missingFields.length > 0) {
+      alert(`Veuillez remplir tous les champs obligatoires : ${missingFields.join(', ')}`)
+      return
+    }
+  }
+  currentStep.value = 2
+}
+
 const submitRenewal = async () => {
   if (selectedGroups.value.length === 0 || !healthForm.value.healthDeclaration) {
     return
@@ -588,14 +695,22 @@ const submitRenewal = async () => {
     submitting.value = true
 
     // Use edited data if available, otherwise use original data
-    const personalData = editPersonalInfo.value ? editForm.value : {
+    const personalData = editPersonalInfo.value ? {
+      ...editForm.value,
+      // Convert date back to ISO format if it was edited
+      birthDate: editForm.value.birthDate ? new Date(editForm.value.birthDate).toISOString() : dancerData.value.birthDate
+    } : {
       firstName: dancerData.value.firstName,
       lastName: dancerData.value.lastName,
       email: dancerData.value.email,
       phone: dancerData.value.phone,
+      birthDate: dancerData.value.birthDate,
+      schoolLevel: dancerData.value.schoolLevel,
+      tShirtSize: dancerData.value.tShirtSize,
       address: dancerData.value.address,
       postalCode: dancerData.value.postalCode,
-      city: dancerData.value.city
+      city: dancerData.value.city,
+      otherInfo: dancerData.value.otherInfo
     }
 
     const guardianDataToSend = guardianData.value ? (

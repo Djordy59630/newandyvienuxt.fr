@@ -119,13 +119,16 @@ export default defineEventHandler(async (event) => {
       lastName: personalData.lastName,
       email: personalData.email,
       phone: personalData.phone,
+      birthDate: personalData.birthDate ? new Date(personalData.birthDate) : existingDancer.birthDate,
+      schoolLevel: convertSchoolLevel(personalData.schoolLevel || existingDancer.schoolLevel),
+      tShirtSize: personalData.tShirtSize || existingDancer.tShirtSize,
       address: personalData.address,
       postalCode: personalData.postalCode,
       city: personalData.city,
     }
 
-    // Ajouter des notes sur le certificat médical si nécessaire
-    let medicalNotes = existingDancer.otherInfo || ''
+    // Gérer les informations supplémentaires et notes médicales
+    let medicalNotes = personalData.otherInfo || existingDancer.otherInfo || ''
     if (healthData.hasHealthProblems || healthData.hasCardiacProblems || healthData.takesMedication) {
       const newMedicalNote = `\n[RENOUVELLEMENT ${schoolYear} - CERTIFICAT MÉDICAL REQUIS - Déclaré le ${new Date().toISOString()}]`
       medicalNotes += newMedicalNote
