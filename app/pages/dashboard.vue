@@ -261,12 +261,22 @@
               </div>
               <div>
                 <h3 class="text-2xl font-bold text-gray-800">Groupes de danse</h3>
-                <p class="text-slate-600">{{ registration.registration.danceGroups.length }} groupe(s) sélectionné(s)</p>
+                <p class="text-slate-600">{{ currentYearDanceGroups.length }} groupe(s) pour l'année {{ currentSchoolYear }}</p>
               </div>
             </div>
             
             <div class="space-y-4 max-h-96 overflow-y-auto">
-              <div v-for="(group, index) in registration.registration.danceGroups" :key="group.id" 
+              <div v-if="currentYearDanceGroups.length === 0" class="text-center py-8">
+                <div class="bg-gray-50 rounded-xl p-6">
+                  <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-3-3V6a3 3 0 016 0v3"/>
+                  </svg>
+                  <p class="text-gray-600">Aucune inscription valide pour l'année scolaire {{ currentSchoolYear }}</p>
+                  <p class="text-sm text-gray-500 mt-2">Vous pouvez renouveler votre inscription si elle est disponible.</p>
+                </div>
+              </div>
+              
+              <div v-for="(group, index) in currentYearDanceGroups" :key="group.id" 
                    class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-2xl border border-purple-200/50 hover:shadow-lg transition-all duration-300">
                 <div class="flex items-start justify-between mb-2">
                   <div class="flex items-center">
@@ -587,6 +597,17 @@ const getNextSchoolYear = () => {
 // Propriétés computed pour le renouvellement
 const currentSchoolYear = computed(() => getCurrentSchoolYear())
 const nextSchoolYear = computed(() => getNextSchoolYear())
+
+// Filtrer les groupes de danse pour afficher uniquement ceux de l'année actuelle avec un statut valide
+const currentYearDanceGroups = computed(() => {
+  if (!registration.value.hasRegistration || !registration.value.registration?.danceGroups) return []
+  
+  const currentYear = getCurrentSchoolYear()
+  
+  return registration.value.registration.danceGroups.filter(
+    (group: any) => group.schoolYear === currentYear && ['SUBMITTED', 'APPROVED'].includes(group.status)
+  )
+})
 
 const showRenewalOption = computed(() => {
   if (!registration.value.hasRegistration || !registration.value.registration) return false
