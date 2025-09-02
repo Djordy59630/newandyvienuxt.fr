@@ -19,54 +19,60 @@
     <!-- Navigation Header -->
     <nav class="relative z-20 bg-white/10 backdrop-blur-xl border-b border-white/20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-20">
+        <div class="flex justify-between items-center h-16 sm:h-20">
           <!-- Logo -->
           <div class="flex items-center">
-            <div class="w-12 h-12 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
             </div>
-            <span class="ml-4 text-2xl font-black text-white tracking-tight">
+            <span class="ml-3 sm:ml-4 text-lg sm:text-2xl font-black text-white tracking-tight">
               <span class="bg-gradient-to-r from-white via-orange-200 to-red-200 bg-clip-text text-transparent">
                 SQUARE630
               </span>
             </span>
           </div>
 
-          <!-- Progress & Back -->
-          <div class="flex items-center space-x-6">
-            <ProgressBar :current-step="4" />
+          <!-- Back Button -->
+          <div>
             <button
               @click="goBack"
-              class="bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20 inline-flex items-center space-x-2"
+              class="bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20 inline-flex items-center space-x-2 text-sm sm:text-base"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
               </svg>
-              <span>Retour</span>
+              <span class="hidden sm:inline">Retour</span>
             </button>
           </div>
         </div>
       </div>
     </nav>
 
+    <!-- Progress Bar Section -->
+    <div class="relative z-20 bg-white/5 backdrop-blur-sm border-b border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <ProgressBar :current-step="4" />
+      </div>
+    </div>
+
     <!-- Main Content -->
-    <div class="relative z-10 max-w-4xl mx-auto px-8 pb-12 flex flex-col items-center justify-center min-h-[calc(100vh-120px)]">
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-8 pb-12 flex flex-col items-center justify-center min-h-[calc(100vh-160px)]">
       
       <!-- Kali Avatar -->
-      <div class="mb-8">
-        <div class="w-32 h-32 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse-slow relative">
+      <div class="mb-6 sm:mb-8">
+        <div class="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse-slow relative mx-auto">
           <!-- Glow effect -->
           <div class="absolute inset-0 bg-gradient-to-br from-orange-400 via-red-400 to-pink-400 rounded-full blur-lg opacity-30 animate-pulse"></div>
           <div class="relative">
-            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
             </svg>
           </div>
         </div>
-        <div class="text-center mt-4">
-          <h2 class="text-2xl font-bold text-white mb-2">Kali</h2>
+        <div class="text-center mt-3 sm:mt-4">
+          <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">Kali</h2>
           <div class="bg-gradient-to-r from-green-400 to-green-500 text-white text-sm px-3 py-1 rounded-full inline-block">
             En ligne
           </div>
@@ -74,25 +80,25 @@
       </div>
 
       <!-- Conversation Interface -->
-      <div class="w-full max-w-2xl space-y-6">
+      <div class="w-full max-w-2xl space-y-4 sm:space-y-6">
         
         <!-- Kali Message -->
-        <div class="flex items-start space-x-4">
-          <div class="w-12 h-12 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-full flex items-center justify-center flex-shrink-0">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex items-start space-x-3 sm:space-x-4">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
             </svg>
           </div>
-          <div class="bg-white/95 backdrop-blur-sm rounded-2xl rounded-tl-md p-6 shadow-xl border border-white/20 flex-1">
+          <div class="bg-white/95 backdrop-blur-sm rounded-2xl rounded-tl-md p-4 sm:p-6 shadow-xl border border-white/20 flex-1">
             <div v-if="currentStep === 'greeting'" class="typewriter">
               {{ displayText }}
               <span v-if="showCursor" class="cursor">|</span>
             </div>
             <div v-else>
-              <p v-if="currentStep === 'dance-selection'" class="text-gray-800 text-lg leading-relaxed">
+              <p v-if="currentStep === 'dance-selection'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
                 Alors, qu'est-ce qui te fait vibrer ? Hip-hop, breakdance, ou peut-être les deux ? Choisis selon tes envies ! 🎵✨
               </p>
-              <p v-else-if="currentStep === 'group-details' && selectedGroups.length > 0" class="text-gray-800 text-lg leading-relaxed">
+              <p v-else-if="currentStep === 'group-details' && selectedGroups.length > 0" class="text-gray-800 text-base sm:text-lg leading-relaxed">
                 {{ selectedGroups.length === 1 ? 'Excellent choix' : 'Excellents choix' }} ! Tu as sélectionné {{ selectedGroups.length }} groupe{{ selectedGroups.length > 1 ? 's' : '' }}. Es-tu prêt(e) à finaliser ton inscription ? 🚀
               </p>
             </div>
@@ -101,7 +107,7 @@
 
         <!-- Dance Group Selection -->
         <div v-if="currentStep === 'dance-selection'" class="space-y-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3">
             <label
               v-for="group in danceGroups"
               :key="group.id"
@@ -133,9 +139,9 @@
               <div class="space-y-2">
                 <p class="text-xs text-gray-600 leading-relaxed">{{ group.description }}</p>
                 <div class="flex flex-wrap gap-1">
-                  <span class="info-badge bg-blue-100 text-blue-700">{{ group.ageRange }}</span>
-                  <span class="info-badge bg-green-100 text-green-700">{{ group.level }}</span>
-                  <span class="info-badge bg-purple-100 text-purple-700">{{ group.category }}</span>
+                  <span class="info-badge bg-orange-100 text-orange-700">{{ group.ageRange }}</span>
+                  <span class="info-badge bg-red-100 text-red-700">{{ group.level }}</span>
+                  <span class="info-badge bg-pink-100 text-pink-700">{{ group.category }}</span>
                 </div>
                 <p class="text-xs text-gray-500">{{ group.schedule }}</p>
               </div>
@@ -143,11 +149,11 @@
           </div>
           
           <!-- Continue Button -->
-          <div class="flex justify-center">
+          <div class="flex justify-center pt-4">
             <button
               @click="proceedToDetails"
               :disabled="loading || selectedGroups.length === 0"
-              class="btn-primary"
+              class="btn-primary w-full sm:w-auto"
             >
               <span>Continuer avec {{ selectedGroups.length }} groupe{{ selectedGroups.length > 1 ? 's' : '' }}</span>
               <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -158,21 +164,21 @@
         </div>
 
         <!-- Groups Confirmation -->
-        <div v-if="currentStep === 'group-details'" class="space-y-6">
+        <div v-if="currentStep === 'group-details'" class="space-y-4 sm:space-y-6">
           <!-- Selected Groups List -->
           <div class="space-y-4">
             <div 
               v-for="group in selectedGroups" 
               :key="group.id" 
-              class="bg-blue-50 border border-blue-200 rounded-xl p-4"
+              class="bg-orange-50 border border-orange-200 rounded-xl p-4"
             >
               <div class="flex items-start">
-                <div class="w-12 h-12 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                <div class="w-12 h-12 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
                   <span class="text-white text-lg font-bold">{{ group.name.substring(0, 2) }}</span>
                 </div>
                 <div class="flex-1">
-                  <h3 class="text-lg font-bold text-gray-900 mb-1">{{ group.name }}</h3>
-                  <p class="text-gray-700 mb-2">{{ group.description }}</p>
+                  <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-1">{{ group.name }}</h3>
+                  <p class="text-gray-700 mb-2 text-sm sm:text-base">{{ group.description }}</p>
                   <div class="text-sm text-gray-600">
                     <div><strong>Âge :</strong> {{ group.ageRange }}</div>
                     <div><strong>Horaire :</strong> {{ group.schedule }}</div>
@@ -185,18 +191,18 @@
           </div>
           
           <!-- Selected Groups Summary -->
-          <div class="bg-gradient-to-r from-slate-100 to-blue-100 border border-slate-200 rounded-xl p-4">
+          <div class="bg-gradient-to-r from-orange-100 to-red-100 border border-orange-200 rounded-xl p-4">
             <div class="text-center">
               <p class="text-gray-700 text-sm mb-1">Groupes sélectionnés</p>
-              <p class="text-2xl font-bold text-slate-800">{{ selectedGroups.length }}</p>
+              <p class="text-2xl font-bold text-orange-800">{{ selectedGroups.length }}</p>
               <p class="text-xs text-gray-600 mt-1">{{ selectedGroups.length }} groupe{{ selectedGroups.length > 1 ? 's' : '' }} choisi{{ selectedGroups.length > 1 ? 's' : '' }}</p>
             </div>
           </div>
           
-          <div class="flex justify-between items-center">
+          <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
             <button
               @click="currentStep = 'dance-selection'"
-              class="btn-secondary"
+              class="btn-secondary w-full sm:w-auto"
               :disabled="loading"
             >
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -208,7 +214,7 @@
             <button
               @click="handleFinalSubmit"
               :disabled="loading"
-              class="btn-primary"
+              class="btn-primary w-full sm:w-auto"
             >
               <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
               <span v-else>Terminer l'inscription</span>
@@ -495,8 +501,15 @@ useHead({
 <style scoped>
 .typewriter {
   color: #1f2937;
-  font-size: 1.125rem;
-  line-height: 1.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .typewriter {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
 }
 
 .cursor {
@@ -558,12 +571,13 @@ useHead({
 .btn-primary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   padding: 1rem 2rem;
-  background: linear-gradient(to right, #475569, #2563eb, #4f46e5);
+  background: linear-gradient(to right, #ea580c, #dc2626, #be185d);
   color: white;
   font-weight: 600;
-  font-size: 1.125rem;
-  line-height: 1.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
   border-radius: 1rem;
   border: none;
   cursor: pointer;
@@ -571,10 +585,17 @@ useHead({
   transform: scale(1);
 }
 
+@media (min-width: 640px) {
+  .btn-primary {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+}
+
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(to right, #334155, #1d4ed8, #4338ca);
+  background: linear-gradient(to right, #c2410c, #b91c1c, #a21caf);
   transform: scale(1.05);
-  box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 25px 50px -12px rgba(234, 88, 12, 0.25);
 }
 
 .btn-primary:disabled {
@@ -586,16 +607,24 @@ useHead({
 .btn-secondary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   padding: 1rem 2rem;
   background-color: white;
   border: 2px solid #e2e8f0;
   color: #374151;
   font-weight: 600;
-  font-size: 1.125rem;
-  line-height: 1.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
   border-radius: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+@media (min-width: 640px) {
+  .btn-secondary {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
 }
 
 .btn-secondary:hover {
@@ -631,16 +660,16 @@ useHead({
 }
 
 .group-card:hover {
-  border-color: #93c5fd;
-  background-color: #fafbff;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.1);
+  border-color: #fed7aa;
+  background-color: #fff7ed;
+  box-shadow: 0 4px 16px rgba(234, 88, 12, 0.1);
   transform: translateY(-2px);
 }
 
 .group-card.selected {
-  border-color: #3b82f6;
-  background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
+  border-color: #ea580c;
+  background: linear-gradient(135deg, #fff7ed 0%, #fef3f2 100%);
+  box-shadow: 0 6px 20px rgba(234, 88, 12, 0.15);
   transform: translateY(-2px);
 }
 
@@ -651,7 +680,7 @@ useHead({
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  background: linear-gradient(90deg, #ea580c, #dc2626);
   border-radius: 0.75rem 0.75rem 0 0;
 }
 
@@ -669,9 +698,9 @@ useHead({
 }
 
 .group-card.selected .custom-checkbox {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  border-color: #1d4ed8;
-  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, #ea580c, #dc2626);
+  border-color: #dc2626;
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.3);
 }
 
 .checkmark {
@@ -689,12 +718,12 @@ useHead({
 }
 
 .group-card:hover .custom-checkbox {
-  border-color: #93c5fd;
-  box-shadow: 0 1px 4px rgba(59, 130, 246, 0.15);
+  border-color: #fed7aa;
+  box-shadow: 0 1px 4px rgba(234, 88, 12, 0.15);
 }
 
 .category-tag {
-  background: linear-gradient(135deg, #475569, #2563eb);
+  background: linear-gradient(135deg, #ea580c, #dc2626);
   color: white;
   font-size: 0.75rem;
   font-weight: 600;
@@ -704,8 +733,8 @@ useHead({
 }
 
 .group-card.selected .category-tag {
-  background: linear-gradient(135deg, #1d4ed8, #4f46e5);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, #c2410c, #b91c1c);
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.3);
 }
 
 .info-badge {

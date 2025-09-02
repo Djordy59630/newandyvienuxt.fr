@@ -19,78 +19,82 @@
     <!-- Navigation Header -->
     <nav class="relative z-20 bg-white/10 backdrop-blur-xl border-b border-white/20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-20">
+        <div class="flex justify-between items-center h-16 lg:h-20">
           <!-- Logo -->
           <div class="flex items-center">
-            <div class="w-12 h-12 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
             </div>
-            <span class="ml-4 text-2xl font-black text-white tracking-tight">
+            <span class="ml-3 lg:ml-4 text-xl lg:text-2xl font-black text-white tracking-tight">
               <span class="bg-gradient-to-r from-white via-orange-200 to-red-200 bg-clip-text text-transparent">
                 SQUARE630
               </span>
             </span>
           </div>
 
-          <!-- Progress & Back -->
-          <div class="flex items-center space-x-6">
-            <ProgressBar :current-step="2" />
-            <button
-              @click="goBack"
-              class="bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20 inline-flex items-center space-x-2"
-            >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-              </svg>
-              <span>Retour</span>
-            </button>
-          </div>
+          <!-- Back Button Only -->
+          <button
+            @click="goBack"
+            class="bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white font-semibold py-2 px-4 lg:py-3 lg:px-6 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20 inline-flex items-center space-x-2 text-sm lg:text-base"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            <span class="hidden sm:inline">Retour</span>
+          </button>
         </div>
       </div>
     </nav>
 
+    <!-- Progress Bar -->
+    <div class="relative z-10 bg-white/5 backdrop-blur-sm border-b border-white/10">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-6">
+        <ProgressBar :current-step="2" />
+      </div>
+    </div>
+
     <!-- Main Content -->
-    <div class="relative z-10 max-w-4xl mx-auto px-8 pb-12 flex flex-col items-center justify-center min-h-[calc(100vh-120px)]">
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 lg:pb-12 flex flex-col items-center justify-center min-h-[calc(100vh-180px)] lg:min-h-[calc(100vh-200px)]">
       
       <!-- Kali Avatar -->
-      <div class="mb-8">
-        <div class="w-32 h-32 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse-slow relative">
+      <div class="mb-6 lg:mb-8">
+        <div class="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse-slow relative mx-auto">
           <!-- Glow effect -->
           <div class="absolute inset-0 bg-gradient-to-br from-orange-400 via-red-400 to-pink-400 rounded-full blur-lg opacity-30 animate-pulse"></div>
           <div class="relative">
-            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
             </svg>
           </div>
         </div>
-        <div class="text-center mt-4">
-          <h2 class="text-2xl font-bold text-white mb-2">Kali</h2>
-          <div class="bg-gradient-to-r from-green-400 to-green-500 text-white text-sm px-3 py-1 rounded-full inline-block">
+        <div class="text-center mt-3 lg:mt-4">
+          <h2 class="text-xl lg:text-2xl font-bold text-white mb-2">Kali</h2>
+          <div class="bg-gradient-to-r from-green-400 to-green-500 text-white text-xs lg:text-sm px-3 py-1 rounded-full inline-block">
             En ligne
           </div>
         </div>
       </div>
 
       <!-- Conversation Interface -->
-      <div class="w-full max-w-2xl space-y-6">
+      <div class="w-full max-w-2xl space-y-4 sm:space-y-6">
         
         <!-- Kali Message -->
-        <div class="flex items-start space-x-4">
-          <div class="w-12 h-12 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-full flex items-center justify-center flex-shrink-0">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex items-start space-x-3 sm:space-x-4">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
             </svg>
           </div>
-          <div class="bg-white/95 backdrop-blur-sm rounded-2xl rounded-tl-md p-6 shadow-xl border border-white/20 flex-1">
+          <div class="bg-white/95 backdrop-blur-sm rounded-2xl rounded-tl-md p-4 sm:p-6 shadow-xl border border-white/20 flex-1">
             <div v-if="currentStep === 'greeting'" class="typewriter">
               {{ displayText }}
               <span v-if="showCursor" class="cursor">|</span>
             </div>
             <div v-else>
               <p v-if="currentStep === 'guardian-info'" class="text-gray-800 text-lg leading-relaxed">
-                Super ! Maintenant j'ai besoin de l'email de ton responsable légal pour finaliser ton dossier. 📧
+                Super ! Maintenant j'ai besoin des informations de ton responsable légal : nom, prénom et email pour finaliser ton dossier. 👨‍👩‍👧‍👦
               </p>
               <p v-else-if="currentStep === 'no-guardian'" class="text-gray-800 text-lg leading-relaxed">
                 Parfait ! Tu es majeur(e), nous pouvons passer directement à l'étape suivante.
@@ -129,7 +133,23 @@
 
         <!-- Guardian Info Form -->
         <div v-if="currentStep === 'guardian-info'" class="space-y-6">
-          <div>
+          <div class="space-y-4">
+            <input
+              v-model="form.firstName"
+              type="text"
+              class="answer-input"
+              placeholder="Prénom du responsable légal"
+              :disabled="loading"
+              required
+            />
+            <input
+              v-model="form.lastName"
+              type="text"
+              class="answer-input"
+              placeholder="Nom de famille du responsable légal"
+              :disabled="loading"
+              required
+            />
             <input
               v-model="form.email"
               type="email"
@@ -139,6 +159,26 @@
               :disabled="loading"
               required
             />
+            
+            <!-- Autorisation parentale -->
+            <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 mt-4">
+              <label class="flex items-start space-x-3 cursor-pointer">
+                <input
+                  v-model="form.authorized"
+                  type="checkbox"
+                  class="mt-1 w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 focus:ring-2"
+                  :disabled="loading"
+                  required
+                />
+                <div class="text-sm">
+                  <p class="text-gray-800 font-medium">Autorisation parentale</p>
+                  <p class="text-gray-600 mt-1">
+                    J'autorise <strong>{{ step1Data.firstName }} {{ step1Data.lastName }}</strong> 
+                    à participer aux activités hip-hop de l'association Square630.
+                  </p>
+                </div>
+              </label>
+            </div>
           </div>
           
           <div class="flex justify-between items-center">
@@ -155,7 +195,7 @@
             
             <button
               @click="handleEmailSubmit"
-              :disabled="loading || !form.email"
+              :disabled="loading || !form.email || !form.firstName || !form.lastName || !form.authorized"
               class="btn-primary"
             >
               <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
@@ -194,9 +234,13 @@ const showCursor = ref(true)
 const loading = ref(false)
 const error = ref('')
 const isMinor = ref<boolean | null>(null)
+const step1Data = ref({})
 
 const form = ref({
-  email: ''
+  firstName: '',
+  lastName: '',
+  email: '',
+  authorized: false
 })
 
 // Calculer si mineur depuis les données de l'étape 1
@@ -261,7 +305,10 @@ const handleSubmit = async (isMinorValue: boolean) => {
     
     formDataCookie.value = {
       isMinor: isMinorValue,
-      guardianEmail: isMinorValue ? form.value.email : null
+      guardianEmail: isMinorValue ? form.value.email : null,
+      guardianFirstName: isMinorValue ? form.value.firstName : null,
+      guardianLastName: isMinorValue ? form.value.lastName : null,
+      guardianAuthorized: isMinorValue ? form.value.authorized : false
     }
     
     console.log('Step 2 data:', formDataCookie.value)
@@ -281,21 +328,23 @@ const handleSubmit = async (isMinorValue: boolean) => {
 
 onMounted(() => {
   // Vérifier les données de l'étape 1
-  const step1Data = useCookie('registration-step1').value
-  if (!step1Data || !step1Data.firstName) {
+  const step1Cookie = useCookie('registration-step1').value
+  if (!step1Cookie || !step1Cookie.firstName) {
     navigateTo('/inscription/step-1')
     return
   }
+  
+  step1Data.value = step1Cookie
 
   // Calculer si l'utilisateur est mineur depuis ses données
-  if (step1Data.birthDate) {
-    isUserMinor = calculateAge(step1Data.birthDate)
+  if (step1Cookie.birthDate) {
+    isUserMinor = calculateAge(step1Cookie.birthDate)
     
     // Définir le message de Kali selon l'âge
     if (isUserMinor) {
-      fullText = `Re-salut ${step1Data.firstName} ! 👋 J'ai calculé ton âge : ${getAge(step1Data.birthDate)} ans. Comme tu es mineur(e), j'ai besoin des coordonnées de ton responsable légal pour finaliser l'inscription. C'est une obligation légale ! 👨‍👩‍👧‍👦`
+      fullText = `Re-salut ${step1Cookie.firstName} ! 👋 J'ai calculé ton âge : ${getAge(step1Cookie.birthDate)} ans. Comme tu es mineur(e), j'ai besoin des coordonnées de ton responsable légal pour finaliser l'inscription. C'est une obligation légale ! 👨‍👩‍👧‍👦`
     } else {
-      fullText = `Re-salut ${step1Data.firstName} ! 👋 J'ai calculé ton âge : ${getAge(step1Data.birthDate)} ans. Parfait, tu es majeur(e) ! On peut passer directement à l'étape suivante. 🎉`
+      fullText = `Re-salut ${step1Cookie.firstName} ! 👋 J'ai calculé ton âge : ${getAge(step1Cookie.birthDate)} ans. Parfait, tu es majeur(e) ! On peut passer directement à l'étape suivante. 🎉`
     }
   } else {
     navigateTo('/inscription/step-1')

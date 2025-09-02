@@ -19,54 +19,60 @@
     <!-- Navigation Header -->
     <nav class="relative z-20 bg-white/10 backdrop-blur-xl border-b border-white/20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-20">
+        <div class="flex justify-between items-center h-16 sm:h-20">
           <!-- Logo -->
           <div class="flex items-center">
-            <div class="w-12 h-12 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
             </div>
-            <span class="ml-4 text-2xl font-black text-white tracking-tight">
+            <span class="ml-3 sm:ml-4 text-lg sm:text-2xl font-black text-white tracking-tight">
               <span class="bg-gradient-to-r from-white via-orange-200 to-red-200 bg-clip-text text-transparent">
                 SQUARE630
               </span>
             </span>
           </div>
 
-          <!-- Progress & Back -->
-          <div class="flex items-center space-x-6">
-            <ProgressBar :current-step="3" />
+          <!-- Back Button -->
+          <div>
             <button
               @click="goBack"
-              class="bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20 inline-flex items-center space-x-2"
+              class="bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20 inline-flex items-center space-x-2 text-sm sm:text-base"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
               </svg>
-              <span>Retour</span>
+              <span class="hidden sm:inline">Retour</span>
             </button>
           </div>
         </div>
       </div>
     </nav>
 
+    <!-- Progress Bar Section -->
+    <div class="relative z-20 bg-white/5 backdrop-blur-sm border-b border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <ProgressBar :current-step="3" />
+      </div>
+    </div>
+
     <!-- Main Content -->
-    <div class="relative z-10 max-w-4xl mx-auto px-8 pb-12 flex flex-col items-center justify-center min-h-[calc(100vh-120px)]">
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-8 pb-12 flex flex-col items-center justify-center min-h-[calc(100vh-160px)]">
       
       <!-- Kali Avatar -->
-      <div class="mb-8">
-        <div class="w-32 h-32 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse-slow relative">
+      <div class="mb-6 sm:mb-8">
+        <div class="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse-slow relative mx-auto">
           <!-- Glow effect -->
           <div class="absolute inset-0 bg-gradient-to-br from-orange-400 via-red-400 to-pink-400 rounded-full blur-lg opacity-30 animate-pulse"></div>
           <div class="relative">
-            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
             </svg>
           </div>
         </div>
-        <div class="text-center mt-4">
-          <h2 class="text-2xl font-bold text-white mb-2">Kali</h2>
+        <div class="text-center mt-3 sm:mt-4">
+          <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">Kali</h2>
           <div class="bg-gradient-to-r from-green-400 to-green-500 text-white text-sm px-3 py-1 rounded-full inline-block">
             En ligne
           </div>
@@ -74,31 +80,34 @@
       </div>
 
       <!-- Conversation Interface -->
-      <div class="w-full max-w-2xl space-y-6">
+      <div class="w-full max-w-2xl space-y-4 sm:space-y-6">
         
         <!-- Kali Message -->
-        <div class="flex items-start space-x-4">
-          <div class="w-12 h-12 bg-gradient-to-br from-slate-500 via-blue-500 to-indigo-500 rounded-full flex items-center justify-center flex-shrink-0">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex items-start space-x-3 sm:space-x-4">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/>
             </svg>
           </div>
-          <div class="bg-white/95 backdrop-blur-sm rounded-2xl rounded-tl-md p-6 shadow-xl border border-white/20 flex-1">
+          <div class="bg-white/95 backdrop-blur-sm rounded-2xl rounded-tl-md p-4 sm:p-6 shadow-xl border border-white/20 flex-1">
             <div v-if="currentStep === 'greeting'" class="typewriter">
               {{ displayText }}
               <span v-if="showCursor" class="cursor">|</span>
             </div>
             <div v-else>
-              <p v-if="currentStep === 'contact-name'" class="text-gray-800 text-lg leading-relaxed">
-                Quel est le nom de ton {{ contacts.length === 0 ? 'premier' : contacts.length === 1 ? 'deuxième' : 'prochain' }} contact d'urgence ?
+              <p v-if="currentStep === 'contact-name'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
+                Quel est le prénom et nom de ton {{ contacts.length === 0 ? 'premier' : contacts.length === 1 ? 'deuxième' : 'prochain' }} contact d'urgence ?
               </p>
-              <p v-else-if="currentStep === 'contact-phone'" class="text-gray-800 text-lg leading-relaxed">
-                Merci {{ form.name }} ! Quel est son numéro de téléphone ?
+              <p v-else-if="currentStep === 'contact-phone'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
+                Merci {{ form.firstName }} ! Quel est son numéro de téléphone ?
               </p>
-              <p v-else-if="currentStep === 'add-more'" class="text-gray-800 text-lg leading-relaxed">
+              <p v-else-if="currentStep === 'contact-type'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
+                Parfait ! Maintenant dis-moi, ce contact peut-il : récupérer le mineur en fin de cours, être appelé en cas d'urgence, ou les deux ?
+              </p>
+              <p v-else-if="currentStep === 'add-more'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
                 Super ! Veux-tu ajouter un autre contact d'urgence ? (recommandé d'avoir au moins 2 contacts)
               </p>
-              <p v-else-if="currentStep === 'contact-list'" class="text-gray-800 text-lg leading-relaxed">
+              <p v-else-if="currentStep === 'contact-list'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
                 Voici tes contacts d'urgence ajoutés :
               </p>
             </div>
@@ -110,8 +119,13 @@
           <div v-for="(contact, index) in contacts" :key="index" class="bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-white/20">
             <div class="flex justify-between items-center">
               <div>
-                <p class="font-semibold text-gray-800">{{ contact.name }}</p>
+                <p class="font-semibold text-gray-800">{{ contact.firstName }} {{ contact.lastName }}</p>
                 <p class="text-gray-600">{{ contact.phone }}</p>
+                <p class="text-xs text-gray-500 mt-1">
+                  <span v-if="contact.type === 'PICKUP_ONLY'" class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Récupération</span>
+                  <span v-else-if="contact.type === 'EMERGENCY_ONLY'" class="bg-red-100 text-red-800 px-2 py-1 rounded-full">Urgence</span>
+                  <span v-else-if="contact.type === 'EMERGENCY_AND_PICKUP'" class="bg-green-100 text-green-800 px-2 py-1 rounded-full">Récupération + Urgence</span>
+                </p>
               </div>
               <button
                 @click="removeContact(index)"
@@ -150,23 +164,31 @@
         </div>
 
         <!-- Contact Name Input -->
-        <div v-if="currentStep === 'contact-name'" class="space-y-6">
-          <div>
+        <div v-if="currentStep === 'contact-name'" class="space-y-4 sm:space-y-6">
+          <div class="space-y-4">
             <input
-              v-model="form.name"
+              v-model="form.firstName"
               type="text"
               class="answer-input"
-              placeholder="Nom complet du contact"
+              placeholder="Prénom du contact"
+              :disabled="loading"
+              required
+            />
+            <input
+              v-model="form.lastName"
+              type="text"
+              class="answer-input"
+              placeholder="Nom de famille du contact"
               @keyup.enter="handleNameSubmit"
               :disabled="loading"
               required
             />
           </div>
           
-          <div class="flex justify-between items-center">
+          <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
             <button
               @click="handleBack"
-              class="btn-secondary"
+              class="btn-secondary w-full sm:w-auto"
               :disabled="loading"
             >
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -177,8 +199,8 @@
             
             <button
               @click="handleNameSubmit"
-              :disabled="loading || !form.name"
-              class="btn-primary"
+              :disabled="loading || !form.firstName || !form.lastName"
+              class="btn-primary w-full sm:w-auto"
             >
               <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
               <span v-else>Continuer</span>
@@ -190,7 +212,7 @@
         </div>
 
         <!-- Contact Phone Input -->
-        <div v-if="currentStep === 'contact-phone'" class="space-y-6">
+        <div v-if="currentStep === 'contact-phone'" class="space-y-4 sm:space-y-6">
           <div>
             <input
               v-model="form.phone"
@@ -203,10 +225,10 @@
             />
           </div>
           
-          <div class="flex justify-between items-center">
+          <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
             <button
               @click="currentStep = 'contact-name'"
-              class="btn-secondary"
+              class="btn-secondary w-full sm:w-auto"
               :disabled="loading"
             >
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -218,13 +240,85 @@
             <button
               @click="handlePhoneSubmit"
               :disabled="loading || !form.phone"
-              class="btn-primary"
+              class="btn-primary w-full sm:w-auto"
             >
               <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
               <span v-else>Continuer</span>
               <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
               </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Contact Type Selection -->
+        <div v-if="currentStep === 'contact-type'" class="space-y-4 sm:space-y-6">
+          <div class="grid grid-cols-1 gap-4">
+            <button
+              @click="handleContactType('PICKUP_ONLY')"
+              :disabled="loading"
+              class="contact-type-btn"
+            >
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mr-3">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                </div>
+                <div class="text-left">
+                  <p class="font-semibold text-gray-800">Récupération uniquement</p>
+                  <p class="text-sm text-gray-600">Peut venir récupérer le mineur en fin de cours</p>
+                </div>
+              </div>
+            </button>
+            
+            <button
+              @click="handleContactType('EMERGENCY_ONLY')"
+              :disabled="loading"
+              class="contact-type-btn"
+            >
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-red-100 text-red-600 rounded-full flex items-center justify-center mr-3">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L5.232 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                  </svg>
+                </div>
+                <div class="text-left">
+                  <p class="font-semibold text-gray-800">Urgence uniquement</p>
+                  <p class="text-sm text-gray-600">À appeler en cas d'urgence seulement</p>
+                </div>
+              </div>
+            </button>
+            
+            <button
+              @click="handleContactType('EMERGENCY_AND_PICKUP')"
+              :disabled="loading"
+              class="contact-type-btn"
+            >
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-green-100 text-green-600 rounded-full flex items-center justify-center mr-3">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <div class="text-left">
+                  <p class="font-semibold text-gray-800">Les deux</p>
+                  <p class="text-sm text-gray-600">Récupération ET contact d'urgence</p>
+                </div>
+              </div>
+            </button>
+          </div>
+          
+          <div class="flex justify-center">
+            <button
+              @click="currentStep = 'contact-phone'"
+              class="btn-secondary"
+              :disabled="loading"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Retour
             </button>
           </div>
         </div>
@@ -257,8 +351,10 @@ const loading = ref(false)
 const error = ref('')
 const contacts = ref([])
 const form = ref({
-  name: '',
-  phone: ''
+  firstName: '',
+  lastName: '',
+  phone: '',
+  type: ''
 })
 
 const fullText = "Excellent ! On avance bien dans ton inscription ! 🎯 Pour ta sécurité, j'ai maintenant besoin d'ajouter tes contacts d'urgence. C'est important en cas de besoin ! 🚨"
@@ -283,7 +379,7 @@ const typeText = () => {
 }
 
 const addAnotherContact = () => {
-  form.value = { name: '', phone: '' }
+  form.value = { firstName: '', lastName: '', phone: '', type: '' }
   currentStep.value = 'contact-name'
 }
 
@@ -298,7 +394,7 @@ const removeContact = (index: number) => {
 }
 
 const handleNameSubmit = () => {
-  if (!form.value.name) return
+  if (!form.value.firstName || !form.value.lastName) return
   setTimeout(() => {
     currentStep.value = 'contact-phone'
   }, 500)
@@ -307,14 +403,25 @@ const handleNameSubmit = () => {
 const handlePhoneSubmit = () => {
   if (!form.value.phone) return
   
+  // Aller à l'étape de sélection du type
+  setTimeout(() => {
+    currentStep.value = 'contact-type'
+  }, 500)
+}
+
+const handleContactType = (type: string) => {
+  form.value.type = type
+  
   // Ajouter le contact à la liste
   contacts.value.push({
-    name: form.value.name,
-    phone: form.value.phone
+    firstName: form.value.firstName,
+    lastName: form.value.lastName,
+    phone: form.value.phone,
+    type: type
   })
   
   // Réinitialiser le formulaire
-  form.value = { name: '', phone: '' }
+  form.value = { firstName: '', lastName: '', phone: '', type: '' }
   
   // Aller à l'étape "add-more"
   setTimeout(() => {
@@ -384,8 +491,15 @@ useHead({
 <style scoped>
 .typewriter {
   color: #1f2937;
-  font-size: 1.125rem;
-  line-height: 1.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .typewriter {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
 }
 
 .cursor {
@@ -399,15 +513,23 @@ useHead({
 
 .answer-input {
   width: 100%;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   background-color: white;
   border: 2px solid #e2e8f0;
   border-radius: 1rem;
   color: #1e293b;
-  font-size: 1.125rem;
-  line-height: 1.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
   outline: none;
   transition: all 0.3s ease;
+}
+
+@media (min-width: 640px) {
+  .answer-input {
+    padding: 1.5rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
 }
 
 .answer-input::placeholder {
@@ -415,8 +537,8 @@ useHead({
 }
 
 .answer-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+  border-color: #ea580c;
+  box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.2);
 }
 
 .option-button {
@@ -444,15 +566,38 @@ useHead({
   background-color: #eff6ff;
 }
 
+.contact-type-btn {
+  width: 100%;
+  padding: 1rem;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 1rem;
+  text-align: left;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.contact-type-btn:hover {
+  border-color: #fed7aa;
+  background-color: #fff7ed;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.contact-type-btn:focus {
+  box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.2);
+}
+
 .btn-primary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   padding: 1rem 2rem;
-  background: linear-gradient(to right, #475569, #2563eb, #4f46e5);
+  background: linear-gradient(to right, #ea580c, #dc2626, #be185d);
   color: white;
   font-weight: 600;
-  font-size: 1.125rem;
-  line-height: 1.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
   border-radius: 1rem;
   border: none;
   cursor: pointer;
@@ -460,10 +605,17 @@ useHead({
   transform: scale(1);
 }
 
+@media (min-width: 640px) {
+  .btn-primary {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+}
+
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(to right, #334155, #1d4ed8, #4338ca);
+  background: linear-gradient(to right, #c2410c, #b91c1c, #a21caf);
   transform: scale(1.05);
-  box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.25);
+  box-shadow: 0 25px 50px -12px rgba(234, 88, 12, 0.25);
 }
 
 .btn-primary:disabled {
@@ -475,16 +627,24 @@ useHead({
 .btn-secondary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   padding: 1rem 2rem;
   background-color: white;
   border: 2px solid #e2e8f0;
   color: #374151;
   font-weight: 600;
-  font-size: 1.125rem;
-  line-height: 1.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
   border-radius: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+@media (min-width: 640px) {
+  .btn-secondary {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
 }
 
 .btn-secondary:hover {

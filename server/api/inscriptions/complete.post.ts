@@ -98,13 +98,13 @@ export default defineEventHandler(async (event) => {
         data: {
           dancerId: dancer.id,
           email: step2.guardianEmail,
-          firstName: 'Non spécifié',
-          lastName: 'Non spécifié',
+          firstName: step2.guardianFirstName || 'Non spécifié',
+          lastName: step2.guardianLastName || 'Non spécifié',
           address: step1.address,
           postalCode: step1.postalCode,
           city: step1.city || 'Non spécifié',
           phone: step1.phone,
-          authorized: false
+          authorized: step2.guardianAuthorized || false
         }
       })
     }
@@ -116,9 +116,9 @@ export default defineEventHandler(async (event) => {
         await prisma.emergencyContact.create({
           data: {
             dancerId: dancer.id,
-            type: 'EMERGENCY_ONLY', // Utiliser l'enum correct
-            firstName: contact.name.split(' ')[0] || contact.name,
-            lastName: contact.name.split(' ').slice(1).join(' ') || '',
+            type: contact.type || 'EMERGENCY_ONLY', // Utiliser le type fourni
+            firstName: contact.firstName || '',
+            lastName: contact.lastName || '',
             phone: contact.phone
           }
         })
