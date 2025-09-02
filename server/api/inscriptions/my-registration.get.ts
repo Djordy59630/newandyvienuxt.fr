@@ -75,6 +75,7 @@ export default defineEventHandler(async (event) => {
           schedule: reg.danceGroup.schedule,
           ageGroup: reg.danceGroup.ageGroup,
           status: reg.status,
+          schoolYear: reg.schoolYear,
           submittedAt: reg.submittedAt,
           reviewedAt: reg.reviewedAt,
           notes: reg.notes

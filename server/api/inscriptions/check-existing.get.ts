@@ -18,7 +18,13 @@ export default defineEventHandler(async (event) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as { userId: number; email: string }
     const userId = decoded.userId
 
-    // Vérifier si l'utilisateur a déjà une inscription COMPLETE (SUBMITTED, APPROVED ou REJECTED)
+    // Obtenir l'année scolaire actuelle
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = now.getMonth() + 1
+    const currentSchoolYear = month >= 9 ? `${year}-${year + 1}` : `${year - 1}-${year}`
+
+    // Vérifier si l'utilisateur a déjà une inscription COMPLETE pour l'année scolaire actuelle
     const existingDancer: any = await (prisma.dancer as any).findFirst({
       where: { 
         userId: userId
@@ -26,6 +32,7 @@ export default defineEventHandler(async (event) => {
       include: {
         registrations: {
           where: {
+            schoolYear: currentSchoolYear,
             status: {
               in: ['SUBMITTED', 'APPROVED', 'REJECTED']
             }

@@ -88,6 +88,7 @@ model Registration {
   id           Int                  @id @default(autoincrement())
   dancerId     Int
   danceGroupId Int
+  schoolYear   String @default("2024-2025") // Format: "2024-2025"
   sportCode    String?
   status       registrations_status @default(DRAFT)
   submittedAt  DateTime?
@@ -102,9 +103,10 @@ model Registration {
   danceGroup DanceGroup @relation(fields: [danceGroupId], references: [id])
   reviewer   User?      @relation("ReviewedBy", fields: [reviewedBy], references: [id])
 
-  @@unique([dancerId, danceGroupId])
+  @@unique([dancerId, danceGroupId, schoolYear])
   @@index([danceGroupId], map: "registrations_danceGroupId_fkey")
   @@index([reviewedBy], map: "registrations_reviewedBy_fkey")
+  @@index([schoolYear], map: "registrations_schoolYear_idx")
   @@map("registrations")
 }
 

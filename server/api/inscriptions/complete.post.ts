@@ -19,13 +19,20 @@ export default defineEventHandler(async (event) => {
     const userId = decoded.userId
     const userEmail = decoded.email
 
-    // Vérifier si l'utilisateur a déjà une inscription COMPLETE (SUBMITTED, APPROVED, REJECTED)
+    // Obtenir l'année scolaire actuelle
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = now.getMonth() + 1
+    const currentSchoolYear = month >= 9 ? `${year}-${year + 1}` : `${year - 1}-${year}`
+
+    // Vérifier si l'utilisateur a déjà une inscription COMPLETE pour l'année scolaire actuelle
     // @ts-expect-error - Modèle Prisma généré
     const existingCompleteRegistration = await prisma.registration.findFirst({
       where: { 
         dancer: {
           userId: userId
         },
+        schoolYear: currentSchoolYear,
         status: {
           in: ['SUBMITTED', 'APPROVED', 'REJECTED']
         }
@@ -209,6 +216,7 @@ export default defineEventHandler(async (event) => {
           data: {
             dancerId: dancer.id,
             danceGroupId: danceGroup.id,
+            schoolYear: currentSchoolYear, // Ajouter l'année scolaire
             sportCode: null,
             status: 'SUBMITTED', // Marquer comme SUBMITTED car l'inscription est complète
             submittedAt: new Date(),

@@ -141,6 +141,33 @@
           </div>
         </div>
 
+        <!-- Renouvellement d'inscription -->
+        <div v-if="showRenewalOption" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-green-500 via-blue-500 to-purple-500"></div>
+          
+          <div class="text-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+              </svg>
+            </div>
+            <h2 class="text-2xl font-black text-gray-800 mb-3">Renouveler votre inscription</h2>
+            <p class="text-gray-600 mb-6">
+              Votre inscription n'est plus valide pour l'année scolaire actuelle {{ currentSchoolYear }}.<br>
+              Renouvelez maintenant avec vos informations pré-remplies que vous pourrez modifier si nécessaire.
+            </p>
+            <button
+              @click="startRenewal"
+              class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-green-500 to-blue-600 text-white font-bold rounded-2xl hover:from-green-600 hover:to-blue-700 transition-all duration-300 transform hover:-translate-y-1 shadow-lg"
+            >
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+              </svg>
+              Renouveler pour {{ currentSchoolYear }}
+            </button>
+          </div>
+        </div>
+
         <!-- Informations complètes -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
@@ -541,6 +568,77 @@ const hasMedicalCertificateRequired = computed(() => {
 // Helper pour gérer les valeurs vides
 const displayValue = (value: string | null | undefined, fallback: string) => {
   return (value && value.trim() !== '') ? value : fallback
+}
+
+// Fonctions pour gérer les années scolaires
+const getCurrentSchoolYear = () => {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth() + 1
+  return month >= 9 ? `${year}-${year + 1}` : `${year - 1}-${year}`
+}
+
+const getNextSchoolYear = () => {
+  const current = getCurrentSchoolYear()
+  const startYear = current.split('-').map(Number)[0] || new Date().getFullYear()
+  return `${startYear + 1}-${startYear + 2}`
+}
+
+// Propriétés computed pour le renouvellement
+const currentSchoolYear = computed(() => getCurrentSchoolYear())
+const nextSchoolYear = computed(() => getNextSchoolYear())
+
+const showRenewalOption = computed(() => {
+  if (!registration.value.hasRegistration || !registration.value.registration) return false
+  
+  const currentYear = getCurrentSchoolYear()
+  
+  // Debug : voir la structure des données
+  console.log('Debugging renewal logic:')
+  console.log('Current year:', currentYear)
+  console.log('Registration data:', registration.value.registration)
+  console.log('Dance groups:', registration.value.registration.danceGroups)
+  
+  // Vérifier si l'utilisateur a une inscription valide (SUBMITTED ou APPROVED) pour l'année scolaire actuelle
+  const hasValidCurrentYearRegistration = registration.value.registration.danceGroups?.some(
+    (group: any) => {
+      console.log('Checking dance group:', group)
+      console.log('School year:', group.schoolYear, 'Status:', group.status)
+      return group.schoolYear === currentYear && ['SUBMITTED', 'APPROVED'].includes(group.status)
+    }
+  )
+  
+  console.log('Has valid current year registration:', hasValidCurrentYearRegistration)
+  
+  // Afficher l'option de renouvellement SEULEMENT si pas d'inscription valide pour l'année actuelle
+  // Cela signifie qu'ils ont une inscription d'une année précédente qui n'est plus valide
+  return !hasValidCurrentYearRegistration
+})
+
+const startRenewal = async () => {
+  try {
+    loading.value = true
+    
+    // Appeler l'API de renouvellement pour obtenir les données pré-remplies
+    const renewalData = await $fetch('/api/inscriptions/renew', {
+      method: 'POST',
+      body: { schoolYear: currentSchoolYear.value }
+    })
+    
+    if (renewalData.success) {
+      // Rediriger vers le processus d'inscription avec les données pré-remplies
+      // On peut stocker les données dans les cookies pour les utiliser
+      const renewalCookie = useCookie('renewal-data')
+      renewalCookie.value = JSON.stringify(renewalData)
+      
+      await navigateTo('/inscription/step-1?renewal=true')
+    }
+    
+  } catch (error) {
+    console.error('Erreur lors du renouvellement:', error)
+  } finally {
+    loading.value = false
+  }
 }
 
 onMounted(async () => {
