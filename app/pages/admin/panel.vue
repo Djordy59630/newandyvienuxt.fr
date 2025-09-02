@@ -216,28 +216,12 @@
                     {{ formatDate(registration.createdAt) }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                    <button
-                      @click="openModal(registration)"
-                      class="bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 px-3 py-1 rounded-lg transition-colors"
+                    <NuxtLink
+                      :to="`/admin/registration/${registration.id}`"
+                      class="bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 px-3 py-1 rounded-lg transition-colors inline-block"
                     >
                       Voir
-                    </button>
-                    <button
-                      v-if="registration.status === 'SUBMITTED'"
-                      @click="updateRegistration(registration.id, 'APPROVED')"
-                      :disabled="updating"
-                      class="bg-green-500/20 text-green-300 hover:bg-green-500/30 px-3 py-1 rounded-lg transition-colors disabled:opacity-50"
-                    >
-                      Approuver
-                    </button>
-                    <button
-                      v-if="registration.status === 'SUBMITTED'"
-                      @click="updateRegistration(registration.id, 'REJECTED')"
-                      :disabled="updating"
-                      class="bg-red-500/20 text-red-300 hover:bg-red-500/30 px-3 py-1 rounded-lg transition-colors disabled:opacity-50"
-                    >
-                      Rejeter
-                    </button>
+                    </NuxtLink>
                   </td>
                 </tr>
               </tbody>
@@ -247,106 +231,6 @@
       </div>
     </div>
 
-    <!-- Modal de détails -->
-    <div v-if="showModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="p-6">
-          <!-- Header -->
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-white">Détails de l'inscription</h2>
-            <button @click="closeModal" class="text-white/60 hover:text-white">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-              </svg>
-            </button>
-          </div>
-
-          <div v-if="selectedRegistration" class="space-y-6">
-            <!-- Informations du danseur -->
-            <div class="bg-white/5 rounded-xl p-4">
-              <h3 class="text-lg font-semibold text-white mb-3">Informations du danseur</h3>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span class="text-orange-100/60">Nom :</span>
-                  <span class="text-white ml-2">{{ selectedRegistration.dancer.firstName }} {{ selectedRegistration.dancer.lastName }}</span>
-                </div>
-                <div>
-                  <span class="text-orange-100/60">Email :</span>
-                  <span class="text-white ml-2">{{ selectedRegistration.dancer.email }}</span>
-                </div>
-                <div>
-                  <span class="text-orange-100/60">Téléphone :</span>
-                  <span class="text-white ml-2">{{ selectedRegistration.dancer.phone }}</span>
-                </div>
-                <div>
-                  <span class="text-orange-100/60">Date de naissance :</span>
-                  <span class="text-white ml-2">{{ formatDate(selectedRegistration.dancer.birthDate) }}</span>
-                </div>
-                <div>
-                  <span class="text-orange-100/60">Niveau scolaire :</span>
-                  <span class="text-white ml-2">{{ selectedRegistration.dancer.schoolLevel }}</span>
-                </div>
-                <div>
-                  <span class="text-orange-100/60">Taille T-shirt :</span>
-                  <span class="text-white ml-2">{{ selectedRegistration.dancer.tShirtSize }}</span>
-                </div>
-              </div>
-              <div class="mt-4">
-                <span class="text-orange-100/60">Adresse :</span>
-                <span class="text-white ml-2">{{ selectedRegistration.dancer.address }}, {{ selectedRegistration.dancer.postalCode }} {{ selectedRegistration.dancer.city }}</span>
-              </div>
-              <div v-if="selectedRegistration.dancer.otherInfo" class="mt-4">
-                <span class="text-orange-100/60">Autres informations :</span>
-                <span class="text-white ml-2">{{ selectedRegistration.dancer.otherInfo }}</span>
-              </div>
-            </div>
-
-            <!-- Groupe de danse -->
-            <div class="bg-white/5 rounded-xl p-4">
-              <h3 class="text-lg font-semibold text-white mb-3">Groupe de danse</h3>
-              <div class="text-sm space-y-2">
-                <div>
-                  <span class="text-orange-100/60">Nom :</span>
-                  <span class="text-white ml-2">{{ selectedRegistration.danceGroup.name }}</span>
-                </div>
-                <div>
-                  <span class="text-orange-100/60">Horaire :</span>
-                  <span class="text-white ml-2">{{ selectedRegistration.danceGroup.schedule }}</span>
-                </div>
-                <div>
-                  <span class="text-orange-100/60">Tranche d'âge :</span>
-                  <span class="text-white ml-2">{{ selectedRegistration.danceGroup.ageGroup }}</span>
-                </div>
-                <div>
-                  <span class="text-orange-100/60">Description :</span>
-                  <span class="text-white ml-2">{{ selectedRegistration.danceGroup.description }}</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Actions -->
-            <div class="flex justify-end space-x-4">
-              <button
-                v-if="selectedRegistration.status === 'SUBMITTED'"
-                @click="updateRegistration(selectedRegistration.id, 'APPROVED')"
-                :disabled="updating"
-                class="bg-green-500/20 text-green-300 hover:bg-green-500/30 px-6 py-2 rounded-xl transition-colors disabled:opacity-50"
-              >
-                Approuver
-              </button>
-              <button
-                v-if="selectedRegistration.status === 'SUBMITTED'"
-                @click="updateRegistration(selectedRegistration.id, 'REJECTED')"
-                :disabled="updating"
-                class="bg-red-500/20 text-red-300 hover:bg-red-500/30 px-6 py-2 rounded-xl transition-colors disabled:opacity-50"
-              >
-                Rejeter
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -361,11 +245,8 @@ const { logout } = useAuth()
 const registrations = ref([])
 const filteredRegistrations = ref([])
 const loading = ref(true)
-const updating = ref(false)
 const selectedStatus = ref('')
 const searchTerm = ref('')
-const showModal = ref(false)
-const selectedRegistration = ref(null)
 
 // Stats
 const stats = computed(() => {
@@ -411,40 +292,6 @@ const filterRegistrations = () => {
   filteredRegistrations.value = filtered
 }
 
-const updateRegistration = async (registrationId, status) => {
-  try {
-    updating.value = true
-    const response = await $fetch(`/api/admin/registrations/${registrationId}/update`, {
-      method: 'POST',
-      body: { status }
-    })
-    
-    // Mettre à jour la liste
-    const index = registrations.value.findIndex(r => r.id === registrationId)
-    if (index !== -1) {
-      registrations.value[index] = response.registration
-    }
-    
-    filterRegistrations()
-    closeModal()
-    
-  } catch (error) {
-    console.error('Erreur lors de la mise à jour:', error)
-    alert('Erreur lors de la mise à jour de l\'inscription')
-  } finally {
-    updating.value = false
-  }
-}
-
-const openModal = (registration) => {
-  selectedRegistration.value = registration
-  showModal.value = true
-}
-
-const closeModal = () => {
-  selectedRegistration.value = null
-  showModal.value = false
-}
 
 const getStatusClass = (status) => {
   switch (status) {
