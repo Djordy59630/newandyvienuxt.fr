@@ -43,7 +43,11 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
-      user
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.roles // Normaliser le nom du champ pour la cohérence
+      }
     }
     
   } catch (error: any) {

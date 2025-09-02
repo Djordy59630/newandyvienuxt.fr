@@ -48,7 +48,12 @@ export const useAuth = () => {
       user.value = data.user
       userCookie.value = data.user
 
-      await navigateTo('/dashboard')
+      // Rediriger les admins vers le panel admin, les utilisateurs vers le dashboard
+      if (data.user.role === 'admin') {
+        await navigateTo('/admin/panel')
+      } else {
+        await navigateTo('/dashboard')
+      }
       
       return { success: true }
     } catch (error: any) {

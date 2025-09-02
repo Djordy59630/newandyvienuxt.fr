@@ -240,7 +240,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useHead, navigateTo, useCookie } from 'nuxt/app'
 
 definePageMeta({
-  middleware: 'auth'
+  middleware: ['auth', 'no-admin']
 })
 
 // @ts-ignore - Nuxt auto-import
