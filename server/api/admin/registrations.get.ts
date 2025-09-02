@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import jwt from 'jsonwebtoken'
+import type { RegistrationWithRelations } from '~/types/database'
 
 const prisma = new PrismaClient()
 
@@ -15,7 +16,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as any
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as { userId: number; email: string }
     
     // Vérifier que l'utilisateur est admin
     const user = await prisma.user.findUnique({
@@ -30,7 +31,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Récupérer toutes les inscriptions avec les détails
-    const registrations: any = await (prisma.registration as any).findMany({
+    const registrations = await prisma.registration.findMany({
       include: {
         dancer: {
           include: {

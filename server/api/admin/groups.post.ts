@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import jwt from 'jsonwebtoken'
+import type { DanceGroup } from '~/types/database'
 
 const prisma = new PrismaClient()
 
@@ -25,7 +26,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as any
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as { userId: number; email: string }
     
     // Vérifier que l'utilisateur est admin
     const user = await prisma.user.findUnique({
@@ -40,7 +41,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Vérifier que le nom du groupe n'existe pas déjà
-    const existingGroup = await (prisma.danceGroup as any).findUnique({
+    const existingGroup = await prisma.danceGroup.findUnique({
       where: { name: name.trim() }
     })
 
@@ -52,7 +53,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Créer le nouveau groupe
-    const newGroup: any = await (prisma.danceGroup as any).create({
+    const newGroup = await prisma.danceGroup.create({
       data: {
         name: name.trim(),
         description: description.trim(),

@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as any
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as { userId: number; email: string }
     const userId = decoded.userId
 
     // Vérifier si l'utilisateur a déjà une inscription COMPLETE (SUBMITTED, APPROVED ou REJECTED)

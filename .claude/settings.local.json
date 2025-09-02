@@ -14,7 +14,10 @@
       "Bash(dir)",
       "Bash(del:*)",
       "Bash(npx tsx:*)",
-      "Bash(node test-prisma.js)"
+      "Bash(node test-prisma.js)",
+      "Bash(npx tsc:*)",
+      "Bash(rd:*)",
+      "Bash(PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=\"oui\" npx prisma db push --force-reset)"
     ],
     "deny": [],
     "ask": []

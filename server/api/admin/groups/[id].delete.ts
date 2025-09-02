@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as any
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as { userId: number; email: string }
     
     // Vérifier que l'utilisateur est admin
     const user = await prisma.user.findUnique({
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Vérifier que le groupe existe
-    const existingGroup = await (prisma.danceGroup as any).findUnique({
+    const existingGroup = await prisma.danceGroup.findUnique({
       where: { id: groupId },
       include: {
         _count: {
@@ -66,7 +66,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Supprimer le groupe
-    await (prisma.danceGroup as any).delete({
+    await prisma.danceGroup.delete({
       where: { id: groupId }
     })
 

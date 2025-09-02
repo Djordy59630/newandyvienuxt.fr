@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import jwt from 'jsonwebtoken'
+import type { DanceGroupWithStats } from '~/types/database'
 
 const prisma = new PrismaClient()
 
@@ -15,7 +16,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as any
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as { userId: number; email: string }
     
     // Vérifier que l'utilisateur est admin
     const user = await prisma.user.findUnique({
@@ -30,7 +31,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Récupérer tous les groupes de danse avec le nombre d'inscrits
-    const groups: any = await (prisma.danceGroup as any).findMany({
+    const groups = await prisma.danceGroup.findMany({
       include: {
         _count: {
           select: {
@@ -45,7 +46,7 @@ export default defineEventHandler(async (event) => {
 
     return {
       success: true,
-      groups: groups.map((group: any) => ({
+      groups: groups.map(group => ({
         id: group.id,
         name: group.name,
         description: group.description,

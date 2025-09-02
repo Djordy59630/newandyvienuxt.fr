@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as any
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as { userId: number; email: string }
     
     // Vérifier que l'utilisateur est admin
     const user = await prisma.user.findUnique({
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Récupérer tous les groupes de danse avec leurs statistiques
-    const groups: any = await (prisma.danceGroup as any).findMany({
+    const groups = await prisma.danceGroup.findMany({
       include: {
         registrations: {
           include: {
@@ -54,17 +54,17 @@ export default defineEventHandler(async (event) => {
     })
 
     // Calculer les statistiques pour chaque groupe
-    const groupStats = groups.map((group: any) => {
+    const groupStats = groups.map(group => {
       const registrations = group.registrations || []
       
       const totalDancers = registrations.length
-      const submittedCount = registrations.filter((r: any) => r.status === 'SUBMITTED').length
-      const approvedCount = registrations.filter((r: any) => r.status === 'APPROVED').length
-      const rejectedCount = registrations.filter((r: any) => r.status === 'REJECTED').length
-      const draftCount = registrations.filter((r: any) => r.status === 'DRAFT').length
+      const submittedCount = registrations.filter(r => r.status === 'SUBMITTED').length
+      const approvedCount = registrations.filter(r => r.status === 'APPROVED').length
+      const rejectedCount = registrations.filter(r => r.status === 'REJECTED').length
+      const draftCount = registrations.filter(r => r.status === 'DRAFT').length
 
       // Liste des danseurs avec leurs détails
-      const dancers = registrations.map((registration: any) => {
+      const dancers = registrations.map(registration => {
         const dancer = registration.dancer
         return {
           id: dancer.id,
@@ -86,7 +86,7 @@ export default defineEventHandler(async (event) => {
           guardian: dancer.guardian,
           userEmail: dancer.user?.email
         }
-      }).sort((a: any, b: any) => a.lastName.localeCompare(b.lastName))
+      }).sort((a, b) => a.lastName.localeCompare(b.lastName))
 
       return {
         id: group.id,
@@ -109,7 +109,7 @@ export default defineEventHandler(async (event) => {
     // Statistiques globales
     const globalStats = {
       totalGroups: groups.length,
-      activeGroups: groups.filter((g: any) => g.isActive).length,
+      activeGroups: groups.filter(g => g.isActive).length,
       totalDancers: groupStats.reduce((sum, group) => sum + group.stats.totalDancers, 0),
       totalSubmitted: groupStats.reduce((sum, group) => sum + group.stats.submittedCount, 0),
       totalApproved: groupStats.reduce((sum, group) => sum + group.stats.approvedCount, 0),

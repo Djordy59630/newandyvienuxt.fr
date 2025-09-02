@@ -25,7 +25,17 @@
           </div>
           
           <!-- Actions -->
-          <div class="flex space-x-3" v-if="registration">
+          <div class="flex flex-wrap gap-3" v-if="registration">
+            <button
+              @click="printRegistration"
+              class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+              </svg>
+              <span>Imprimer</span>
+            </button>
+            
             <button
               v-if="registration.status === 'SUBMITTED'"
               @click="updateStatus('APPROVED')"
@@ -367,6 +377,385 @@ const showToast = (message, type = 'success') => {
   setTimeout(() => {
     toast.value.show = false
   }, 3000)
+}
+
+const printRegistration = () => {
+  // Créer une nouvelle fenêtre pour l'impression
+  const printWindow = window.open('', '_blank')
+  
+  if (!printWindow || !registration.value) return
+  
+  // Contenu HTML pour l'impression
+  const printContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Inscription - ${registration.value.dancer.firstName} ${registration.value.dancer.lastName}</title>
+      <style>
+        @page {
+          size: A4;
+          margin: 2cm;
+        }
+        
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          line-height: 1.6;
+          color: #333;
+          max-width: 210mm;
+          margin: 0 auto;
+          background: white;
+        }
+        
+        .header {
+          text-align: center;
+          border-bottom: 3px solid #ea580c;
+          padding-bottom: 20px;
+          margin-bottom: 30px;
+        }
+        
+        .header h1 {
+          color: #ea580c;
+          margin: 0;
+          font-size: 28px;
+          font-weight: bold;
+        }
+        
+        .header p {
+          color: #666;
+          margin: 5px 0;
+          font-size: 14px;
+        }
+        
+        .dancer-info {
+          background: #fff;
+          border: 2px solid #ea580c;
+          border-radius: 10px;
+          padding: 20px;
+          margin-bottom: 25px;
+        }
+        
+        .dancer-info h2 {
+          color: #ea580c;
+          margin: 0 0 15px 0;
+          font-size: 24px;
+          text-align: center;
+        }
+        
+        .status-badge {
+          display: inline-block;
+          padding: 8px 16px;
+          border-radius: 20px;
+          font-weight: bold;
+          font-size: 14px;
+          margin-left: 10px;
+        }
+        
+        .status-submitted { background: #fef3c7; color: #92400e; }
+        .status-approved { background: #d1fae5; color: #065f46; }
+        .status-rejected { background: #fee2e2; color: #991b1b; }
+        .status-draft { background: #f3f4f6; color: #374151; }
+        
+        .section {
+          margin-bottom: 25px;
+          page-break-inside: avoid;
+        }
+        
+        .section h3 {
+          color: #ea580c;
+          font-size: 18px;
+          margin: 0 0 15px 0;
+          padding-bottom: 5px;
+          border-bottom: 2px solid #fed7aa;
+        }
+        
+        .info-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+          margin-bottom: 20px;
+        }
+        
+        .info-item {
+          margin-bottom: 15px;
+        }
+        
+        .info-label {
+          font-weight: bold;
+          color: #374151;
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 3px;
+          display: block;
+        }
+        
+        .info-value {
+          color: #111827;
+          font-size: 14px;
+        }
+        
+        .dance-group {
+          background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+          padding: 20px;
+          border-radius: 10px;
+          margin-bottom: 20px;
+        }
+        
+        .dance-group h4 {
+          color: #9a3412;
+          font-size: 20px;
+          margin: 0 0 10px 0;
+        }
+        
+        .dance-group p {
+          color: #9a3412;
+          margin: 5px 0;
+        }
+        
+        .contact-card {
+          background: #fef2f2;
+          border: 1px solid #fecaca;
+          border-radius: 8px;
+          padding: 15px;
+          margin-bottom: 15px;
+        }
+        
+        .contact-card h4 {
+          color: #dc2626;
+          margin: 0 0 10px 0;
+          font-size: 16px;
+        }
+        
+        .emergency-number {
+          background: #dc2626;
+          color: white;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+          font-weight: bold;
+          margin-right: 10px;
+        }
+        
+        .medical-alert {
+          background: #fef3c7;
+          border: 2px solid #f59e0b;
+          border-radius: 8px;
+          padding: 15px;
+          margin-top: 15px;
+        }
+        
+        .medical-alert .info-value {
+          color: #92400e;
+          font-weight: 500;
+        }
+        
+        .review-section {
+          background: #f3f4f6;
+          border-radius: 8px;
+          padding: 15px;
+        }
+        
+        .footer {
+          text-align: center;
+          margin-top: 40px;
+          padding-top: 20px;
+          border-top: 1px solid #d1d5db;
+          color: #6b7280;
+          font-size: 12px;
+        }
+        
+        @media print {
+          body { -webkit-print-color-adjust: exact; }
+          .page-break { page-break-before: always; }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <h1>FICHE D'INSCRIPTION</h1>
+        <p>École de Danse</p>
+        <p>Inscription #${registration.value.id} - ${formatDate(registration.value.createdAt)}</p>
+      </div>
+      
+      <div class="dancer-info">
+        <h2>
+          ${registration.value.dancer.firstName} ${registration.value.dancer.lastName}
+          <span class="status-badge status-${registration.value.status.toLowerCase()}">
+            ${getStatusText(registration.value.status)}
+          </span>
+        </h2>
+      </div>
+      
+      <div class="section">
+        <h3>Informations Personnelles</h3>
+        <div class="info-grid">
+          <div>
+            <div class="info-item">
+              <span class="info-label">Date de naissance</span>
+              <div class="info-value">${formatDate(registration.value.dancer.birthDate)}</div>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Email</span>
+              <div class="info-value">${registration.value.dancer.user?.email || 'Non renseigné'}</div>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Téléphone</span>
+              <div class="info-value">${registration.value.dancer.phone || 'Non renseigné'}</div>
+            </div>
+          </div>
+          <div>
+            <div class="info-item">
+              <span class="info-label">Adresse complète</span>
+              <div class="info-value">
+                ${registration.value.dancer.address}<br>
+                ${registration.value.dancer.postalCode} ${registration.value.dancer.city}
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Niveau scolaire</span>
+              <div class="info-value">${registration.value.dancer.schoolLevel || 'Non renseigné'}</div>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Taille T-shirt</span>
+              <div class="info-value">${registration.value.dancer.tShirtSize || 'Non renseigné'}</div>
+            </div>
+          </div>
+        </div>
+        
+        ${registration.value.dancer.medicalInfo ? `
+          <div class="medical-alert">
+            <span class="info-label">⚠️ Informations médicales importantes</span>
+            <div class="info-value">${registration.value.dancer.medicalInfo}</div>
+          </div>
+        ` : ''}
+        
+        ${registration.value.dancer.otherInfo ? `
+          <div class="info-item">
+            <span class="info-label">Autres informations</span>
+            <div class="info-value">${registration.value.dancer.otherInfo}</div>
+          </div>
+        ` : ''}
+      </div>
+      
+      <div class="section">
+        <h3>Groupe de Danse</h3>
+        <div class="dance-group">
+          <h4>${registration.value.danceGroup.name}</h4>
+          <p><strong>Description:</strong> ${registration.value.danceGroup.description}</p>
+          <p><strong>Horaires:</strong> ${registration.value.danceGroup.schedule}</p>
+          <p><strong>Groupe d'âge:</strong> ${registration.value.danceGroup.ageGroup}</p>
+        </div>
+      </div>
+      
+      ${registration.value.dancer.guardian ? `
+        <div class="section">
+          <h3>Responsable Légal</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Nom complet</span>
+              <div class="info-value">${registration.value.dancer.guardian.firstName} ${registration.value.dancer.guardian.lastName}</div>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Relation</span>
+              <div class="info-value">${registration.value.dancer.guardian.relationship}</div>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Email</span>
+              <div class="info-value">${registration.value.dancer.guardian.email}</div>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Téléphone</span>
+              <div class="info-value">${registration.value.dancer.guardian.phone}</div>
+            </div>
+          </div>
+        </div>
+      ` : ''}
+      
+      ${registration.value.dancer.emergencyContacts?.length ? `
+        <div class="section">
+          <h3>Contacts d'Urgence</h3>
+          ${registration.value.dancer.emergencyContacts.map((contact, index) => `
+            <div class="contact-card">
+              <h4>
+                <span class="emergency-number">${index + 1}</span>
+                ${contact.firstName} ${contact.lastName}
+              </h4>
+              <div class="info-grid">
+                <div class="info-item">
+                  <span class="info-label">Relation</span>
+                  <div class="info-value">${contact.relationship}</div>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">Téléphone</span>
+                  <div class="info-value">${contact.phone}</div>
+                </div>
+                ${contact.email ? `
+                  <div class="info-item">
+                    <span class="info-label">Email</span>
+                    <div class="info-value">${contact.email}</div>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+      
+      ${registration.value.reviewer || registration.value.reviewedAt ? `
+        <div class="section">
+          <h3>Informations de Révision</h3>
+          <div class="review-section">
+            ${registration.value.reviewer ? `
+              <div class="info-item">
+                <span class="info-label">Révisé par</span>
+                <div class="info-value">${registration.value.reviewer.email}</div>
+              </div>
+            ` : ''}
+            ${registration.value.reviewedAt ? `
+              <div class="info-item">
+                <span class="info-label">Date de révision</span>
+                <div class="info-value">${formatDate(registration.value.reviewedAt)}</div>
+              </div>
+            ` : ''}
+            ${registration.value.notes ? `
+              <div class="info-item">
+                <span class="info-label">Notes de révision</span>
+                <div class="info-value">${registration.value.notes}</div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      ` : ''}
+      
+      <div class="footer">
+        <p>Document généré le ${new Date().toLocaleDateString('fr-FR', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}</p>
+        <p>École de Danse - Système de Gestion des Inscriptions</p>
+      </div>
+    </body>
+    </html>
+  `
+  
+  // Écrire le contenu dans la nouvelle fenêtre
+  printWindow.document.write(printContent)
+  printWindow.document.close()
+  
+  // Attendre que le contenu soit chargé puis imprimer
+  printWindow.onload = () => {
+    setTimeout(() => {
+      printWindow.print()
+      printWindow.close()
+    }, 500)
+  }
 }
 
 const formatDate = (date) => {
