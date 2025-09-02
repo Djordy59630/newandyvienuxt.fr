@@ -15,24 +15,30 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as any
-    const userId = decoded.userId
+    let decoded: any
+    let userId: number
+    
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as any
+      userId = decoded.userId
+    } catch (jwtError) {
+      console.error('JWT Error:', jwtError)
+      throw createError({
+        statusCode: 401,
+        statusMessage: 'Token invalide ou expiré'
+      })
+    }
 
     // Récupérer l'inscription de l'utilisateur avec tous les détails
-    // @ts-expect-error - Modèle Prisma généré
     const dancer = await prisma.dancer.findFirst({
       where: { userId: userId },
       include: {
-        // @ts-expect-error
         registrations: {
           include: {
-            // @ts-expect-error
             danceGroup: true
           }
         },
-        // @ts-expect-error
         emergencyContacts: true,
-        // @ts-expect-error
         guardian: true
       }
     })
@@ -85,7 +91,12 @@ export default defineEventHandler(async (event) => {
           firstName: dancer.guardian.firstName,
           lastName: dancer.guardian.lastName,
           phone: dancer.guardian.phone,
-          authorized: dancer.guardian.authorized
+          authorized: dancer.guardian.authorized,
+          relationship: dancer.guardian.relationship,
+          address: dancer.guardian.address,
+          postalCode: dancer.guardian.postalCode,
+          city: dancer.guardian.city
+
         } : null
       }
     }

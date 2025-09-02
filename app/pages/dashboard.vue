@@ -114,7 +114,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div class="bg-gray-50 rounded-xl p-4">
                 <p class="text-sm text-gray-500">Date d'inscription</p>
-                <p class="font-bold text-gray-800">{{ formatDate(registration.registration.createdAt) }}</p>
+                <p class="font-bold text-gray-800">{{ formatDate(registration.registration.dancer.createdAt) }}</p>
               </div>
               <div v-if="registration.registration.submittedAt" class="bg-blue-50 rounded-xl p-4">
                 <p class="text-sm text-blue-500">Soumis le</p>
@@ -285,7 +285,7 @@
             <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-2xl">
               <div class="flex items-center justify-between mb-3">
                 <p class="font-bold text-gray-800 text-lg">
-                  {{ registration.registration.guardian.firstName || 'Prénom à compléter' }} {{ registration.registration.guardian.lastName || 'Nom à compléter' }}
+                  {{ displayValue(registration.registration.guardian.firstName, 'Prénom à compléter') }} {{ displayValue(registration.registration.guardian.lastName, 'Nom à compléter') }}
                 </p>
                 <span class="px-3 py-1 rounded-full text-xs font-bold" 
                       :class="registration.registration.guardian.authorized ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'">
@@ -295,22 +295,22 @@
               <div class="space-y-2 text-sm">
                 <div>
                   <span class="text-gray-500">Email :</span>
-                  <span class="font-semibold text-gray-800 ml-2">{{ registration.registration.guardian.email || 'Email à compléter' }}</span>
+                  <span class="font-semibold text-gray-800 ml-2">{{ displayValue(registration.registration.guardian.email, 'Email à compléter') }}</span>
                 </div>
                 <div>
                   <span class="text-gray-500">Téléphone :</span>
-                  <span class="font-semibold text-gray-800 ml-2">{{ registration.registration.guardian.phone || 'Téléphone à compléter' }}</span>
+                  <span class="font-semibold text-gray-800 ml-2">{{ displayValue(registration.registration.guardian.phone, 'Téléphone à compléter') }}</span>
                 </div>
                 <div>
                   <span class="text-gray-500">Relation :</span>
-                  <span class="font-semibold text-gray-800 ml-2">{{ registration.registration.guardian.relationship || 'Relation à compléter' }}</span>
+                  <span class="font-semibold text-gray-800 ml-2">{{ displayValue(registration.registration.guardian.relationship, 'Relation à compléter') }}</span>
                 </div>
                 <div>
                   <span class="text-gray-500">Adresse :</span>
                   <span class="font-semibold text-gray-800 ml-2">
-                    {{ registration.registration.guardian.address || 'Adresse à compléter' }}, 
-                    {{ registration.registration.guardian.postalCode || 'Code postal' }} 
-                    {{ registration.registration.guardian.city || 'Ville' }}
+                    {{ displayValue(registration.registration.guardian.address, 'Adresse à compléter') }}, 
+                    {{ displayValue(registration.registration.guardian.postalCode, 'Code postal') }} 
+                    {{ displayValue(registration.registration.guardian.city, 'Ville') }}
                   </span>
                 </div>
               </div>
@@ -339,9 +339,9 @@
                     {{ index + 1 }}
                   </span>
                   <div class="flex-1">
-                    <p class="font-bold text-gray-800">{{ contact.firstName || 'Prénom à compléter' }} {{ contact.lastName || 'Nom à compléter' }}</p>
-                    <p class="text-gray-700 text-sm">📞 {{ contact.phone || 'Téléphone à compléter' }}</p>
-                    <p class="text-gray-700 text-sm">👤 {{ contact.relationship || 'Relation à compléter' }}</p>
+                    <p class="font-bold text-gray-800">{{ displayValue(contact.firstName, 'Prénom à compléter') }} {{ displayValue(contact.lastName, 'Nom à compléter') }}</p>
+                    <p class="text-gray-700 text-sm">📞 {{ displayValue(contact.phone, 'Téléphone à compléter') }}</p>
+                    <p class="text-gray-700 text-sm">👤 {{ displayValue(contact.relationship, 'Relation à compléter') }}</p>
                     <div class="mt-2">
                       <span class="text-xs px-2 py-1 rounded-full" 
                             :class="getContactTypeClass(contact.type)">
@@ -426,6 +426,7 @@ const fetchRegistration = async () => {
   try {
     const response = await $fetch('/api/inscriptions/my-registration')
     registration.value = response
+    console.log(registration.value)
   } catch (error) {
     console.error('Erreur chargement inscription:', error)
   } finally {
@@ -536,6 +537,11 @@ const hasMedicalCertificateRequired = computed(() => {
   const otherInfo = registration.value.registration.dancer.otherInfo || ''
   return otherInfo.includes('CERTIFICAT MÉDICAL REQUIS')
 })
+
+// Helper pour gérer les valeurs vides
+const displayValue = (value: string | null | undefined, fallback: string) => {
+  return (value && value.trim() !== '') ? value : fallback
+}
 
 onMounted(async () => {
   // Rediriger les admins vers le panel admin
