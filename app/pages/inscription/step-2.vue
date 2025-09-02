@@ -58,7 +58,7 @@
     <!-- Main Content -->
     <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 lg:pb-12 flex flex-col items-center justify-center min-h-[calc(100vh-180px)] lg:min-h-[calc(100vh-200px)]">
       
-      <!-- Kali Avatar -->
+      <!-- Damien.C Avatar -->
       <div class="mb-6 lg:mb-8">
         <div class="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse-slow relative mx-auto">
           <!-- Glow effect -->
@@ -70,7 +70,7 @@
           </div>
         </div>
         <div class="text-center mt-3 lg:mt-4">
-          <h2 class="text-xl lg:text-2xl font-bold text-white mb-2">Kali</h2>
+          <h2 class="text-xl lg:text-2xl font-bold text-white mb-2">Damien.C</h2>
           <div class="bg-gradient-to-r from-green-400 to-green-500 text-white text-xs lg:text-sm px-3 py-1 rounded-full inline-block">
             En ligne
           </div>
@@ -80,7 +80,7 @@
       <!-- Conversation Interface -->
       <div class="w-full max-w-2xl space-y-4 sm:space-y-6">
         
-        <!-- Kali Message -->
+        <!-- Damien.C Message -->
         <div class="flex items-start space-x-3 sm:space-x-4">
           <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
             <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -340,7 +340,7 @@ onMounted(() => {
   if (step1Cookie.birthDate) {
     isUserMinor = calculateAge(step1Cookie.birthDate)
     
-    // Définir le message de Kali selon l'âge
+    // Définir le message de Damien.C selon l'âge
     if (isUserMinor) {
       fullText = `Re-salut ${step1Cookie.firstName} ! 👋 J'ai calculé ton âge : ${getAge(step1Cookie.birthDate)} ans. Comme tu es mineur(e), j'ai besoin des coordonnées de ton responsable légal pour finaliser l'inscription. C'est une obligation légale ! 👨‍👩‍👧‍👦`
     } else {
@@ -380,7 +380,7 @@ const getAge = (birthDate: string) => {
 useHead({
   title: 'Étape 2 - Responsable légal • Square630',
   meta: [
-    { name: 'description', content: 'Kali, ton assistante virtuelle pour l\'inscription Square630' }
+    { name: 'description', content: 'Damien.C, ton assistant virtuel pour l\'inscription Square630' }
   ]
 })
 </script>

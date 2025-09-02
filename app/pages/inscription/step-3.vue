@@ -60,7 +60,7 @@
     <!-- Main Content -->
     <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-8 pb-12 flex flex-col items-center justify-center min-h-[calc(100vh-160px)]">
       
-      <!-- Kali Avatar -->
+      <!-- Damien.C Avatar -->
       <div class="mb-6 sm:mb-8">
         <div class="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse-slow relative mx-auto">
           <!-- Glow effect -->
@@ -72,7 +72,7 @@
           </div>
         </div>
         <div class="text-center mt-3 sm:mt-4">
-          <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">Kali</h2>
+          <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">Damien.C</h2>
           <div class="bg-gradient-to-r from-green-400 to-green-500 text-white text-sm px-3 py-1 rounded-full inline-block">
             En ligne
           </div>
@@ -82,7 +82,7 @@
       <!-- Conversation Interface -->
       <div class="w-full max-w-2xl space-y-4 sm:space-y-6">
         
-        <!-- Kali Message -->
+        <!-- Damien.C Message -->
         <div class="flex items-start space-x-3 sm:space-x-4">
           <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
             <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -483,7 +483,7 @@ onMounted(() => {
 useHead({
   title: 'Étape 3 - Contact d\'urgence • Square630',
   meta: [
-    { name: 'description', content: 'Kali, ton assistante virtuelle pour l\'inscription Square630' }
+    { name: 'description', content: 'Damien.C, ton assistant virtuel pour l\'inscription Square630' }
   ]
 })
 </script>

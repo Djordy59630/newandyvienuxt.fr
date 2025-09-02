@@ -75,7 +75,7 @@
               </svg>
             </div>
             
-            <h2 class="text-lg sm:text-xl font-bold text-gray-900">Message de Kali</h2>
+            <h2 class="text-lg sm:text-xl font-bold text-gray-900">Message de Damien.C</h2>
             <p class="text-gray-700 text-base sm:text-lg leading-relaxed">
               Bravo ! 🎊 Ton inscription à Square630 a été enregistrée avec succès ! J'ai bien sauvegardé toutes tes informations en base de données. 
             </p>
