@@ -96,8 +96,11 @@
               <p v-if="currentStep === 'firstName'" class="text-gray-800 text-lg leading-relaxed">
                 Parfait ! Pour commencer, quel est ton prénom ?
               </p>
+              <p v-else-if="currentStep === 'email'" class="text-gray-800 text-lg leading-relaxed">
+                Merci {{ form.firstName }} ! J'ai besoin de ton adresse email.
+              </p>
               <p v-else-if="currentStep === 'lastName'" class="text-gray-800 text-lg leading-relaxed">
-                Enchanté {{ form.firstName }} ! Et ton nom de famille ?
+                Parfait ! Et ton nom de famille ?
               </p>
               <p v-else-if="currentStep === 'birthDate'" class="text-gray-800 text-lg leading-relaxed">
                 Super ! Maintenant, quelle est ta date de naissance ?
@@ -107,6 +110,15 @@
               </p>
               <p v-else-if="currentStep === 'phone'" class="text-gray-800 text-lg leading-relaxed">
                 Parfait ! Quel est ton numéro de téléphone ?
+              </p>
+              <p v-else-if="currentStep === 'schoolLevel'" class="text-gray-800 text-lg leading-relaxed">
+                Génial ! Quel est ton niveau scolaire actuel ?
+              </p>
+              <p v-else-if="currentStep === 'tshirtSize'" class="text-gray-800 text-lg leading-relaxed">
+                Super ! Quelle est ta taille de t-shirt ?
+              </p>
+              <p v-else-if="currentStep === 'otherInfo'" class="text-gray-800 text-lg leading-relaxed">
+                Presque fini ! Y a-t-il d'autres informations que tu souhaites nous communiquer ?
               </p>
               <p v-else-if="currentStep === 'final'" class="text-gray-800 text-lg leading-relaxed">
                 Excellent ! J'ai toutes tes informations de base. Prêt(e) à continuer ?
@@ -145,6 +157,46 @@
           </div>
         </div>
 
+        <!-- Email Input -->
+        <div v-if="currentStep === 'email'" class="space-y-6">
+          <div>
+            <input
+              v-model="form.email"
+              type="email"
+              class="answer-input"
+              placeholder="ton.email@exemple.com"
+              @keyup.enter="handleEmailSubmit"
+              :disabled="loading"
+              required
+            />
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <button
+              @click="currentStep = 'firstName'"
+              class="btn-secondary"
+              :disabled="loading"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Retour
+            </button>
+            
+            <button
+              @click="handleEmailSubmit"
+              :disabled="loading || !form.email"
+              class="btn-primary"
+            >
+              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+              <span v-else>Continuer</span>
+              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
         <!-- Last Name Input -->
         <div v-if="currentStep === 'lastName'" class="space-y-6">
           <div>
@@ -161,7 +213,7 @@
           
           <div class="flex justify-between items-center">
             <button
-              @click="currentStep = 'firstName'"
+              @click="currentStep = 'email'"
               class="btn-secondary"
               :disabled="loading"
             >
@@ -325,6 +377,147 @@
           </div>
         </div>
 
+        <!-- School Level Input -->
+        <div v-if="currentStep === 'schoolLevel'" class="space-y-6">
+          <div>
+            <select
+              v-model="form.schoolLevel"
+              class="answer-input"
+              :disabled="loading"
+              required
+            >
+              <option value="">Sélectionne ton niveau</option>
+              <option value="CP">CP</option>
+              <option value="CE1">CE1</option>
+              <option value="CE2">CE2</option>
+              <option value="CM1">CM1</option>
+              <option value="CM2">CM2</option>
+              <option value="6ème">6ème</option>
+              <option value="5ème">5ème</option>
+              <option value="4ème">4ème</option>
+              <option value="3ème">3ème</option>
+              <option value="Seconde">Seconde</option>
+              <option value="Première">Première</option>
+              <option value="Terminale">Terminale</option>
+              <option value="Bac+1">Bac+1</option>
+              <option value="Bac+2">Bac+2</option>
+              <option value="Bac+3">Bac+3</option>
+              <option value="Bac+4">Bac+4</option>
+              <option value="Bac+5 et plus">Bac+5 et plus</option>
+              <option value="Adulte">Adulte</option>
+            </select>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <button
+              @click="currentStep = 'phone'"
+              class="btn-secondary"
+              :disabled="loading"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Retour
+            </button>
+            
+            <button
+              @click="handleSchoolLevelSubmit"
+              :disabled="loading || !form.schoolLevel"
+              class="btn-primary"
+            >
+              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+              <span v-else>Continuer</span>
+              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- T-shirt Size Input -->
+        <div v-if="currentStep === 'tshirtSize'" class="space-y-6">
+          <div>
+            <select
+              v-model="form.tshirtSize"
+              class="answer-input"
+              :disabled="loading"
+              required
+            >
+              <option value="">Choisis ta taille</option>
+              <option value="XS">XS</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>
+            </select>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <button
+              @click="currentStep = 'schoolLevel'"
+              class="btn-secondary"
+              :disabled="loading"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Retour
+            </button>
+            
+            <button
+              @click="handleTshirtSizeSubmit"
+              :disabled="loading || !form.tshirtSize"
+              class="btn-primary"
+            >
+              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+              <span v-else>Continuer</span>
+              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Other Info Input -->
+        <div v-if="currentStep === 'otherInfo'" class="space-y-6">
+          <div>
+            <textarea
+              v-model="form.otherInfo"
+              class="answer-input"
+              placeholder="Partage-nous toute information que tu juges utile (allergies, besoins spéciaux, etc.)"
+              rows="4"
+              :disabled="loading"
+            ></textarea>
+            <p class="text-sm text-white/70 mt-2">Ce champ est optionnel</p>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <button
+              @click="currentStep = 'tshirtSize'"
+              class="btn-secondary"
+              :disabled="loading"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Retour
+            </button>
+            
+            <button
+              @click="handleOtherInfoSubmit"
+              :disabled="loading"
+              class="btn-primary"
+            >
+              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+              <span v-else>Continuer</span>
+              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
         <!-- Final Step -->
         <div v-if="currentStep === 'final'" class="space-y-6">
           <div class="bg-green-50 border border-green-200 rounded-xl p-4">
@@ -337,8 +530,12 @@
               </div>
               <div class="space-y-1">
                 <div>{{ form.firstName }} {{ form.lastName }}</div>
+                <div>{{ form.email }}</div>
                 <div>{{ form.address }}, {{ form.postalCode }} {{ form.city }}</div>
                 <div>{{ form.phone }}</div>
+                <div>{{ form.schoolLevel }}</div>
+                <div>T-shirt : {{ form.tshirtSize }}</div>
+                <div v-if="form.otherInfo">Autres infos : {{ form.otherInfo }}</div>
                 <div>{{ isMinor ? 'Mineur(e)' : 'Majeur(e)' }}</div>
               </div>
             </div>
@@ -346,7 +543,7 @@
           
           <div class="flex justify-between items-center">
             <button
-              @click="currentStep = 'phone'"
+              @click="currentStep = 'otherInfo'"
               class="btn-secondary"
               :disabled="loading"
             >
@@ -420,13 +617,17 @@ const loading = ref(false)
 const error = ref('')
 
 const form = ref({
+  email: user.value?.email || '',
   firstName: user.value?.firstName || '',
   lastName: user.value?.lastName || '',
   birthDate: '',
   address: '',
   city: '',
   postalCode: '',
-  phone: ''
+  phone: '',
+  schoolLevel: '',
+  tshirtSize: '',
+  otherInfo: ''
 })
 
 const fullText = ref("Salut ! Moi c'est Damien.C, ton assistant virtuel pour Square630 ! 🤖✨ Je vais t'accompagner dans ton inscription étape par étape. C'est parti, commençons par faire connaissance ! 😊")
@@ -487,6 +688,13 @@ const typeText = () => {
 const handleFirstNameSubmit = () => {
   if (!form.value.firstName) return
   setTimeout(() => {
+    currentStep.value = 'email'
+  }, 500)
+}
+
+const handleEmailSubmit = () => {
+  if (!form.value.email) return
+  setTimeout(() => {
     currentStep.value = 'lastName'
   }, 500)
 }
@@ -514,6 +722,26 @@ const handleAddressSubmit = () => {
 
 const handlePhoneSubmit = () => {
   if (!form.value.phone) return
+  setTimeout(() => {
+    currentStep.value = 'schoolLevel'
+  }, 500)
+}
+
+const handleSchoolLevelSubmit = () => {
+  if (!form.value.schoolLevel) return
+  setTimeout(() => {
+    currentStep.value = 'tshirtSize'
+  }, 500)
+}
+
+const handleTshirtSizeSubmit = () => {
+  if (!form.value.tshirtSize) return
+  setTimeout(() => {
+    currentStep.value = 'otherInfo'
+  }, 500)
+}
+
+const handleOtherInfoSubmit = () => {
   setTimeout(() => {
     currentStep.value = 'final'
   }, 500)

@@ -77,7 +77,7 @@ export default defineEventHandler(async (event) => {
     const dancer = await prisma.dancer.create({
       data: {
         userId: userId,
-        email: userEmail,
+        email: step1.email || userEmail,
         firstName: step1.firstName,
         lastName: step1.lastName,
         birthDate: new Date(step1.birthDate),
@@ -85,9 +85,9 @@ export default defineEventHandler(async (event) => {
         postalCode: step1.postalCode,
         city: step1.city || 'Non spécifié',
         phone: step1.phone,
-        schoolLevel: 'ADULTE', // Défaut, vous pouvez ajuster selon l'âge
-        tShirtSize: 'M',
-        otherInfo: null,
+        schoolLevel: step1.schoolLevel || 'ADULTE',
+        tShirtSize: step1.tshirtSize || 'M',
+        otherInfo: step1.otherInfo || null,
       }
     })
 
