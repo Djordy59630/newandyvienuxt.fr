@@ -159,6 +159,18 @@
               :disabled="loading"
               required
             />
+            <select
+              v-model="form.relationship"
+              class="answer-input"
+              :disabled="loading"
+              required
+            >
+              <option value="Parent">Parent</option>
+              <option value="Tuteur">Tuteur</option>
+              <option value="Grand-parent">Grand-parent</option>
+              <option value="Oncle/Tante">Oncle/Tante</option>
+              <option value="Autre">Autre</option>
+            </select>
             
             <!-- Autorisation parentale -->
             <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 mt-4">
@@ -195,7 +207,7 @@
             
             <button
               @click="handleEmailSubmit"
-              :disabled="loading || !form.email || !form.firstName || !form.lastName || !form.authorized"
+              :disabled="loading || !form.email || !form.firstName || !form.lastName || !form.relationship || !form.authorized"
               class="btn-primary"
             >
               <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
@@ -240,6 +252,7 @@ const form = ref({
   firstName: '',
   lastName: '',
   email: '',
+  relationship: 'Parent',
   authorized: false
 })
 
@@ -308,6 +321,7 @@ const handleSubmit = async (isMinorValue: boolean) => {
       guardianEmail: isMinorValue ? form.value.email : null,
       guardianFirstName: isMinorValue ? form.value.firstName : null,
       guardianLastName: isMinorValue ? form.value.lastName : null,
+      guardianRelationship: isMinorValue ? form.value.relationship : null,
       guardianAuthorized: isMinorValue ? form.value.authorized : false
     }
     

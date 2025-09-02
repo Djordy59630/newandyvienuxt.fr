@@ -101,8 +101,11 @@
               <p v-else-if="currentStep === 'contact-phone'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
                 Merci {{ form.firstName }} ! Quel est son numéro de téléphone ?
               </p>
+              <p v-else-if="currentStep === 'contact-relationship'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
+                Parfait ! Quelle est la relation de {{ form.firstName }} avec toi ?
+              </p>
               <p v-else-if="currentStep === 'contact-type'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
-                Parfait ! Maintenant dis-moi, ce contact peut-il : récupérer le mineur en fin de cours, être appelé en cas d'urgence, ou les deux ?
+                Super ! Maintenant dis-moi, ce contact peut-il : récupérer le mineur en fin de cours, être appelé en cas d'urgence, ou les deux ?
               </p>
               <p v-else-if="currentStep === 'add-more'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
                 Super ! Veux-tu ajouter un autre contact d'urgence ? (recommandé d'avoir au moins 2 contacts)
@@ -121,6 +124,7 @@
               <div>
                 <p class="font-semibold text-gray-800">{{ contact.firstName }} {{ contact.lastName }}</p>
                 <p class="text-gray-600">{{ contact.phone }}</p>
+                <p class="text-sm text-gray-600 mt-1">{{ contact.relationship }}</p>
                 <p class="text-xs text-gray-500 mt-1">
                   <span v-if="contact.type === 'PICKUP_ONLY'" class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Récupération</span>
                   <span v-else-if="contact.type === 'EMERGENCY_ONLY'" class="bg-red-100 text-red-800 px-2 py-1 rounded-full">Urgence</span>
@@ -251,6 +255,53 @@
           </div>
         </div>
 
+        <!-- Contact Relationship Selection -->
+        <div v-if="currentStep === 'contact-relationship'" class="space-y-4 sm:space-y-6">
+          <div>
+            <select
+              v-model="form.relationship"
+              class="answer-input"
+              :disabled="loading"
+              required
+              @change="handleRelationshipSubmit"
+            >
+              <option value="">Sélectionner la relation</option>
+              <option value="Parent">Parent</option>
+              <option value="Grand-parent">Grand-parent</option>
+              <option value="Oncle/Tante">Oncle/Tante</option>
+              <option value="Frère/Sœur">Frère/Sœur</option>
+              <option value="Ami(e) de famille">Ami(e) de famille</option>
+              <option value="Voisin(e)">Voisin(e)</option>
+              <option value="Autre proche">Autre proche</option>
+            </select>
+          </div>
+          
+          <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
+            <button
+              @click="currentStep = 'contact-phone'"
+              class="btn-secondary w-full sm:w-auto"
+              :disabled="loading"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Retour
+            </button>
+            
+            <button
+              @click="handleRelationshipSubmit"
+              :disabled="loading || !form.relationship"
+              class="btn-primary w-full sm:w-auto"
+            >
+              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+              <span v-else>Continuer</span>
+              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
         <!-- Contact Type Selection -->
         <div v-if="currentStep === 'contact-type'" class="space-y-4 sm:space-y-6">
           <div class="grid grid-cols-1 gap-4">
@@ -311,7 +362,7 @@
           
           <div class="flex justify-center">
             <button
-              @click="currentStep = 'contact-phone'"
+              @click="currentStep = 'contact-relationship'"
               class="btn-secondary"
               :disabled="loading"
             >
@@ -354,6 +405,7 @@ const form = ref({
   firstName: '',
   lastName: '',
   phone: '',
+  relationship: '',
   type: ''
 })
 
@@ -379,7 +431,7 @@ const typeText = () => {
 }
 
 const addAnotherContact = () => {
-  form.value = { firstName: '', lastName: '', phone: '', type: '' }
+  form.value = { firstName: '', lastName: '', phone: '', relationship: '', type: '' }
   currentStep.value = 'contact-name'
 }
 
@@ -403,6 +455,15 @@ const handleNameSubmit = () => {
 const handlePhoneSubmit = () => {
   if (!form.value.phone) return
   
+  // Aller à l'étape de sélection de la relation
+  setTimeout(() => {
+    currentStep.value = 'contact-relationship'
+  }, 500)
+}
+
+const handleRelationshipSubmit = () => {
+  if (!form.value.relationship) return
+  
   // Aller à l'étape de sélection du type
   setTimeout(() => {
     currentStep.value = 'contact-type'
@@ -417,11 +478,12 @@ const handleContactType = (type: string) => {
     firstName: form.value.firstName,
     lastName: form.value.lastName,
     phone: form.value.phone,
+    relationship: form.value.relationship,
     type: type
   })
   
   // Réinitialiser le formulaire
-  form.value = { firstName: '', lastName: '', phone: '', type: '' }
+  form.value = { firstName: '', lastName: '', phone: '', relationship: '', type: '' }
   
   // Aller à l'étape "add-more"
   setTimeout(() => {

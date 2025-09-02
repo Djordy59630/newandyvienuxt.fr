@@ -19,20 +19,20 @@ export default defineEventHandler(async (event) => {
     const userId = decoded.userId
 
     // Récupérer l'inscription de l'utilisateur avec tous les détails
-    // @ts-ignore - Modèle Prisma généré
+    // @ts-expect-error - Modèle Prisma généré
     const dancer = await prisma.dancer.findFirst({
       where: { userId: userId },
       include: {
-        // @ts-ignore
+        // @ts-expect-error
         registrations: {
           include: {
-            // @ts-ignore
+            // @ts-expect-error
             danceGroup: true
           }
         },
-        // @ts-ignore
+        // @ts-expect-error
         emergencyContacts: true,
-        // @ts-ignore
+        // @ts-expect-error
         guardian: true
       }
     })

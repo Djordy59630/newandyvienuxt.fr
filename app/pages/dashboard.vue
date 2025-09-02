@@ -72,7 +72,7 @@
       <div class="mb-12 animate-fade-in text-center">
         <h1 class="text-5xl font-black text-white mb-4 tracking-tight">
           <span class="bg-gradient-to-r from-white via-orange-200 to-red-200 bg-clip-text text-transparent">
-            Tableau de bord
+            Mon Espace Danseur
           </span>
         </h1>
         <p class="text-orange-200 text-xl font-medium">
@@ -86,170 +86,287 @@
         <p class="text-white/80">Chargement de votre inscription...</p>
       </div>
 
-      <div v-else-if="registration.hasRegistration" class="space-y-8">
+      <div v-else-if="registration.hasRegistration && registration.registration" class="space-y-8">
         
-        <!-- Status Badge -->
-        <div class="text-center mb-8">
-          <div class="inline-flex items-center space-x-3 bg-orange-100 text-orange-800 px-6 py-3 rounded-2xl border border-orange-200">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <span class="text-lg font-bold">Inscription active</span>
+        <!-- STATUS PRINCIPAL EN PREMIER -->
+        <div class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500"></div>
+          
+          <div class="text-center mb-6">
+            <h2 class="text-3xl font-black text-gray-800 mb-4">Statut de votre inscription</h2>
+            
+            <!-- Grand badge de statut -->
+            <div class="inline-flex items-center space-x-3 px-8 py-4 rounded-2xl mb-4" 
+                 :class="getMainStatusClass(registration.registration.status)">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path v-if="registration.registration.status === 'SUBMITTED'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                <path v-else-if="registration.registration.status === 'APPROVED'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                <path v-else-if="registration.registration.status === 'REJECTED'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <div class="text-left">
+                <span class="text-2xl font-bold block">{{ getStatusText(registration.registration.status) }}</span>
+                <span class="text-sm opacity-80">{{ getStatusDescription(registration.registration.status) }}</span>
+              </div>
+            </div>
+
+            <!-- Dates importantes -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="bg-gray-50 rounded-xl p-4">
+                <p class="text-sm text-gray-500">Date d'inscription</p>
+                <p class="font-bold text-gray-800">{{ formatDate(registration.registration.createdAt) }}</p>
+              </div>
+              <div v-if="registration.registration.submittedAt" class="bg-blue-50 rounded-xl p-4">
+                <p class="text-sm text-blue-500">Soumis le</p>
+                <p class="font-bold text-blue-800">{{ formatDate(registration.registration.submittedAt) }}</p>
+              </div>
+              <div v-if="registration.registration.reviewedAt" class="bg-green-50 rounded-xl p-4">
+                <p class="text-sm text-green-500">Traité le</p>
+                <p class="font-bold text-green-800">{{ formatDate(registration.registration.reviewedAt) }}</p>
+              </div>
+            </div>
+
+            <!-- Certificat médical si nécessaire -->
+            <div v-if="hasMedicalCertificateRequired" class="mt-6 p-4 bg-yellow-50 border-2 border-yellow-200 rounded-xl">
+              <div class="flex items-center">
+                <svg class="w-6 h-6 text-yellow-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <div class="text-left">
+                  <p class="font-bold text-yellow-800">Certificat médical requis</p>
+                  <p class="text-sm text-yellow-700">Vous devez fournir un certificat médical d'aptitude à la pratique sportive</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Cards Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Informations complètes -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
-          <!-- Informations personnelles -->
-          <div class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 relative overflow-hidden group hover:scale-105 transition-all duration-300">
-            <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-red-500/5 to-pink-500/5 rounded-3xl"></div>
-            <div class="relative">
-              <div class="flex items-center space-x-4 mb-6">
-                <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                  </svg>
-                </div>
-                <div>
-                  <h3 class="text-2xl font-bold text-gray-800">Informations personnelles</h3>
-                  <p class="text-slate-600">{{ registration.registration.dancer.firstName }} {{ registration.registration.dancer.lastName }}</p>
+          <!-- Informations personnelles complètes -->
+          <div class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
+            <div class="flex items-center space-x-4 mb-6">
+              <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold text-gray-800">Informations personnelles</h3>
+                <p class="text-slate-600">Profil complet du danseur</p>
+              </div>
+            </div>
+            
+            <div class="space-y-4">
+              <!-- Identité -->
+              <div class="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-xl">
+                <h4 class="font-bold text-gray-800 mb-2">Identité</h4>
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <span class="text-gray-500">Nom :</span>
+                    <span class="font-semibold text-gray-800 ml-2">{{ registration.registration.dancer.lastName }}</span>
+                  </div>
+                  <div>
+                    <span class="text-gray-500">Prénom :</span>
+                    <span class="font-semibold text-gray-800 ml-2">{{ registration.registration.dancer.firstName }}</span>
+                  </div>
+                  <div class="col-span-2">
+                    <span class="text-gray-500">Date de naissance :</span>
+                    <span class="font-semibold text-gray-800 ml-2">{{ formatDate(registration.registration.dancer.birthDate) }}</span>
+                    <span class="text-gray-600 ml-2">({{ calculateAge(registration.registration.dancer.birthDate) }} ans)</span>
+                  </div>
                 </div>
               </div>
-              <div class="space-y-3">
-                <div class="flex items-center space-x-3">
-                  <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
-                  <span class="text-gray-700">{{ registration.registration.dancer.email }}</span>
-                </div>
-                <div class="flex items-center space-x-3">
-                  <div class="w-2 h-2 bg-red-400 rounded-full"></div>
-                  <span class="text-gray-700">{{ registration.registration.dancer.phone }}</span>
-                </div>
-                <div class="flex items-center space-x-3">
-                  <div class="w-2 h-2 bg-pink-400 rounded-full"></div>
-                  <span class="text-gray-700">{{ registration.registration.dancer.address }}, {{ registration.registration.dancer.postalCode }} {{ registration.registration.dancer.city }}</span>
-                </div>
-                <div class="flex items-center space-x-3">
-                  <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
-                  <span class="text-gray-700">Né(e) le {{ formatDate(registration.registration.dancer.birthDate) }}</span>
-                </div>
-                <div class="pt-4 border-t border-gray-200">
-                  <div class="flex justify-between items-center">
-                    <span class="text-sm text-gray-500">Niveau</span>
-                    <span class="font-semibold text-gray-700">{{ registration.registration.dancer.schoolLevel }}</span>
+
+              <!-- Contact -->
+              <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl">
+                <h4 class="font-bold text-gray-800 mb-2">Contact</h4>
+                <div class="space-y-2 text-sm">
+                  <div>
+                    <span class="text-gray-500">Email :</span>
+                    <span class="font-semibold text-gray-800 ml-2">{{ registration.registration.dancer.email }}</span>
                   </div>
-                  <div class="flex justify-between items-center mt-2">
-                    <span class="text-sm text-gray-500">T-shirt</span>
-                    <span class="font-semibold text-gray-700">{{ registration.registration.dancer.tShirtSize }}</span>
+                  <div>
+                    <span class="text-gray-500">Téléphone :</span>
+                    <span class="font-semibold text-gray-800 ml-2">{{ registration.registration.dancer.phone }}</span>
                   </div>
+                </div>
+              </div>
+
+              <!-- Adresse -->
+              <div class="bg-gradient-to-r from-green-50 to-teal-50 p-4 rounded-xl">
+                <h4 class="font-bold text-gray-800 mb-2">Adresse</h4>
+                <div class="text-sm">
+                  <p class="font-semibold text-gray-800">{{ registration.registration.dancer.address }}</p>
+                  <p class="text-gray-700">{{ registration.registration.dancer.postalCode }} {{ registration.registration.dancer.city }}</p>
+                </div>
+              </div>
+
+              <!-- Informations supplémentaires -->
+              <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl">
+                <h4 class="font-bold text-gray-800 mb-2">Informations complémentaires</h4>
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <span class="text-gray-500">Niveau scolaire :</span>
+                    <span class="font-semibold text-gray-800 ml-2">{{ formatSchoolLevel(registration.registration.dancer.schoolLevel) }}</span>
+                  </div>
+                  <div>
+                    <span class="text-gray-500">Taille T-shirt :</span>
+                    <span class="font-semibold text-gray-800 ml-2">{{ registration.registration.dancer.tShirtSize }}</span>
+                  </div>
+                </div>
+                <div v-if="registration.registration.dancer.otherInfo" class="mt-2">
+                  <span class="text-gray-500">Notes :</span>
+                  <p class="font-semibold text-gray-800 mt-1">{{ registration.registration.dancer.otherInfo }}</p>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Groupes de danse -->
-          <div class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 relative overflow-hidden group hover:scale-105 transition-all duration-300">
-            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-pink-500/5 to-red-500/5 rounded-3xl"></div>
-            <div class="relative">
-              <div class="flex items-center space-x-4 mb-6">
-                <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12 7-12 6z"/>
-                  </svg>
-                </div>
-                <div>
-                  <h3 class="text-2xl font-bold text-gray-800">Groupes de danse</h3>
-                  <p class="text-slate-600">{{ registration.registration.danceGroups.length }} groupe(s) sélectionné(s)</p>
-                </div>
+          <div class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
+            <div class="flex items-center space-x-4 mb-6">
+              <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12 7-12 6z"/>
+                </svg>
               </div>
-              <div class="space-y-4">
-                <div v-for="group in registration.registration.danceGroups" :key="group.id" 
-                     class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-2xl border border-purple-200/50 hover:shadow-lg transition-all duration-300">
-                  <div class="flex items-center justify-between mb-2">
-                    <h4 class="font-bold text-gray-800">{{ group.name }}</h4>
-                    <span class="px-3 py-1 rounded-full text-xs font-bold" :class="getStatusBadgeClass(group.status)">
-                      {{ getStatusText(group.status) }}
-                    </span>
-                  </div>
-                  <p class="text-sm text-gray-600 mb-2">{{ group.description }}</p>
-                  <div class="flex items-center justify-between">
-                    <span class="text-sm font-semibold text-purple-700">{{ group.schedule }}</span>
-                    <span class="text-xs text-gray-500">{{ group.ageGroup }}</span>
-                  </div>
-                </div>
+              <div>
+                <h3 class="text-2xl font-bold text-gray-800">Groupes de danse</h3>
+                <p class="text-slate-600">{{ registration.registration.danceGroups.length }} groupe(s) sélectionné(s)</p>
               </div>
             </div>
-          </div>
-
-          <!-- Contacts & Responsable -->
-          <div class="space-y-8">
             
-            <!-- Contacts d'urgence -->
-            <div v-if="registration.registration.emergencyContacts.length > 0" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 relative overflow-hidden group hover:scale-105 transition-all duration-300">
-              <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-red-500/5 to-pink-500/5 rounded-3xl"></div>
-              <div class="relative">
-                <div class="flex items-center space-x-4 mb-6">
-                  <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 class="text-2xl font-bold text-gray-800">Contacts d'urgence</h3>
-                    <p class="text-orange-600">{{ registration.registration.emergencyContacts.length }} contact(s)</p>
-                  </div>
-                </div>
-                <div class="space-y-3">
-                  <div v-for="contact in registration.registration.emergencyContacts" :key="contact.id" 
-                       class="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-2xl border border-orange-200/50">
-                    <p class="font-semibold text-gray-800">{{ contact.firstName }} {{ contact.lastName }}</p>
-                    <p class="text-gray-600">{{ contact.phone }}</p>
-                    <span class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full">{{ contact.type }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Responsable légal -->
-            <div v-if="registration.registration.guardian" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 relative overflow-hidden group hover:scale-105 transition-all duration-300">
-              <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-red-500/5 to-pink-500/5 rounded-3xl"></div>
-              <div class="relative">
-                <div class="flex items-center space-x-4 mb-6">
-                  <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 class="text-2xl font-bold text-gray-800">Responsable légal</h3>
-                    <p class="text-orange-600">Tuteur légal</p>
-                  </div>
-                </div>
-                <div class="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-2xl border border-orange-200/50">
-                  <div class="flex items-center justify-between mb-3">
-                    <p class="font-semibold text-gray-800">{{ registration.registration.guardian.firstName }} {{ registration.registration.guardian.lastName }}</p>
-                    <span class="px-3 py-1 rounded-full text-xs font-bold" 
-                          :class="registration.registration.guardian.authorized ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'">
-                      {{ registration.registration.guardian.authorized ? '✓ Autorisé' : '⏳ En attente' }}
+            <div class="space-y-4 max-h-96 overflow-y-auto">
+              <div v-for="(group, index) in registration.registration.danceGroups" :key="group.id" 
+                   class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-2xl border border-purple-200/50 hover:shadow-lg transition-all duration-300">
+                <div class="flex items-start justify-between mb-2">
+                  <div class="flex items-center">
+                    <span class="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold text-sm mr-3">
+                      {{ index + 1 }}
                     </span>
+                    <h4 class="font-bold text-gray-800">{{ group.name }}</h4>
                   </div>
-                  <p class="text-gray-600 mb-1">{{ registration.registration.guardian.email }}</p>
-                  <p class="text-gray-600">{{ registration.registration.guardian.phone }}</p>
+                </div>
+                <p class="text-sm text-gray-600 mb-3 ml-11">{{ group.description }}</p>
+                <div class="ml-11 grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <span class="text-purple-600 font-semibold">📅 Horaire :</span>
+                    <span class="text-gray-700 ml-1">{{ group.schedule }}</span>
+                  </div>
+                  <div>
+                    <span class="text-purple-600 font-semibold">👥 Âge :</span>
+                    <span class="text-gray-700 ml-1">{{ group.ageGroup }}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          
           </div>
         </div>
 
-        <!-- Status global -->
-        <div class="text-center">
-          <div class="inline-block bg-white/95 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20">
-            <p class="text-gray-700 mb-2">Inscription soumise le <span class="font-semibold">{{ formatDate(registration.registration.dancer.createdAt) }}</span></p>
-            <div class="flex items-center justify-center space-x-2">
-              <div class="w-3 h-3 bg-orange-500 rounded-full animate-pulse"></div>
-              <span class="text-lg font-bold text-orange-700">En attente de validation</span>
+        <!-- Contacts et responsables -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          <!-- Responsable légal -->
+          <div v-if="registration.registration.guardian" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
+            <div class="flex items-center space-x-4 mb-6">
+              <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold text-gray-800">Responsable légal</h3>
+                <p class="text-slate-600">Tuteur du danseur mineur</p>
+              </div>
             </div>
+            
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-5 rounded-2xl">
+              <div class="flex items-center justify-between mb-3">
+                <p class="font-bold text-gray-800 text-lg">
+                  {{ registration.registration.guardian.firstName || 'Prénom à compléter' }} {{ registration.registration.guardian.lastName || 'Nom à compléter' }}
+                </p>
+                <span class="px-3 py-1 rounded-full text-xs font-bold" 
+                      :class="registration.registration.guardian.authorized ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'">
+                  {{ registration.registration.guardian.authorized ? '✓ Autorisé' : '⏳ En attente' }}
+                </span>
+              </div>
+              <div class="space-y-2 text-sm">
+                <div>
+                  <span class="text-gray-500">Email :</span>
+                  <span class="font-semibold text-gray-800 ml-2">{{ registration.registration.guardian.email || 'Email à compléter' }}</span>
+                </div>
+                <div>
+                  <span class="text-gray-500">Téléphone :</span>
+                  <span class="font-semibold text-gray-800 ml-2">{{ registration.registration.guardian.phone || 'Téléphone à compléter' }}</span>
+                </div>
+                <div>
+                  <span class="text-gray-500">Relation :</span>
+                  <span class="font-semibold text-gray-800 ml-2">{{ registration.registration.guardian.relationship || 'Relation à compléter' }}</span>
+                </div>
+                <div>
+                  <span class="text-gray-500">Adresse :</span>
+                  <span class="font-semibold text-gray-800 ml-2">
+                    {{ registration.registration.guardian.address || 'Adresse à compléter' }}, 
+                    {{ registration.registration.guardian.postalCode || 'Code postal' }} 
+                    {{ registration.registration.guardian.city || 'Ville' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contacts d'urgence -->
+          <div v-if="registration.registration.emergencyContacts.length > 0" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
+            <div class="flex items-center space-x-4 mb-6">
+              <div class="w-14 h-14 bg-gradient-to-br from-red-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold text-gray-800">Contacts d'urgence</h3>
+                <p class="text-slate-600">{{ registration.registration.emergencyContacts.length }} contact(s) enregistré(s)</p>
+              </div>
+            </div>
+            
+            <div class="space-y-3 max-h-96 overflow-y-auto">
+              <div v-for="(contact, index) in registration.registration.emergencyContacts" :key="contact.id" 
+                   class="bg-gradient-to-r from-red-50 to-orange-50 p-4 rounded-2xl border border-red-200/50">
+                <div class="flex items-start">
+                  <span class="w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center font-bold text-sm mr-3 flex-shrink-0">
+                    {{ index + 1 }}
+                  </span>
+                  <div class="flex-1">
+                    <p class="font-bold text-gray-800">{{ contact.firstName || 'Prénom à compléter' }} {{ contact.lastName || 'Nom à compléter' }}</p>
+                    <p class="text-gray-700 text-sm">📞 {{ contact.phone || 'Téléphone à compléter' }}</p>
+                    <p class="text-gray-700 text-sm">👤 {{ contact.relationship || 'Relation à compléter' }}</p>
+                    <div class="mt-2">
+                      <span class="text-xs px-2 py-1 rounded-full" 
+                            :class="getContactTypeClass(contact.type)">
+                        {{ getContactTypeText(contact.type) }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notes administratives si présentes -->
+        <div v-if="registration.registration.notes" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
+          <div class="flex items-center space-x-4 mb-6">
+            <div class="w-14 h-14 bg-gradient-to-br from-gray-500 to-gray-700 rounded-2xl flex items-center justify-center shadow-lg">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800">Notes administratives</h3>
+          </div>
+          <div class="bg-gray-50 rounded-xl p-5">
+            <p class="text-gray-700 whitespace-pre-wrap">{{ registration.registration.notes }}</p>
           </div>
         </div>
       </div>
@@ -292,7 +409,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useHead, navigateTo } from 'nuxt/app'
 
 definePageMeta({
@@ -303,7 +420,7 @@ definePageMeta({
 const { user, logout } = useAuth()
 
 const loading = ref(true)
-const registration = ref({ hasRegistration: false, registration: null })
+const registration = ref<{ hasRegistration: boolean; registration: any | null }>({ hasRegistration: false, registration: null })
 
 const fetchRegistration = async () => {
   try {
@@ -326,38 +443,99 @@ const startRegistration = () => {
 }
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('fr-FR')
+  return new Date(dateString).toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+  })
+}
+
+const calculateAge = (birthDate: string) => {
+  const birth = new Date(birthDate)
+  const today = new Date()
+  let age = today.getFullYear() - birth.getFullYear()
+  const monthDiff = today.getMonth() - birth.getMonth()
+  
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--
+  }
+  
+  return age
+}
+
+const formatSchoolLevel = (level: string) => {
+  const levels: { [key: string]: string } = {
+    'CP': 'CP',
+    'CE1': 'CE1',
+    'CE2': 'CE2',
+    'CM1': 'CM1',
+    'CM2': 'CM2',
+    'SIXIEME': '6ème',
+    'CINQUIEME': '5ème',
+    'QUATRIEME': '4ème',
+    'TROISIEME': '3ème',
+    'SECONDE': 'Seconde',
+    'PREMIERE': 'Première',
+    'TERMINALE': 'Terminale',
+    'POST_BAC': 'Post-Bac',
+    'ADULTE': 'Adulte'
+  }
+  return levels[level] || level
 }
 
 const getStatusText = (status: string) => {
-  const statusMap = {
+  const statusMap: { [key: string]: string } = {
     'DRAFT': 'Brouillon',
-    'SUBMITTED': 'Soumis',
-    'APPROVED': 'Approuvé',
-    'REJECTED': 'Refusé'
+    'SUBMITTED': 'En attente de validation',
+    'APPROVED': 'Inscription approuvée',
+    'REJECTED': 'Inscription refusée'
   }
   return statusMap[status] || status
 }
 
-const getStatusClass = (status: string) => {
-  const classMap = {
-    'DRAFT': 'border-gray-300',
-    'SUBMITTED': 'border-blue-300',
-    'APPROVED': 'border-green-300',
-    'REJECTED': 'border-red-300'
+const getStatusDescription = (status: string) => {
+  const descMap: { [key: string]: string } = {
+    'DRAFT': 'Votre inscription n\'est pas encore finalisée',
+    'SUBMITTED': 'Votre dossier est en cours d\'examen par l\'administration',
+    'APPROVED': 'Votre inscription a été validée, bienvenue chez Square630 !',
+    'REJECTED': 'Votre inscription a été refusée, veuillez contacter l\'administration'
   }
-  return classMap[status] || 'border-gray-300'
+  return descMap[status] || ''
 }
 
-const getStatusBadgeClass = (status: string) => {
-  const classMap = {
-    'DRAFT': 'bg-gray-100 text-gray-800',
-    'SUBMITTED': 'bg-blue-100 text-blue-800',
-    'APPROVED': 'bg-green-100 text-green-800',
-    'REJECTED': 'bg-red-100 text-red-800'
+const getMainStatusClass = (status: string) => {
+  const classMap: { [key: string]: string } = {
+    'DRAFT': 'bg-gray-100 text-gray-800 border-2 border-gray-300',
+    'SUBMITTED': 'bg-blue-100 text-blue-800 border-2 border-blue-300',
+    'APPROVED': 'bg-green-100 text-green-800 border-2 border-green-300',
+    'REJECTED': 'bg-red-100 text-red-800 border-2 border-red-300'
   }
   return classMap[status] || 'bg-gray-100 text-gray-800'
 }
+
+const getContactTypeClass = (type: string) => {
+  const classMap: { [key: string]: string } = {
+    'EMERGENCY_AND_PICKUP': 'bg-red-100 text-red-800 border border-red-300',
+    'EMERGENCY_ONLY': 'bg-orange-100 text-orange-800 border border-orange-300',
+    'PICKUP_ONLY': 'bg-blue-100 text-blue-800 border border-blue-300'
+  }
+  return classMap[type] || 'bg-gray-100 text-gray-800'
+}
+
+const getContactTypeText = (type: string) => {
+  const textMap: { [key: string]: string } = {
+    'EMERGENCY_AND_PICKUP': '🚨 Urgence + Récupération',
+    'EMERGENCY_ONLY': '🚨 Contact d\'urgence uniquement',
+    'PICKUP_ONLY': '🚗 Peut récupérer l\'enfant'
+  }
+  return textMap[type] || type
+}
+
+const hasMedicalCertificateRequired = computed(() => {
+  if (!registration.value.registration || !registration.value.registration.dancer) return false
+  const otherInfo = registration.value.registration.dancer.otherInfo || ''
+  return otherInfo.includes('CERTIFICAT MÉDICAL REQUIS')
+})
 
 onMounted(async () => {
   // Rediriger les admins vers le panel admin
@@ -371,9 +549,9 @@ onMounted(async () => {
 
 // Meta
 useHead({
-  title: 'Tableau de bord • Square630',
+  title: 'Mon Espace Danseur • Square630',
   meta: [
-    { name: 'description', content: 'Tableau de bord Square630 - Mon inscription hip-hop' }
+    { name: 'description', content: 'Espace personnel Square630 - Suivi de mon inscription hip-hop' }
   ]
 })
 </script>
