@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
       data: {
         email,
         password: hashedPassword,
-        role: 'user'
+        roles: 'user'
       }
     })
 
@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
       user: {
         id: user.id,
         email: user.email,
-        role: user.role
+        role: user.roles
       }
     }
   } catch (error: any) {

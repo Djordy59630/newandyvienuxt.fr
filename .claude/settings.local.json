@@ -13,7 +13,8 @@
       "Bash(dir \"C:\\wamp64\\www\\newandyvienuxt.fr\\app\\server\")",
       "Bash(dir)",
       "Bash(del:*)",
-      "Bash(npx tsx:*)"
+      "Bash(npx tsx:*)",
+      "Bash(node test-prisma.js)"
     ],
     "deny": [],
     "ask": []

@@ -19,20 +19,11 @@ export default defineEventHandler(async (event) => {
     const userId = decoded.userId
 
     // Vérifier si l'utilisateur a déjà une inscription COMPLETE (SUBMITTED, APPROVED ou REJECTED)
-    // @ts-ignore - Modèle Prisma généré
-    const existingDancer = await prisma.dancer.findFirst({
+    const existingDancer: any = await (prisma.dancer as any).findFirst({
       where: { 
-        userId: userId,
-        registrations: {
-          some: {
-            status: {
-              in: ['SUBMITTED', 'APPROVED', 'REJECTED']
-            }
-          }
-        }
+        userId: userId
       },
       include: {
-        // @ts-ignore
         registrations: {
           where: {
             status: {
@@ -40,14 +31,13 @@ export default defineEventHandler(async (event) => {
             }
           },
           include: {
-            // @ts-ignore
             danceGroup: true
           }
         }
       }
     })
 
-    if (existingDancer) {
+    if (existingDancer && existingDancer.registrations && existingDancer.registrations.length > 0) {
       return {
         hasExistingRegistration: true,
         dancer: {
@@ -55,7 +45,6 @@ export default defineEventHandler(async (event) => {
           firstName: existingDancer.firstName,
           lastName: existingDancer.lastName,
           email: existingDancer.email,
-          // @ts-ignore
           registrations: existingDancer.registrations
         }
       }

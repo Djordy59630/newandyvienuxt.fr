@@ -51,7 +51,7 @@ export default defineEventHandler(async (event) => {
       user: {
         id: user.id,
         email: user.email,
-        role: user.role
+        role: user.roles
       }
     }
   } catch (error: any) {

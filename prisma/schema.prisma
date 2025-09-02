@@ -13,7 +13,7 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  role      String   @default("user")
+  roles     String   @default("user")
   
   // Relations
   dancers        Dancer[]
@@ -43,7 +43,7 @@ model Dancer {
   user              User               @relation(fields: [userId], references: [id])
   emergencyContacts EmergencyContact[]
   registrations     Registration[]
-  guardian          guardians?
+  guardian          Guardian?
 
   @@index([userId], map: "dancers_userId_fkey")
   @@map("dancers")
@@ -106,7 +106,7 @@ model Registration {
   @@map("registrations")
 }
 
-model guardians {
+model Guardian {
   id         Int      @id @default(autoincrement())
   dancerId   Int      @unique
   email      String
@@ -122,6 +122,8 @@ model guardians {
   
   // Relations
   dancer Dancer @relation(fields: [dancerId], references: [id])
+  
+  @@map("guardians")
 }
 
 enum emergency_contacts_type {
