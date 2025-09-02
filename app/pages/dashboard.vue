@@ -157,7 +157,7 @@
               Renouvelez maintenant avec vos informations pré-remplies que vous pourrez modifier si nécessaire.
             </p>
             <button
-              @click="startRenewal"
+              @click="goToRenewal"
               class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-green-500 to-blue-600 text-white font-bold rounded-2xl hover:from-green-600 hover:to-blue-700 transition-all duration-300 transform hover:-translate-y-1 shadow-lg"
             >
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -593,52 +593,18 @@ const showRenewalOption = computed(() => {
   
   const currentYear = getCurrentSchoolYear()
   
-  // Debug : voir la structure des données
-  console.log('Debugging renewal logic:')
-  console.log('Current year:', currentYear)
-  console.log('Registration data:', registration.value.registration)
-  console.log('Dance groups:', registration.value.registration.danceGroups)
-  
   // Vérifier si l'utilisateur a une inscription valide (SUBMITTED ou APPROVED) pour l'année scolaire actuelle
   const hasValidCurrentYearRegistration = registration.value.registration.danceGroups?.some(
-    (group: any) => {
-      console.log('Checking dance group:', group)
-      console.log('School year:', group.schoolYear, 'Status:', group.status)
-      return group.schoolYear === currentYear && ['SUBMITTED', 'APPROVED'].includes(group.status)
-    }
+    (group: any) => group.schoolYear === currentYear && ['SUBMITTED', 'APPROVED'].includes(group.status)
   )
   
-  console.log('Has valid current year registration:', hasValidCurrentYearRegistration)
-  
   // Afficher l'option de renouvellement SEULEMENT si pas d'inscription valide pour l'année actuelle
-  // Cela signifie qu'ils ont une inscription d'une année précédente qui n'est plus valide
   return !hasValidCurrentYearRegistration
 })
 
-const startRenewal = async () => {
-  try {
-    loading.value = true
-    
-    // Appeler l'API de renouvellement pour obtenir les données pré-remplies
-    const renewalData = await $fetch('/api/inscriptions/renew', {
-      method: 'POST',
-      body: { schoolYear: currentSchoolYear.value }
-    })
-    
-    if (renewalData.success) {
-      // Rediriger vers le processus d'inscription avec les données pré-remplies
-      // On peut stocker les données dans les cookies pour les utiliser
-      const renewalCookie = useCookie('renewal-data')
-      renewalCookie.value = JSON.stringify(renewalData)
-      
-      await navigateTo('/inscription/step-1?renewal=true')
-    }
-    
-  } catch (error) {
-    console.error('Erreur lors du renouvellement:', error)
-  } finally {
-    loading.value = false
-  }
+const goToRenewal = () => {
+  // Rediriger vers la page de renouvellement
+  navigateTo('/renouvellement')
 }
 
 onMounted(async () => {
