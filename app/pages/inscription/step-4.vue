@@ -107,7 +107,16 @@
 
         <!-- Dance Group Selection -->
         <div v-if="currentStep === 'dance-selection'" class="space-y-4">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3">
+          <!-- Loading indicator -->
+          <div v-if="loadingGroups" class="flex justify-center items-center py-8">
+            <div class="flex flex-col items-center space-y-4">
+              <div class="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+              <p class="text-white/70 text-sm">Chargement des groupes de danse...</p>
+            </div>
+          </div>
+          
+          <!-- Groups grid -->
+          <div v-else-if="danceGroups.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3">
             <label
               v-for="group in danceGroups"
               :key="group.id"
@@ -139,13 +148,24 @@
               <div class="space-y-2">
                 <p class="text-xs text-gray-600 leading-relaxed">{{ group.description }}</p>
                 <div class="flex flex-wrap gap-1">
-                  <span class="info-badge bg-orange-100 text-orange-700">{{ group.ageRange }}</span>
-                  <span class="info-badge bg-red-100 text-red-700">{{ group.level }}</span>
-                  <span class="info-badge bg-pink-100 text-pink-700">{{ group.category }}</span>
+                  <span class="info-badge bg-orange-100 text-orange-700">{{ group.ageGroup }}</span>
                 </div>
                 <p class="text-xs text-gray-500">{{ group.schedule }}</p>
               </div>
             </label>
+          </div>
+          
+          <!-- Error message -->
+          <div v-else-if="error" class="flex justify-center items-center py-8">
+            <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-center">
+              <p>{{ error }}</p>
+              <button
+                @click="loadDanceGroups"
+                class="mt-2 text-red-600 hover:text-red-800 underline text-sm"
+              >
+                Réessayer
+              </button>
+            </div>
           </div>
           
           <!-- Continue Button -->
@@ -180,10 +200,8 @@
                   <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-1">{{ group.name }}</h3>
                   <p class="text-gray-700 mb-2 text-sm sm:text-base">{{ group.description }}</p>
                   <div class="text-sm text-gray-600">
-                    <div><strong>Âge :</strong> {{ group.ageRange }}</div>
+                    <div><strong>Âge :</strong> {{ group.ageGroup }}</div>
                     <div><strong>Horaire :</strong> {{ group.schedule }}</div>
-                    <div><strong>Catégorie :</strong> {{ group.category }}</div>
-                    <div><strong>Niveau :</strong> {{ group.level }}</div>
                   </div>
                 </div>
               </div>
@@ -255,125 +273,8 @@ const selectedGroups = ref<any[]>([])
 const selectedGroupIds = ref<number[]>([])
 
 
-const danceGroups = ref([
-  {
-    id: 1,
-    name: "Les Kids",
-    description: "Pour les plus jeunes danseurs, découverte du hip-hop en s'amusant",
-    ageRange: "CP / CE1",
-    schedule: "Samedi 12h-13h",
-    level: "Débutant",
-    category: "HIPHOP"
-  },
-  {
-    id: 2,
-    name: "La Relève",
-    description: "Apprentissage des bases du hip-hop avec technique et créativité",
-    ageRange: "CE2 / CM1 / CM2",
-    schedule: "Samedi 10h-11h",
-    level: "Débutant",
-    category: "HIPHOP"
-  },
-  {
-    id: 3,
-    name: "Les Espoirs",
-    description: "Développement technique et expression personnelle",
-    ageRange: "6ᵉ - 5ᵉ",
-    schedule: "Samedi 11h-12h",
-    level: "Intermédiaire",
-    category: "HIPHOP"
-  },
-  {
-    id: 4,
-    name: "Les Initiés",
-    description: "Perfectionnement et styles avancés du hip-hop",
-    ageRange: "4ᵉ - 3ᵉ",
-    schedule: "Samedi 13h-14h",
-    level: "Intermédiaire",
-    category: "HIPHOP"
-  },
-  {
-    id: 5,
-    name: "Les Confirmés",
-    description: "Niveau avancé avec chorégraphies complexes et battles",
-    ageRange: "Lycéens à 25 ans",
-    schedule: "Vendredi 19h-20h",
-    level: "Avancé",
-    category: "HIPHOP"
-  },
-  {
-    id: 6,
-    name: "Les Funky",
-    description: "Hip-hop pour adultes dans une ambiance décontractée",
-    ageRange: "+25 ans",
-    schedule: "Mercredi 18h15-19h15",
-    level: "Tous niveaux",
-    category: "HIPHOP"
-  },
-  {
-    id: 7,
-    name: "Les Élites",
-    description: "Groupe d'excellence avec entraînement intensif",
-    ageRange: "Sur sélection",
-    schedule: "À définir avec Damien",
-    level: "Expert",
-    category: "HIPHOP"
-  },
-  {
-    id: 8,
-    name: "Les No Limit",
-    description: "Danse inclusive pour personnes en situation de handicap",
-    ageRange: "Dès 14 ans",
-    schedule: "Vendredi 18h-19h",
-    level: "Tous niveaux",
-    category: "INCLUSIF"
-  },
-  {
-    id: 9,
-    name: "Les Rookies",
-    description: "Initiation à la danse pour jeunes en situation de handicap",
-    ageRange: "6 à 13 ans",
-    schedule: "Vendredi 17h-18h",
-    level: "Débutant",
-    category: "INCLUSIF"
-  },
-  {
-    id: 10,
-    name: "Break Débutants",
-    description: "Découverte du breakdance et premières figures",
-    ageRange: "Collège et +",
-    schedule: "Samedi 10h-11h",
-    level: "Débutant",
-    category: "BREAKDANCE"
-  },
-  {
-    id: 11,
-    name: "Break Intermédiaire",
-    description: "Perfectionnement des mouvements et enchaînements",
-    ageRange: "CE2 au CM2",
-    schedule: "Samedi 11h-12h",
-    level: "Intermédiaire",
-    category: "BREAKDANCE"
-  },
-  {
-    id: 12,
-    name: "Show Break",
-    description: "Préparation spectacles et compétitions de breaking",
-    ageRange: "Tous âges",
-    schedule: "Samedi 12h-13h",
-    level: "Débutant/Inter",
-    category: "BREAKDANCE"
-  },
-  {
-    id: 13,
-    name: "Break Confirmés",
-    description: "Entraînement libre et perfectionnement avancé",
-    ageRange: "Tous âges",
-    schedule: "Mercredi & Vendredi 18h-20h",
-    level: "Confirmé",
-    category: "BREAKDANCE"
-  }
-])
+const danceGroups = ref<any[]>([])
+const loadingGroups = ref(true)
 
 const fullText = "Et voilà ! On arrive à la dernière étape ! 🎉 C'est le moment de choisir ton ou tes groupes de danse. Tu peux en sélectionner plusieurs si tu veux explorer différents styles ! 🕺💃"
 
@@ -394,6 +295,26 @@ const typeText = () => {
       }, 800)
     }
   }, 20)
+}
+
+const loadDanceGroups = async () => {
+  try {
+    loadingGroups.value = true
+    error.value = ''
+    
+    const response = await $fetch('/api/dance-groups')
+    
+    if (response.success) {
+      danceGroups.value = response.groups
+    } else {
+      throw new Error('Erreur lors du chargement des groupes')
+    }
+  } catch (err: any) {
+    console.error('Erreur chargement groupes:', err)
+    error.value = 'Impossible de charger les groupes de danse'
+  } finally {
+    loadingGroups.value = false
+  }
 }
 
 const updateSelectedGroups = () => {
@@ -467,7 +388,7 @@ const handleFinalSubmit = async () => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   // Vérifier les données des étapes précédentes
   const step1Data = useCookie('registration-step1').value
   const step2Data = useCookie('registration-step2').value
@@ -477,6 +398,9 @@ onMounted(() => {
     navigateTo('/inscription/step-1')
     return
   }
+
+  // Charger les groupes de danse depuis l'API
+  await loadDanceGroups()
 
   // Démarrer l'animation de frappe
   setTimeout(() => {

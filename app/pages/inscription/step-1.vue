@@ -392,19 +392,15 @@
               <option value="CE2">CE2</option>
               <option value="CM1">CM1</option>
               <option value="CM2">CM2</option>
-              <option value="6ème">6ème</option>
-              <option value="5ème">5ème</option>
-              <option value="4ème">4ème</option>
-              <option value="3ème">3ème</option>
-              <option value="Seconde">Seconde</option>
-              <option value="Première">Première</option>
-              <option value="Terminale">Terminale</option>
-              <option value="Bac+1">Bac+1</option>
-              <option value="Bac+2">Bac+2</option>
-              <option value="Bac+3">Bac+3</option>
-              <option value="Bac+4">Bac+4</option>
-              <option value="Bac+5 et plus">Bac+5 et plus</option>
-              <option value="Adulte">Adulte</option>
+              <option value="SIXIEME">6ème</option>
+              <option value="CINQUIEME">5ème</option>
+              <option value="QUATRIEME">4ème</option>
+              <option value="TROISIEME">3ème</option>
+              <option value="SECONDE">Seconde</option>
+              <option value="PREMIERE">Première</option>
+              <option value="TERMINALE">Terminale</option>
+              <option value="POST_BAC">Post-Bac</option>
+              <option value="ADULTE">Adulte</option>
             </select>
           </div>
           

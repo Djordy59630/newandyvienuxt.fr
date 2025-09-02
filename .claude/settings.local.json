@@ -18,7 +18,8 @@
       "Bash(npx tsc:*)",
       "Bash(rd:*)",
       "Bash(PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=\"oui\" npx prisma db push --force-reset)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

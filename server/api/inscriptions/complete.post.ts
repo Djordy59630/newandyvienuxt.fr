@@ -72,6 +72,33 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Fonction pour convertir les anciennes valeurs vers les nouvelles
+    const convertSchoolLevel = (level: string) => {
+      const mapping: Record<string, string> = {
+        'CP': 'CP',
+        'CE1': 'CE1', 
+        'CE2': 'CE2',
+        'CM1': 'CM1',
+        'CM2': 'CM2',
+        '6ème': 'SIXIEME',
+        '5ème': 'CINQUIEME',
+        '4ème': 'QUATRIEME',
+        '3ème': 'TROISIEME',
+        'Seconde': 'SECONDE',
+        'Première': 'PREMIERE',
+        'Terminale': 'TERMINALE',
+        'Bac+1': 'POST_BAC',
+        'Bac+2': 'POST_BAC',
+        'Bac+3': 'POST_BAC',
+        'Bac+4': 'POST_BAC',
+        'Bac+5 et plus': 'POST_BAC',
+        'POST_BAC': 'POST_BAC',
+        'Adulte': 'ADULTE',
+        'ADULTE': 'ADULTE'
+      }
+      return mapping[level] || 'ADULTE'
+    }
+
     // 1. Créer le danseur
     // @ts-ignore - Modèle Prisma généré
     const dancer = await prisma.dancer.create({
@@ -85,7 +112,7 @@ export default defineEventHandler(async (event) => {
         postalCode: step1.postalCode,
         city: step1.city || 'Non spécifié',
         phone: step1.phone,
-        schoolLevel: step1.schoolLevel || 'ADULTE',
+        schoolLevel: convertSchoolLevel(step1.schoolLevel || 'ADULTE'),
         tShirtSize: step1.tshirtSize || 'M',
         otherInfo: step1.otherInfo || null,
       }
@@ -141,7 +168,7 @@ export default defineEventHandler(async (event) => {
           danceGroup = await prisma.danceGroup.create({
             data: {
               name: group.name,
-              ageGroup: group.ageRange, // Utiliser ageGroup au lieu de ageRange
+              ageGroup: group.ageGroup,
               schedule: group.schedule,
               description: group.description || '',
               isActive: true
