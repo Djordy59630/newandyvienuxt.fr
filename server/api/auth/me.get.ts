@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
       select: {
         id: true,
         email: true,
-        role: true
+        roles: true
       }
     })
 

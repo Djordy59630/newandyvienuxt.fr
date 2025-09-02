@@ -46,32 +46,46 @@ npx eslint .           # Run ESLint
 ### Project Structure
 ```
 server/api/auth/       # Authentication API endpoints (login, register)
+server/api/inscriptions/  # Registration/enrollment endpoints
 prisma/               # Database schema and migrations
-models/               # Business logic and data models
-composables/          # Vue composables for shared logic
-plugins/              # Nuxt plugins
+app/composables/      # Vue composables for shared logic
+app/pages/inscription/ # Multi-step registration flow pages
+app/middleware/       # Nuxt middleware (auth protection)
 types/                # TypeScript type definitions
-app/                  # Application pages and components
 ```
 
 ### Authentication System
 - JWT-based authentication with 7-day expiration
 - Passwords hashed with bcrypt (salt rounds: 10)
 - User registration and login endpoints at `/api/auth/`
-- Uses `JWT_SECRET` environment variable
+- Auth composable at `app/composables/useAuth.ts` manages authentication state
+- Uses cookies for token and user data persistence
 
 ### Database Schema
-- Primary entity: `User` with email, password, firstName, lastName
-- Uses MySQL as primary database
-- Prisma client auto-generated from schema changes
+Main entities in MySQL database:
+- **User**: Authentication and admin users
+- **Dancer**: Students/participants with personal info
+- **DanceGroup**: Available dance classes/groups
+- **Registration**: Links dancers to dance groups with status tracking
+- **guardians**: Legal guardians for minors
+- **EmergencyContact**: Emergency contact information
+
+### Multi-Step Registration Flow
+Located in `app/pages/inscription/`:
+- `step-1.vue`: Personal information collection
+- `step-2.vue`: Dance group selection
+- `step-3.vue`: Emergency contacts and guardian info
+- `step-4.vue`: Review and submission
+- `success.vue`: Registration confirmation
 
 ### Environment Configuration
-- Requires `DATABASE_URL` for MySQL connection
-- Requires `JWT_SECRET` for token signing
-- Configuration in `.env` file
+Required environment variables:
+- `DATABASE_URL`: MySQL connection string
+- `JWT_SECRET`: Secret key for JWT token signing
 
 ### Development Notes
-- French language used in error messages and comments
+- French language used throughout (error messages, UI text, comments)
 - Nuxt auto-imports enabled for composables and utilities
-- ESLint configured with Nuxt defaults
 - Uses Nuxt's file-based routing system
+- API endpoints use defineEventHandler pattern
+- Frontend uses animated gradients with orange/red color scheme
