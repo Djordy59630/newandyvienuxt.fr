@@ -1,57 +1,102 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 relative overflow-hidden">
-    <!-- Animated background elements -->
+  <div class="min-h-screen bg-gradient-to-br from-orange-900 via-red-900 to-pink-900 relative overflow-hidden">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0">
+      <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-gradient-to-r from-orange-400/20 to-red-400/20 rounded-full blur-3xl animate-pulse"></div>
+      <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-red-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-orange-400/15 to-red-400/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+    </div>
+    
+    <!-- Floating particles -->
     <div class="absolute inset-0 overflow-hidden">
-      <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-400/20 to-pink-400/20 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"></div>
-      <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-red-400/20 to-orange-400/20 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
-      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-br from-pink-400/20 to-red-400/20 rounded-full mix-blend-multiply filter blur-xl animate-blob"></div>
+      <div class="absolute top-10 left-10 w-2 h-2 bg-white/30 rounded-full animate-bounce"></div>
+      <div class="absolute top-32 right-20 w-1 h-1 bg-orange-300/40 rounded-full animate-ping"></div>
+      <div class="absolute bottom-20 left-32 w-1.5 h-1.5 bg-red-300/40 rounded-full animate-pulse"></div>
+      <div class="absolute top-40 left-1/2 w-1 h-1 bg-orange-300/40 rounded-full animate-bounce" style="animation-delay: 1s;"></div>
+      <div class="absolute bottom-40 right-10 w-2 h-2 bg-red-300/30 rounded-full animate-ping" style="animation-delay: 2s;"></div>
     </div>
 
-    <div class="relative z-10">
-      <!-- Header -->
-      <header class="bg-white/80 backdrop-blur-lg shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-              <button @click="$router.back()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                </svg>
-              </button>
-              <h1 class="text-3xl font-bold bg-gradient-to-r from-orange-700 to-pink-700 bg-clip-text text-transparent">
-                Renouvellement d'inscription
-              </h1>
+    <!-- Navigation Header -->
+    <nav class="relative z-20 bg-white/10 backdrop-blur-xl border-b border-white/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+          <!-- Logo -->
+          <div class="flex items-center">
+            <div class="w-12 h-12 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
             </div>
+            <span class="ml-4 text-2xl font-black text-white tracking-tight">
+              <span class="bg-gradient-to-r from-white via-orange-200 to-red-200 bg-clip-text text-transparent">
+                SQUARE630
+              </span>
+            </span>
+          </div>
+
+          <!-- Title and Back Button -->
+          <div class="flex items-center space-x-6">
             <div class="text-right">
-              <p class="text-sm text-gray-600">Année scolaire</p>
-              <p class="text-lg font-bold text-gray-800">{{ currentSchoolYear }}</p>
+              <p class="text-sm text-white/80">Année scolaire</p>
+              <p class="text-lg font-bold text-white">{{ currentSchoolYear }}</p>
             </div>
+            <button @click="$router.back()" class="bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white p-3 rounded-2xl transition-all duration-300 border border-white/20">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+              </svg>
+            </button>
           </div>
         </div>
-      </header>
+      </div>
+    </nav>
 
-      <!-- Main Content -->
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12" v-if="!loading">
+    <!-- Main Content -->
+    <div class="relative z-10">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12" v-if="!loading">
+        <!-- Page Title -->
+        <div class="text-center mb-12">
+          <h1 class="text-4xl md:text-5xl font-black text-white mb-4">
+            <span class="bg-gradient-to-r from-white via-orange-200 to-red-200 bg-clip-text text-transparent">
+              Renouvellement d'inscription
+            </span>
+          </h1>
+          <p class="text-xl text-white/80 font-medium">
+            Mise à jour de votre inscription pour l'année {{ currentSchoolYear }}
+          </p>
+        </div>
+
         <!-- Progress Steps -->
-        <div class="mb-8">
+        <div class="mb-12">
           <div class="flex justify-center space-x-8">
             <div class="flex items-center">
-              <div :class="`w-10 h-10 rounded-full flex items-center justify-center ${currentStep >= 1 ? 'bg-orange-600 text-white' : 'bg-gray-300 text-gray-600'}`">
+              <div :class="`w-12 h-12 rounded-2xl flex items-center justify-center font-bold transition-all duration-300 ${
+                currentStep >= 1 
+                  ? 'bg-gradient-to-br from-orange-500 to-red-500 text-white shadow-lg' 
+                  : 'bg-white/10 text-white/60 backdrop-blur-xl border border-white/20'
+              }`">
                 1
               </div>
-              <span class="ml-3 text-sm font-medium text-gray-700">Informations personnelles</span>
+              <span class="ml-3 text-sm font-medium text-white">Informations personnelles</span>
             </div>
             <div class="flex items-center">
-              <div :class="`w-10 h-10 rounded-full flex items-center justify-center ${currentStep >= 2 ? 'bg-orange-600 text-white' : 'bg-gray-300 text-gray-600'}`">
+              <div :class="`w-12 h-12 rounded-2xl flex items-center justify-center font-bold transition-all duration-300 ${
+                currentStep >= 2 
+                  ? 'bg-gradient-to-br from-orange-500 to-red-500 text-white shadow-lg' 
+                  : 'bg-white/10 text-white/60 backdrop-blur-xl border border-white/20'
+              }`">
                 2
               </div>
-              <span class="ml-3 text-sm font-medium text-gray-700">Questionnaire santé</span>
+              <span class="ml-3 text-sm font-medium text-white">Questionnaire santé</span>
             </div>
             <div class="flex items-center">
-              <div :class="`w-10 h-10 rounded-full flex items-center justify-center ${currentStep >= 3 ? 'bg-orange-600 text-white' : 'bg-gray-300 text-gray-600'}`">
+              <div :class="`w-12 h-12 rounded-2xl flex items-center justify-center font-bold transition-all duration-300 ${
+                currentStep >= 3 
+                  ? 'bg-gradient-to-br from-orange-500 to-red-500 text-white shadow-lg' 
+                  : 'bg-white/10 text-white/60 backdrop-blur-xl border border-white/20'
+              }`">
                 3
               </div>
-              <span class="ml-3 text-sm font-medium text-gray-700">Groupes de danse</span>
+              <span class="ml-3 text-sm font-medium text-white">Groupes de danse</span>
             </div>
           </div>
         </div>
@@ -59,7 +104,7 @@
         <!-- Step 1: Personal Information Review -->
         <div v-if="currentStep === 1" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
           <div class="text-center mb-8">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Vérification des informations</h2>
+            <h2 class="text-3xl font-bold bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent mb-4">Vérification des informations</h2>
             <p class="text-gray-600">Vérifiez vos informations personnelles et celles de vos contacts. Vous pouvez les modifier si nécessaire.</p>
           </div>
 
@@ -67,8 +112,8 @@
           <div class="space-y-8">
             <div class="bg-gray-50 rounded-xl p-6">
               <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-gray-800">Informations personnelles</h3>
-                <button @click="editPersonalInfo = !editPersonalInfo" class="text-orange-600 hover:text-orange-700 font-medium">
+                <h3 class="text-xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Informations personnelles</h3>
+                <button @click="editPersonalInfo = !editPersonalInfo" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-4 py-2 rounded-xl font-medium transition-all duration-300 shadow-lg">
                   {{ editPersonalInfo ? 'Annuler' : 'Modifier' }}
                 </button>
               </div>
@@ -223,7 +268,7 @@
           </div>
 
           <div class="flex justify-end mt-8">
-            <button @click="validatePersonalInfoAndContinue" class="bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg">
+            <button @click="validatePersonalInfoAndContinue" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 shadow-2xl">
               Continuer
               <svg class="w-5 h-5 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
@@ -235,7 +280,7 @@
         <!-- Step 2: Health Questionnaire -->
         <div v-if="currentStep === 2" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
           <div class="text-center mb-8">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Questionnaire santé</h2>
+            <h2 class="text-3xl font-bold bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent mb-4">Questionnaire santé</h2>
             <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mx-auto max-w-2xl">
               <div class="flex items-start space-x-3">
                 <svg class="w-6 h-6 text-amber-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -322,7 +367,7 @@
           </div>
 
           <div class="flex justify-between mt-8">
-            <button @click="currentStep = 1" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300">
+            <button @click="currentStep = 1" class="bg-white/20 hover:bg-white/30 backdrop-blur-xl text-gray-700 font-bold py-4 px-8 rounded-2xl transition-all duration-300 border border-gray-300">
               <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
               </svg>
@@ -331,7 +376,7 @@
             <button 
               @click="currentStep = 3" 
               :disabled="!healthForm.healthDeclaration"
-              class="bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Continuer
               <svg class="w-5 h-5 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -344,13 +389,13 @@
         <!-- Step 3: Dance Groups Selection -->
         <div v-if="currentStep === 3" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
           <div class="text-center mb-8">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Choix des groupes de danse</h2>
+            <h2 class="text-3xl font-bold bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent mb-4">Choix des groupes de danse</h2>
             <p class="text-gray-600">Sélectionnez vos groupes de danse pour l'année scolaire {{ currentSchoolYear }}</p>
           </div>
 
           <!-- Previous groups -->
           <div v-if="previousDanceGroups?.length > 0" class="mb-8">
-            <h3 class="text-lg font-bold text-gray-800 mb-4">Vos groupes précédents</h3>
+            <h3 class="text-lg font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4">Vos groupes précédents</h3>
             <div class="bg-blue-50 rounded-xl p-4 mb-4">
               <div class="flex items-center space-x-2 mb-2">
                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -385,7 +430,7 @@
 
           <!-- Available groups -->
           <div>
-            <h3 class="text-lg font-bold text-gray-800 mb-4">Groupes disponibles</h3>
+            <h3 class="text-lg font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4">Groupes disponibles</h3>
             <div v-if="availableGroups?.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div 
                 v-for="group in availableGroups" 
@@ -393,8 +438,8 @@
                 @click="toggleGroup(group)"
                 :class="`cursor-pointer rounded-xl p-6 border-2 transition-all duration-300 hover:shadow-lg ${
                   selectedGroups.some(g => g.id === group.id)
-                    ? 'border-orange-500 bg-orange-50 shadow-lg transform scale-105'
-                    : 'border-gray-200 bg-white hover:border-orange-300'
+                    ? 'border-orange-500 bg-gradient-to-br from-orange-50 to-red-50 shadow-2xl transform scale-105'
+                    : 'border-gray-200 bg-white hover:border-orange-300 hover:shadow-xl'
                 }`"
               >
                 <div class="flex justify-between items-start mb-4">
@@ -436,7 +481,7 @@
           </div>
 
           <div class="flex justify-between mt-8">
-            <button @click="currentStep = 2" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300">
+            <button @click="currentStep = 2" class="bg-white/20 hover:bg-white/30 backdrop-blur-xl text-gray-700 font-bold py-4 px-8 rounded-2xl transition-all duration-300 border border-gray-300">
               <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
               </svg>
@@ -445,7 +490,7 @@
             <button 
               @click="submitRenewal" 
               :disabled="selectedGroups.length === 0 || submitting"
-              class="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span v-if="submitting">
                 <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -466,13 +511,13 @@
       </div>
 
       <!-- Loading State -->
-      <div v-else class="flex justify-center items-center min-h-screen">
+      <div v-else class="relative z-10 flex justify-center items-center min-h-screen">
         <div class="text-center">
-          <svg class="animate-spin h-16 w-16 text-orange-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg class="animate-spin h-16 w-16 text-white mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <p class="text-xl font-semibold text-gray-700">Chargement de vos données...</p>
+          <p class="text-xl font-semibold text-white">Chargement de vos données...</p>
         </div>
       </div>
     </div>
@@ -769,33 +814,6 @@ useHead({
 </script>
 
 <style scoped>
-@keyframes blob {
-  0% {
-    transform: translate(0px, 0px) scale(1);
-  }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-  100% {
-    transform: translate(0px, 0px) scale(1);
-  }
-}
-
-.animate-blob {
-  animation: blob 7s infinite;
-}
-
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-
-.animation-delay-4000 {
-  animation-delay: 4s;
-}
-
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
