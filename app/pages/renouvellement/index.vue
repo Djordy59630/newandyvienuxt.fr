@@ -351,73 +351,127 @@
           </div>
 
           <div class="space-y-6">
-            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-              <h3 class="text-lg font-bold text-yellow-800 mb-4">Questions de santé</h3>
-              
-              <div class="space-y-4">
-                <div class="flex items-start space-x-3">
-                  <input 
-                    id="health1" 
-                    v-model="healthForm.hasHealthProblems" 
-                    type="checkbox" 
-                    class="mt-1 w-4 h-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
-                  >
-                  <label for="health1" class="text-sm text-gray-700">
-                    Au cours des douze derniers mois, avez-vous ressenti une douleur dans la poitrine lors d'un effort physique ?
-                  </label>
-                </div>
+            <!-- Image du formulaire papier -->
+            <div class="bg-white rounded-xl p-6 border-2 border-orange-200">
+              <h3 class="text-lg font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4 text-center">
+                Référence du formulaire officiel CERFA
+              </h3>
+              <div class="flex justify-center">
+                <img 
+                  src="/assets/4 CERFA-Questionnaire-Santé-2024-2025.jpg" 
+                  alt="Formulaire CERFA Questionnaire Santé 2024-2025" 
+                  class="max-w-full h-auto rounded-lg shadow-lg border border-gray-200"
+                  style="max-height: 600px;"
+                />
+              </div>
+              <p class="text-sm text-gray-600 text-center mt-4 italic">
+                Formulaire officiel de référence - Version dématérialisée ci-dessous
+              </p>
+            </div>
 
-                <div class="flex items-start space-x-3">
-                  <input 
-                    id="health2" 
-                    v-model="healthForm.hasCardiacProblems" 
-                    type="checkbox" 
-                    class="mt-1 w-4 h-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
-                  >
-                  <label for="health2" class="text-sm text-gray-700">
-                    Au cours des douze derniers mois, avez-vous eu des étourdissements lors d'un effort physique ?
-                  </label>
-                </div>
-
-                <div class="flex items-start space-x-3">
-                  <input 
-                    id="health3" 
-                    v-model="healthForm.takesMedication" 
-                    type="checkbox" 
-                    class="mt-1 w-4 h-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
-                  >
-                  <label for="health3" class="text-sm text-gray-700">
-                    Prenez-vous actuellement un traitement médical ?
-                  </label>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <div class="flex">
+                <svg class="w-5 h-5 text-blue-400 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <div class="text-blue-700 text-sm">
+                  <p class="font-semibold mb-1">Important :</p>
+                  <p>Si vous répondez "OUI" à l'une des questions de ce questionnaire, vous devrez fournir un certificat médical d'aptitude à la pratique sportive.</p>
                 </div>
               </div>
             </div>
 
-            <div class="bg-red-50 border border-red-200 rounded-lg p-6">
-              <h3 class="text-lg font-bold text-red-800 mb-4">Déclaration obligatoire</h3>
-              <div class="flex items-start space-x-3">
-                <input 
-                  id="healthDeclaration" 
-                  v-model="healthForm.healthDeclaration" 
-                  type="checkbox" 
-                  class="mt-1 w-4 h-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
-                  required
+            <div class="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+              <h3 class="text-lg font-bold text-gray-900 mb-4">Déclaration sur l'honneur</h3>
+              
+              <p class="text-gray-700 mb-4">
+                Après avoir pris connaissance du questionnaire santé, veuillez indiquer votre situation :
+              </p>
+
+              <!-- Options de réponse -->
+              <div class="space-y-3">
+                <!-- Option 1: Toutes négatives -->
+                <label class="flex items-start space-x-3 cursor-pointer p-4 rounded-xl border-2 transition-all"
+                  :class="healthForm.healthStatus === 'negative' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:bg-gray-50'"
                 >
-                <label for="healthDeclaration" class="text-sm text-gray-700">
-                  <strong>Je déclare</strong> n'avoir aucune contre-indication à la pratique de la danse hip-hop et m'engage à signaler tout changement dans mon état de santé qui pourrait constituer une contre-indication à la pratique sportive.
+                  <input
+                    v-model="healthForm.healthStatus"
+                    type="radio"
+                    value="negative"
+                    class="mt-1 h-5 w-5 text-green-600 focus:ring-green-500"
+                  />
+                  <div class="text-gray-700 text-sm leading-relaxed">
+                    <p class="font-semibold text-green-700">✅ Toutes mes réponses sont NÉGATIVES</p>
+                    <p class="text-sm text-gray-600 mt-1">
+                      Je certifie avoir répondu NON à toutes les questions du questionnaire santé.
+                    </p>
+                  </div>
+                </label>
+
+                <!-- Option 2: Au moins une positive -->
+                <label class="flex items-start space-x-3 cursor-pointer p-4 rounded-xl border-2 transition-all"
+                  :class="healthForm.healthStatus === 'positive' ? 'border-orange-500 bg-orange-50' : 'border-gray-200 hover:bg-gray-50'"
+                >
+                  <input
+                    v-model="healthForm.healthStatus"
+                    type="radio"
+                    value="positive"
+                    class="mt-1 h-5 w-5 text-orange-600 focus:ring-orange-500"
+                  />
+                  <div class="text-gray-700 text-sm leading-relaxed">
+                    <p class="font-semibold text-orange-700">⚠️ Une ou plusieurs réponses sont POSITIVES</p>
+                    <p class="text-sm text-gray-600 mt-1">
+                      J'ai répondu OUI à au moins une question. Je comprends que je dois fournir un certificat médical d'aptitude à la pratique sportive.
+                    </p>
+                  </div>
                 </label>
               </div>
-            </div>
 
-            <div v-if="requiresCertificate" class="bg-orange-50 border border-orange-200 rounded-lg p-6">
-              <div class="flex items-center space-x-3">
-                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.081 18.5C3.311 20.333 4.273 22 5.813 22z"/>
-                </svg>
-                <div>
-                  <p class="font-bold text-orange-800">Certificat médical requis</p>
-                  <p class="text-sm text-orange-700">Suite à vos réponses, vous devez fournir un certificat médical d'aptitude à la pratique sportive</p>
+              <!-- Confirmation checkbox -->
+              <div v-if="healthForm.healthStatus" class="mt-6 p-4 rounded-xl"
+                :class="healthForm.healthStatus === 'negative' ? 'bg-green-50 border border-green-200' : 'bg-orange-50 border border-orange-200'"
+              >
+                <label class="flex items-start space-x-3 cursor-pointer">
+                  <input
+                    v-model="healthForm.healthDeclaration"
+                    type="checkbox"
+                    class="mt-1 h-5 w-5"
+                    :class="healthForm.healthStatus === 'negative' ? 'text-green-600 focus:ring-green-500' : 'text-orange-600 focus:ring-orange-500'"
+                  />
+                  <div class="text-sm leading-relaxed"
+                    :class="healthForm.healthStatus === 'negative' ? 'text-green-700' : 'text-orange-700'"
+                  >
+                    <p class="font-semibold">Je confirme :</p>
+                    <ul class="list-disc list-inside space-y-1 mt-1">
+                      <li>Avoir lu et compris le questionnaire santé</li>
+                      <li v-if="healthForm.healthStatus === 'negative'">
+                        Que toutes mes réponses sont négatives et que je peux pratiquer sans certificat médical
+                      </li>
+                      <li v-else>
+                        Que je dois fournir un <strong>certificat médical d'aptitude</strong> à la pratique sportive
+                      </li>
+                    </ul>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Alert si certificat nécessaire -->
+              <div v-if="healthForm.healthStatus === 'positive' && healthForm.healthDeclaration" class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div class="flex">
+                  <svg class="w-5 h-5 text-yellow-400 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>
+                  <div class="text-yellow-700 text-sm">
+                    <p class="font-semibold">Certificat médical requis</p>
+                    <p class="mt-1">Vous devrez transmettre votre certificat médical d'aptitude à la pratique de la danse pour finaliser votre inscription.</p>
+                  </div>
                 </div>
+              </div>
+
+              <div v-if="!healthForm.healthStatus || !healthForm.healthDeclaration" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p class="text-red-700 text-sm">
+                  ⚠️ Vous devez sélectionner votre situation et confirmer pour continuer.
+                </p>
               </div>
             </div>
           </div>
@@ -431,7 +485,7 @@
             </button>
             <button 
               @click="currentStep = 3" 
-              :disabled="!healthForm.healthDeclaration"
+              :disabled="!healthForm.healthStatus || !healthForm.healthDeclaration"
               class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Continuer
@@ -629,9 +683,7 @@ const editGuardianForm = ref({
 })
 
 const healthForm = ref({
-  hasHealthProblems: false,
-  hasCardiacProblems: false,
-  takesMedication: false,
+  healthStatus: '', // 'negative' ou 'positive'
   healthDeclaration: false
 })
 
@@ -661,9 +713,7 @@ const fullAddress = computed(() => {
 })
 
 const requiresCertificate = computed(() => {
-  return healthForm.value.hasHealthProblems || 
-         healthForm.value.hasCardiacProblems || 
-         healthForm.value.takesMedication
+  return healthForm.value.healthStatus === 'positive'
 })
 
 // Methods

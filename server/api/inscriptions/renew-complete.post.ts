@@ -129,7 +129,7 @@ export default defineEventHandler(async (event) => {
 
     // Gérer les informations supplémentaires et notes médicales
     let medicalNotes = personalData.otherInfo || existingDancer.otherInfo || ''
-    if (healthData.hasHealthProblems || healthData.hasCardiacProblems || healthData.takesMedication) {
+    if (healthData.healthStatus === 'positive') {
       const newMedicalNote = `\n[RENOUVELLEMENT ${schoolYear} - CERTIFICAT MÉDICAL REQUIS - Déclaré le ${new Date().toISOString()}]`
       medicalNotes += newMedicalNote
     }
@@ -198,7 +198,7 @@ export default defineEventHandler(async (event) => {
               lastName: contact.lastName,
               phone: contact.phone,
               relationship: contact.relationship,
-              type: 'EMERGENCY'
+              type: 'EMERGENCY_ONLY'
             }
           })
         }
@@ -235,7 +235,7 @@ export default defineEventHandler(async (event) => {
           submittedAt: new Date(),
           reviewedAt: null,
           reviewedBy: null,
-          notes: `Renouvellement depuis année précédente. ${healthData.hasHealthProblems || healthData.hasCardiacProblems || healthData.takesMedication ? 'Certificat médical requis.' : ''}`
+          notes: `Renouvellement depuis année précédente. ${healthData.healthStatus === 'positive' ? 'Certificat médical requis.' : ''}`
         }
       })
     }
