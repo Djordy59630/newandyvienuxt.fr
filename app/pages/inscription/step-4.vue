@@ -326,10 +326,29 @@ const loadDanceGroups = async () => {
     loadingGroups.value = true
     error.value = ''
     
-    const response = await $fetch('/api/dance-groups')
+    // Calculer l'âge du danseur à partir des données step1
+    const step1Data = useCookie('registration-step1').value as Step1Data | null
+    let queryParams = ''
+    
+    if (step1Data && step1Data.birthDate) {
+      const today = new Date()
+      const birth = new Date(step1Data.birthDate)
+      const age = today.getFullYear() - birth.getFullYear()
+      const monthDiff = today.getMonth() - birth.getMonth()
+      
+      // Ajustement si l'anniversaire n'est pas encore passé cette année
+      const calculatedAge = (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) 
+        ? age - 1 
+        : age
+        
+      queryParams = `?age=${calculatedAge}`
+    }
+    
+    const response = await $fetch(`/api/dance-groups${queryParams}`)
     
     if (response.success) {
       danceGroups.value = response.groups
+      console.log(`Groupes filtrés par âge: ${response.filteredByAge ? 'Oui' : 'Non'}`, response.dancerAge ? `(${response.dancerAge} ans)` : '')
     } else {
       throw new Error('Erreur lors du chargement des groupes')
     }

@@ -74,6 +74,8 @@ model DanceGroup {
   description String
   schedule    String
   ageGroup    String
+  ageMin      Int?     // Age minimum requis (optionnel pour les groupes sans restriction)
+  ageMax      Int?     // Age maximum autorisé (optionnel pour les groupes sans restriction)
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
