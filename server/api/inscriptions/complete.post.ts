@@ -167,7 +167,10 @@ export default defineEventHandler(async (event) => {
     }
 
     // 3. Créer les contacts d'urgence
+    console.log('step3 data:', step3)
+    console.log('step3.emergencyContacts:', step3?.emergencyContacts)
     if (step3 && step3.emergencyContacts && step3.emergencyContacts.length > 0) {
+      console.log('Creating', step3.emergencyContacts.length, 'emergency contacts')
       for (const contact of step3.emergencyContacts) {
         await prisma.emergencyContact.create({
           data: {

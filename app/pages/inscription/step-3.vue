@@ -692,6 +692,8 @@ const handleSubmit = async () => {
     }
     
     console.log('Step 3 data:', formDataCookie.value)
+    console.log('Nombre de contacts stockés:', contacts.value.length)
+    console.log('Contacts détail:', contacts.value)
     
     // Simuler un appel API
     await new Promise(resolve => setTimeout(resolve, 800))

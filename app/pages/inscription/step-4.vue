@@ -287,6 +287,18 @@ interface HealthData {
   healthDeclaration: string
 }
 
+interface Contact {
+  firstName: string
+  lastName: string
+  phone: string
+  relationship: string
+  type: string
+}
+
+interface Step3Data {
+  emergencyContacts: Contact[]
+}
+
 const currentStep = ref('greeting')
 const displayText = ref('')
 const showCursor = ref(true)
@@ -404,10 +416,10 @@ const handleFinalSubmit = async () => {
     }
     
     // Récupérer toutes les données des étapes précédentes
-    const step1Data = useCookie('registration-step1').value
-    const healthData = useCookie('registration-health').value
+    const step1Data = useCookie('registration-step1').value as Step1Data | null
+    const healthData = useCookie('registration-health').value as HealthData | null
     const step2Data = useCookie('registration-step2').value
-    const step3Data = useCookie('registration-step3').value
+    const step3Data = useCookie('registration-step3').value as Step3Data | null
     const step4Data = formDataCookie.value
 
     console.log('Envoi des données complètes:', {
@@ -417,6 +429,8 @@ const handleFinalSubmit = async () => {
       step3: step3Data,
       step4: step4Data
     })
+    console.log('step3Data.emergencyContacts length:', step3Data?.emergencyContacts?.length)
+    console.log('step3Data.emergencyContacts:', step3Data?.emergencyContacts)
 
     // Appel API pour sauvegarder en base de données
     const response = await $fetch('/api/inscriptions/complete', {
@@ -454,7 +468,7 @@ onMounted(async () => {
   const step1Data = useCookie('registration-step1').value as Step1Data | null
   const healthData = useCookie('registration-health').value as HealthData | null
   const step2Data = useCookie('registration-step2').value
-  const step3Data = useCookie('registration-step3').value
+  const step3Data = useCookie('registration-step3').value as Step3Data | null
   
   if (!step1Data || !step1Data.firstName) {
     navigateTo('/inscription/step-1')
