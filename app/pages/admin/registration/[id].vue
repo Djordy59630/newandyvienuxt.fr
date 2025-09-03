@@ -355,12 +355,12 @@ const updateStatus = async (newStatus) => {
   loading.value = true
   
   try {
-    const { data } = await $fetch(`/api/admin/registrations/${registrationId}`, {
+    const response = await $fetch(`/api/admin/registrations/${registrationId}`, {
       method: 'PUT',
       body: { status: newStatus }
     })
     
-    if (data.success) {
+    if (response.success) {
       await refresh()
       showToast(`Inscription ${newStatus === 'APPROVED' ? 'approuvée' : 'rejetée'} avec succès`)
     }
