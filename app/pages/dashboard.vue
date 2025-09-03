@@ -142,59 +142,6 @@
       </div>
 
       <div v-else-if="registration.hasRegistration && registration.registration" class="space-y-8">
-        
-        <!-- STATUS PRINCIPAL EN PREMIER -->
-        <div class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 relative overflow-hidden">
-          <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500"></div>
-          
-          <div class="text-center mb-6">
-            <h2 class="text-3xl font-black text-gray-800 mb-4">Statut de votre inscription</h2>
-            
-            <!-- Grand badge de statut -->
-            <div class="inline-flex items-center space-x-3 px-8 py-4 rounded-2xl mb-4" 
-                 :class="getMainStatusClass(registration.registration.status)">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path v-if="registration.registration.status === 'SUBMITTED'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                <path v-else-if="registration.registration.status === 'APPROVED'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                <path v-else-if="registration.registration.status === 'REJECTED'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <div class="text-left">
-                <span class="text-2xl font-bold block">{{ getStatusText(registration.registration.status) }}</span>
-                <span class="text-sm opacity-80">{{ getStatusDescription(registration.registration.status) }}</span>
-              </div>
-            </div>
-
-            <!-- Dates importantes -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
-              <div class="bg-gray-50 rounded-xl p-4">
-                <p class="text-sm text-gray-500">Date d'inscription</p>
-                <p class="font-bold text-gray-800">{{ formatDate(registration.registration.dancer.createdAt) }}</p>
-              </div>
-              <div v-if="registration.registration.submittedAt" class="bg-blue-50 rounded-xl p-4">
-                <p class="text-sm text-blue-500">Soumis le</p>
-                <p class="font-bold text-blue-800">{{ formatDate(registration.registration.submittedAt) }}</p>
-              </div>
-              <div v-if="registration.registration.reviewedAt" class="bg-green-50 rounded-xl p-4">
-                <p class="text-sm text-green-500">Traité le</p>
-                <p class="font-bold text-green-800">{{ formatDate(registration.registration.reviewedAt) }}</p>
-              </div>
-            </div>
-
-            <!-- Certificat médical si nécessaire -->
-            <div v-if="hasMedicalCertificateRequired" class="mt-6 p-4 bg-yellow-50 border-2 border-yellow-200 rounded-xl">
-              <div class="flex items-center">
-                <svg class="w-6 h-6 text-yellow-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                </svg>
-                <div class="text-left">
-                  <p class="font-bold text-yellow-800">Certificat médical requis</p>
-                  <p class="text-sm text-yellow-700">Vous devez fournir un certificat médical d'aptitude à la pratique sportive</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         <!-- Renouvellement d'inscription -->
         <div v-if="showRenewalOption" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 relative overflow-hidden">
@@ -340,6 +287,10 @@
                     </span>
                     <h4 class="font-bold text-gray-800">{{ group.name }}</h4>
                   </div>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold"
+                        :class="getMainStatusClass(group.status).replace('px-8 py-4', 'px-3 py-1').replace('text-2xl', 'text-xs')">
+                    {{ getStatusText(group.status) }}
+                  </span>
                 </div>
                 <p class="text-sm text-gray-600 mb-3 ml-11">{{ group.description }}</p>
                 <div class="ml-11 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
@@ -654,14 +605,70 @@ const getNextSchoolYear = () => {
 const currentSchoolYear = computed(() => getCurrentSchoolYear())
 const nextSchoolYear = computed(() => getNextSchoolYear())
 
-// Filtrer les groupes de danse pour afficher uniquement ceux de l'année actuelle avec un statut valide
+// Obtenir le statut global de l'inscription basé sur les groupes de danse
+const globalRegistrationStatus = computed(() => {
+  if (!registration.value.hasRegistration || !registration.value.registration?.danceGroups) return 'DRAFT'
+  
+  const currentYear = getCurrentSchoolYear()
+  const currentYearRegistrations = registration.value.registration.danceGroups.filter(
+    (group: any) => group.schoolYear === currentYear
+  )
+  
+  if (currentYearRegistrations.length === 0) return 'DRAFT'
+  
+  // Si au moins une inscription est approuvée
+  if (currentYearRegistrations.some((group: any) => group.status === 'APPROVED')) {
+    return 'APPROVED'
+  }
+  
+  // Si au moins une inscription est refusée (et aucune approuvée)
+  if (currentYearRegistrations.some((group: any) => group.status === 'REJECTED')) {
+    return 'REJECTED'
+  }
+  
+  // Si toutes les inscriptions sont soumises
+  if (currentYearRegistrations.every((group: any) => group.status === 'SUBMITTED')) {
+    return 'SUBMITTED'
+  }
+  
+  // Par défaut
+  return 'DRAFT'
+})
+
+// Obtenir la date de soumission la plus récente
+const globalSubmittedAt = computed(() => {
+  if (!registration.value.hasRegistration || !registration.value.registration?.danceGroups) return null
+  
+  const currentYear = getCurrentSchoolYear()
+  const submittedDates = registration.value.registration.danceGroups
+    .filter((group: any) => group.schoolYear === currentYear && group.submittedAt)
+    .map((group: any) => group.submittedAt)
+    .sort((a: string, b: string) => new Date(b).getTime() - new Date(a).getTime())
+    
+  return submittedDates.length > 0 ? submittedDates[0] : null
+})
+
+// Obtenir la date de traitement la plus récente
+const globalReviewedAt = computed(() => {
+  if (!registration.value.hasRegistration || !registration.value.registration?.danceGroups) return null
+  
+  const currentYear = getCurrentSchoolYear()
+  const reviewedDates = registration.value.registration.danceGroups
+    .filter((group: any) => group.schoolYear === currentYear && group.reviewedAt)
+    .map((group: any) => group.reviewedAt)
+    .sort((a: string, b: string) => new Date(b).getTime() - new Date(a).getTime())
+    
+  return reviewedDates.length > 0 ? reviewedDates[0] : null
+})
+
+// Filtrer les groupes de danse pour afficher tous ceux de l'année actuelle
 const currentYearDanceGroups = computed(() => {
   if (!registration.value.hasRegistration || !registration.value.registration?.danceGroups) return []
   
   const currentYear = getCurrentSchoolYear()
   
   return registration.value.registration.danceGroups.filter(
-    (group: any) => group.schoolYear === currentYear && ['SUBMITTED', 'APPROVED'].includes(group.status)
+    (group: any) => group.schoolYear === currentYear
   )
 })
 
