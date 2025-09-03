@@ -132,7 +132,7 @@ export default defineEventHandler(async (event) => {
         city: step1.city || 'Non spécifié',
         phone: step1.phone,
         schoolLevel: convertSchoolLevel(step1.schoolLevel || 'ADULTE') as dancers_schoolLevel,
-        tShirtSize: step1.tShirtSize || 'M',
+        tShirtSize: step1.tshirtSize || step1.tShirtSize || 'M',
         otherInfo: step1.otherInfo || null,
       }
     })
