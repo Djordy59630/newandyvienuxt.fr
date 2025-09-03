@@ -78,7 +78,7 @@
       </div>
 
       <!-- Conversation Interface -->
-      <div class="w-full max-w-2xl space-y-4 sm:space-y-6">
+      <div class="w-full max-w-2xl space-y-4 sm:space-y-6 px-4 sm:px-0">
         
         <!-- Damien.C Message -->
         <div class="flex items-start space-x-3 sm:space-x-4">
@@ -239,7 +239,7 @@
 
         <!-- Birth Date Input -->
         <div v-if="currentStep === 'birthDate'" class="space-y-6">
-          <div class="relative">
+          <div class="relative w-full overflow-hidden">
             <input
               v-model="form.birthDate"
               type="date"
@@ -842,6 +842,8 @@ useHead({
   line-height: 1.75rem;
   outline: none;
   transition: all 0.3s ease;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .answer-input::placeholder {
@@ -856,6 +858,19 @@ useHead({
 /* Fix pour afficher le placeholder sur mobile pour les champs date */
 .date-input {
   min-height: 4rem;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Sur mobile, ajuster le padding pour éviter le débordement */
+@media (max-width: 640px) {
+  .date-input {
+    padding-right: 3rem;
+    font-size: 16px; /* Éviter le zoom sur iOS */
+  }
 }
 
 .date-placeholder {
@@ -867,6 +882,10 @@ useHead({
   font-size: 1.125rem;
   pointer-events: none;
   z-index: 1;
+  max-width: calc(100% - 3rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Masquer le placeholder natif sur mobile */
