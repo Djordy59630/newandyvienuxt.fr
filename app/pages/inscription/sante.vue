@@ -229,21 +229,38 @@
           </div>
         </div>
 
-        <!-- Continue Button Section -->
+        <!-- Navigation Buttons Section -->
         <div class="space-y-6">
-          <!-- Continue Button -->
-          <div class="flex justify-center">
-            <button
-              @click="handleContinue"
-              :disabled="loading || !healthStatus || !healthConfirmation"
-              class="btn-primary"
-            >
-              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
-              <span v-else>Continuer vers l'étape 2</span>
-              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </button>
+          <!-- Buttons Row -->
+          <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <!-- Continue Button (first on mobile, right on desktop) -->
+            <div class="order-1 sm:order-2">
+              <button
+                @click="handleContinue"
+                :disabled="loading || !healthStatus || !healthConfirmation"
+                class="btn-primary w-full sm:w-auto"
+              >
+                <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                <span v-else>Continuer vers l'étape 2</span>
+                <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
+            
+            <!-- Back Button (second on mobile, left on desktop) -->
+            <div class="order-2 sm:order-1">
+              <button
+                @click="goBack"
+                class="btn-secondary w-full sm:w-auto"
+                :disabled="loading"
+              >
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Retour
+              </button>
+            </div>
           </div>
         </div>
 
@@ -439,6 +456,40 @@ useHead({
   opacity: 0.5;
   cursor: not-allowed;
   transform: scale(1);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  background-color: white;
+  border: 2px solid #e2e8f0;
+  color: #374151;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+@media (min-width: 640px) {
+  .btn-secondary {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+}
+
+.btn-secondary:hover:not(:disabled) {
+  border-color: #cbd5e1;
+  background-color: #f8fafc;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 @keyframes pulse-slow {

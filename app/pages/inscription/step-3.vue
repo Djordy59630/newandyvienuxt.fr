@@ -203,29 +203,35 @@
             </div>
           </div>
           
-          <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
-            <button
-              @click="currentStep = 'add-more'"
-              class="btn-secondary w-full sm:w-auto"
-              :disabled="loading"
-            >
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-              </svg>
-              Retour
-            </button>
+          <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <!-- Continue Button (first on mobile, right on desktop) -->
+            <div class="order-1 sm:order-2">
+              <button
+                @click="handleNameSubmit"
+                :disabled="loading || !form.firstName || !form.lastName"
+                class="btn-primary w-full sm:w-auto"
+              >
+                <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                <span v-else>Continuer</span>
+                <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
             
-            <button
-              @click="handleNameSubmit"
-              :disabled="loading || !form.firstName || !form.lastName"
-              class="btn-primary w-full sm:w-auto"
-            >
-              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
-              <span v-else>Continuer</span>
-              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </button>
+            <!-- Back Button (second on mobile, left on desktop) -->
+            <div class="order-2 sm:order-1">
+              <button
+                @click="currentStep = 'add-more'"
+                class="btn-secondary w-full sm:w-auto"
+                :disabled="loading"
+              >
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Retour
+              </button>
+            </div>
           </div>
         </div>
 
@@ -248,29 +254,35 @@
             </div>
           </div>
           
-          <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
-            <button
-              @click="currentStep = 'contact-name'"
-              class="btn-secondary w-full sm:w-auto"
-              :disabled="loading"
-            >
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-              </svg>
-              Retour
-            </button>
+          <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <!-- Continue Button (first on mobile, right on desktop) -->
+            <div class="order-1 sm:order-2">
+              <button
+                @click="handlePhoneSubmit"
+                :disabled="loading || !form.phone"
+                class="btn-primary w-full sm:w-auto"
+              >
+                <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                <span v-else>Continuer</span>
+                <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
             
-            <button
-              @click="handlePhoneSubmit"
-              :disabled="loading || !form.phone"
-              class="btn-primary w-full sm:w-auto"
-            >
-              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
-              <span v-else>Continuer</span>
-              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </button>
+            <!-- Back Button (second on mobile, left on desktop) -->
+            <div class="order-2 sm:order-1">
+              <button
+                @click="currentStep = 'contact-name'"
+                class="btn-secondary w-full sm:w-auto"
+                :disabled="loading"
+              >
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Retour
+              </button>
+            </div>
           </div>
         </div>
 
@@ -299,29 +311,35 @@
             </div>
           </div>
           
-          <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
-            <button
-              @click="currentStep = 'contact-phone'"
-              class="btn-secondary w-full sm:w-auto"
-              :disabled="loading"
-            >
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-              </svg>
-              Retour
-            </button>
+          <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <!-- Continue Button (first on mobile, right on desktop) -->
+            <div class="order-1 sm:order-2">
+              <button
+                @click="handleRelationshipSubmit"
+                :disabled="loading || !form.relationship"
+                class="btn-primary w-full sm:w-auto"
+              >
+                <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                <span v-else>Continuer</span>
+                <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
             
-            <button
-              @click="handleRelationshipSubmit"
-              :disabled="loading || !form.relationship"
-              class="btn-primary w-full sm:w-auto"
-            >
-              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
-              <span v-else>Continuer</span>
-              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </button>
+            <!-- Back Button (second on mobile, left on desktop) -->
+            <div class="order-2 sm:order-1">
+              <button
+                @click="currentStep = 'contact-phone'"
+                class="btn-secondary w-full sm:w-auto"
+                :disabled="loading"
+              >
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Retour
+              </button>
+            </div>
           </div>
         </div>
 
