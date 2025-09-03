@@ -239,15 +239,17 @@
 
         <!-- Birth Date Input -->
         <div v-if="currentStep === 'birthDate'" class="space-y-6">
-          <div>
+          <div class="relative">
             <input
               v-model="form.birthDate"
               type="date"
-              class="answer-input"
+              class="answer-input date-input"
+              placeholder="jj/mm/aaaa"
               @keyup.enter="handleBirthDateSubmit"
               :disabled="loading"
               required
             />
+            <span v-if="!form.birthDate" class="date-placeholder">jj/mm/aaaa</span>
             <div v-if="form.birthDate && isMinor" class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-700 text-sm">
               ℹ️ Tu es mineur(e), nous aurons besoin des informations de ton responsable légal à l'étape suivante.
             </div>
@@ -603,6 +605,20 @@ definePageMeta({
   middleware: ['auth', 'no-admin']
 })
 
+// Types
+interface DancerInfo {
+  id: number
+  firstName: string
+  lastName: string
+  email: string
+  registrations: any[]
+}
+
+interface CheckExistingResponse {
+  hasExistingRegistration: boolean
+  dancer?: DancerInfo
+}
+
 // @ts-ignore - Nuxt auto-import
 const { user } = useAuth()
 
@@ -628,7 +644,7 @@ const form = ref({
 
 const fullText = ref("Salut ! Moi c'est Damien.C, ton assistant virtuel pour Square630 ! 🤖✨ Je vais t'accompagner dans ton inscription étape par étape. C'est parti, commençons par faire connaissance ! 😊")
 const hasExistingRegistration = ref(false)
-const existingDancer = ref<any>(null)
+const existingDancer = ref<DancerInfo | null>(null)
 
 const goBack = () => {
   navigateTo('/dashboard')
@@ -649,8 +665,8 @@ const isMinor = computed(() => {
 
 const checkExistingRegistration = async () => {
   try {
-    const response = await $fetch('/api/inscriptions/check-existing')
-    if (response.hasExistingRegistration) {
+    const response = await $fetch<CheckExistingResponse>('/api/inscriptions/check-existing')
+    if (response.hasExistingRegistration && response.dancer) {
       hasExistingRegistration.value = true
       existingDancer.value = response.dancer
       fullText.value = `Bonjour ${response.dancer.firstName} ! 👋 Je vois que tu as déjà une demande d'inscription en cours. Tu ne peux avoir qu'un seul dossier d'inscription par compte. Si tu souhaites modifier ton inscription, contacte l'administration. 📧`
@@ -835,6 +851,37 @@ useHead({
 .answer-input:focus {
   border-color: #3b82f6;
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+/* Fix pour afficher le placeholder sur mobile pour les champs date */
+.date-input {
+  min-height: 4rem;
+}
+
+.date-placeholder {
+  position: absolute;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 1.125rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Masquer le placeholder natif sur mobile */
+input[type="date"].date-input::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+/* Pour les navigateurs qui n'affichent pas de placeholder */
+input[type="date"].date-input:invalid::-webkit-datetime-edit {
+  color: transparent;
+}
+
+input[type="date"].date-input:focus::-webkit-datetime-edit,
+input[type="date"].date-input:valid::-webkit-datetime-edit {
+  color: #1e293b;
 }
 
 .option-button {

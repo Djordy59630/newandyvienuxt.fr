@@ -149,7 +149,10 @@
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Date de naissance *</label>
-                  <input v-model="editForm.birthDate" type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" required>
+                  <div class="relative">
+                    <input v-model="editForm.birthDate" type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 date-field" required>
+                    <span v-if="!editForm.birthDate" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">jj/mm/aaaa</span>
+                  </div>
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1">Niveau scolaire *</label>
@@ -969,5 +972,22 @@ useHead({
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Fix pour afficher le placeholder sur mobile pour les champs date */
+.date-field:not(:focus):not(:valid)::-webkit-datetime-edit {
+  color: transparent;
+}
+
+.date-field:focus::-webkit-datetime-edit,
+.date-field:valid::-webkit-datetime-edit {
+  color: #374151;
+}
+
+/* Support pour les navigateurs mobiles */
+@supports (-webkit-touch-callout: none) or (-webkit-overflow-scrolling: touch) {
+  .date-field:not(:focus):invalid {
+    color: transparent;
+  }
 }
 </style>
