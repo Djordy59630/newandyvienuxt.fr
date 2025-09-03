@@ -105,7 +105,7 @@
                 Parfait ! Quelle est la relation de cette personne avec toi ?
               </p>
               <p v-else-if="currentStep === 'contact-type'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
-                Super ! Maintenant dis-moi, ce contact peut-il : récupérer le mineur en fin de cours, être appelé en cas d'urgence, ou les deux ?
+                Super ! Maintenant dis-moi, ce contact peut-il : <span v-if="isMinor">récupérer le mineur en fin de cours, être appelé en cas d'urgence, ou les deux</span><span v-else>être appelé en cas d'urgence</span> ?
               </p>
               <p v-else-if="currentStep === 'add-more'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
                 Super ! Veux-tu ajouter un autre contact d'urgence ? (recommandé d'avoir au moins 2 contacts)
@@ -346,7 +346,9 @@
         <!-- Contact Type Selection -->
         <div v-if="currentStep === 'contact-type'" class="space-y-4 sm:space-y-6">
           <div class="grid grid-cols-1 gap-4">
+            <!-- Option récupération uniquement - seulement pour les mineurs -->
             <button
+              v-if="isMinor"
               @click="handleContactType('PICKUP_ONLY')"
               :disabled="loading"
               class="contact-type-btn"
@@ -382,7 +384,9 @@
               </div>
             </button>
             
+            <!-- Option les deux - seulement pour les mineurs -->
             <button
+              v-if="isMinor"
               @click="handleContactType('EMERGENCY_AND_PICKUP')"
               :disabled="loading"
               class="contact-type-btn"
@@ -426,7 +430,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useHead, navigateTo, useCookie } from 'nuxt/app'
 
 definePageMeta({
@@ -466,6 +470,20 @@ const form = ref({
   type: ''
 })
 const validationErrors = ref<Record<string, string>>({})
+
+// Computed pour vérifier si la personne est mineure
+const isMinor = computed(() => {
+  if (!step1Data.value?.birthDate) return false
+  const today = new Date()
+  const birth = new Date(step1Data.value.birthDate)
+  const age = today.getFullYear() - birth.getFullYear()
+  const monthDiff = today.getMonth() - birth.getMonth()
+  
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    return (age - 1) < 18
+  }
+  return age < 18
+})
 
 // Validation functions
 const validateName = (name: string, fieldName: string): string | null => {
@@ -571,10 +589,17 @@ const handleRelationshipSubmit = () => {
     return
   }
   
-  // Aller à l'étape de sélection du type
-  setTimeout(() => {
-    currentStep.value = 'contact-type'
-  }, 500)
+  // Si la personne est majeure, setter automatiquement EMERGENCY_ONLY et passer à add-more
+  if (!isMinor.value) {
+    setTimeout(() => {
+      handleContactType('EMERGENCY_ONLY')
+    }, 300)
+  } else {
+    // Si mineur, aller à l'étape de sélection du type
+    setTimeout(() => {
+      currentStep.value = 'contact-type'
+    }, 500)
+  }
 }
 
 const handleContactType = (type: string) => {
