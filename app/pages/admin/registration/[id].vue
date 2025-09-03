@@ -37,7 +37,7 @@
             </button>
             
             <button
-              v-if="registration.status === 'SUBMITTED'"
+              v-if="registration.status !== 'APPROVED'"
               @click="updateStatus('APPROVED')"
               :disabled="loading"
               class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center space-x-2"
@@ -45,11 +45,11 @@
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
               </svg>
-              <span>Approuver</span>
+              <span>{{ registration.status === 'REJECTED' ? 'Approuver finalement' : 'Approuver' }}</span>
             </button>
             
             <button
-              v-if="registration.status === 'SUBMITTED'"
+              v-if="registration.status !== 'REJECTED'"
               @click="updateStatus('REJECTED')"
               :disabled="loading"
               class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 flex items-center space-x-2"
@@ -57,7 +57,19 @@
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
-              <span>Rejeter</span>
+              <span>{{ registration.status === 'APPROVED' ? 'Rejeter finalement' : 'Rejeter' }}</span>
+            </button>
+            
+            <button
+              v-if="registration.status !== 'SUBMITTED'"
+              @click="updateStatus('SUBMITTED')"
+              :disabled="loading"
+              class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 flex items-center space-x-2"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Remettre en attente</span>
             </button>
           </div>
         </div>
