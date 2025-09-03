@@ -129,6 +129,7 @@
                 <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Groupe</th>
                 <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Horaire</th>
                 <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Tranche d'âge</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Restrictions d'âge</th>
                 <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Statut</th>
                 <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Inscrits</th>
                 <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Actions</th>
@@ -147,6 +148,14 @@
                 </td>
                 <td class="px-6 py-4">
                   <div class="text-sm text-white">{{ group.ageGroup }}</div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="text-sm text-white">
+                    <span v-if="group.ageMin || group.ageMax">
+                      {{ group.ageMin || '?' }} - {{ group.ageMax || '?' }} ans
+                    </span>
+                    <span v-else class="text-orange-100/60">Non défini</span>
+                  </div>
                 </td>
                 <td class="px-6 py-4">
                   <span 
@@ -246,6 +255,39 @@
               </div>
             </div>
 
+            <!-- Restrictions d'âge -->
+            <div>
+              <label class="block text-sm font-medium text-white mb-2">Restrictions d'âge (optionnel)</label>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-xs text-orange-100/80 mb-1">Âge minimum</label>
+                  <input
+                    v-model="formData.ageMin"
+                    type="number"
+                    min="0"
+                    max="100"
+                    class="w-full bg-white/20 text-white placeholder-white/60 rounded-xl px-4 py-3 border border-white/30 backdrop-blur-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    placeholder="Ex: 6"
+                  >
+                </div>
+
+                <div>
+                  <label class="block text-xs text-orange-100/80 mb-1">Âge maximum</label>
+                  <input
+                    v-model="formData.ageMax"
+                    type="number"
+                    min="0"
+                    max="100"
+                    class="w-full bg-white/20 text-white placeholder-white/60 rounded-xl px-4 py-3 border border-white/30 backdrop-blur-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    placeholder="Ex: 12"
+                  >
+                </div>
+              </div>
+              <p class="text-xs text-orange-100/60 mt-2">
+                Si défini, seuls les danseurs dans cette tranche d'âge pourront s'inscrire à ce groupe
+              </p>
+            </div>
+
             <div>
               <label class="flex items-center space-x-3">
                 <input
@@ -342,6 +384,8 @@ const formData = ref({
   description: '',
   schedule: '',
   ageGroup: '',
+  ageMin: null,
+  ageMax: null,
   isActive: true
 })
 
@@ -370,6 +414,8 @@ const openCreateModal = () => {
     description: '',
     schedule: '',
     ageGroup: '',
+    ageMin: null,
+    ageMax: null,
     isActive: true
   }
   showModal.value = true
@@ -382,6 +428,8 @@ const editGroup = (group) => {
     description: group.description,
     schedule: group.schedule,
     ageGroup: group.ageGroup,
+    ageMin: group.ageMin,
+    ageMax: group.ageMax,
     isActive: group.isActive
   }
   showModal.value = true
@@ -395,6 +443,8 @@ const closeModal = () => {
     description: '',
     schedule: '',
     ageGroup: '',
+    ageMin: null,
+    ageMax: null,
     isActive: true
   }
 }

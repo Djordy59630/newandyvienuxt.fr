@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client'
 import jwt from 'jsonwebtoken'
-import type { DanceGroupWithStats } from '~/types/database'
 
 const prisma = new PrismaClient()
 
@@ -55,7 +54,9 @@ export default defineEventHandler(async (event) => {
         isActive: group.isActive,
         createdAt: group.createdAt,
         updatedAt: group.updatedAt,
-        registrationCount: group._count.registrations
+        registrationCount: group._count.registrations,
+        ageMin: group.ageMin,
+        ageMax: group.ageMax
       }))
     }
 

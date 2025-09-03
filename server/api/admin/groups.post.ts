@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event)
-    const { name, description, schedule, ageGroup, isActive } = body
+    const { name, description, schedule, ageGroup, ageMin, ageMax, isActive } = body
 
     if (!name || !description || !schedule || !ageGroup) {
       throw createError({
@@ -59,6 +59,8 @@ export default defineEventHandler(async (event) => {
         description: description.trim(),
         schedule: schedule.trim(),
         ageGroup: ageGroup.trim(),
+        ageMin: ageMin !== null && ageMin !== undefined ? parseInt(ageMin) : null,
+        ageMax: ageMax !== null && ageMax !== undefined ? parseInt(ageMax) : null,
         isActive: isActive !== undefined ? isActive : true
       }
     })

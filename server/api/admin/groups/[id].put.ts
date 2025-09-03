@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client'
 import jwt from 'jsonwebtoken'
-import type { DanceGroup } from '~/types/database'
 
 const prisma = new PrismaClient()
 
@@ -8,7 +7,7 @@ export default defineEventHandler(async (event) => {
   try {
     const groupId = parseInt(getRouterParam(event, 'id') || '0')
     const body = await readBody(event)
-    const { name, description, schedule, ageGroup, isActive } = body
+    const { name, description, schedule, ageGroup, ageMin, ageMax, isActive } = body
 
     if (!groupId) {
       throw createError({
@@ -85,6 +84,8 @@ export default defineEventHandler(async (event) => {
         description: description.trim(),
         schedule: schedule.trim(),
         ageGroup: ageGroup.trim(),
+        ageMin: ageMin !== null && ageMin !== undefined ? parseInt(ageMin) : null,
+        ageMax: ageMax !== null && ageMax !== undefined ? parseInt(ageMax) : null,
         isActive: isActive !== undefined ? isActive : existingGroup.isActive
       }
     })
