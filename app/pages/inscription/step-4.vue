@@ -127,7 +127,7 @@
                 type="checkbox"
                 :value="group.id"
                 v-model="selectedGroupIds"
-                @change="updateSelectedGroups"
+                @change="updateSelectedGroups(); validationErrors.groups = ''"
                 class="hidden"
               />
               
@@ -170,16 +170,22 @@
           
           <!-- Continue Button -->
           <div class="flex justify-center pt-4">
-            <button
-              @click="proceedToDetails"
-              :disabled="loading || selectedGroups.length === 0"
-              class="btn-primary w-full sm:w-auto"
-            >
-              <span>Continuer avec {{ selectedGroups.length }} groupe{{ selectedGroups.length > 1 ? 's' : '' }}</span>
-              <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </button>
+            <div class="w-full sm:w-auto">
+              <button
+                @click="proceedToDetails"
+                :disabled="loading"
+                class="btn-primary w-full sm:w-auto"
+              >
+                <span v-if="selectedGroups.length > 0">Continuer avec {{ selectedGroups.length }} groupe{{ selectedGroups.length > 1 ? 's' : '' }}</span>
+                <span v-else>Sélectionner des groupes</span>
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </button>
+              <div v-if="validationErrors.groups" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg text-center">
+                {{ validationErrors.groups }}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -264,6 +270,17 @@ definePageMeta({
 // @ts-ignore - Nuxt auto-import
 const { user } = useAuth()
 
+// Types pour les données des étapes
+interface Step1Data {
+  firstName: string
+  lastName: string
+  birthDate: string
+}
+
+interface HealthData {
+  healthDeclaration: string
+}
+
 const currentStep = ref('greeting')
 const displayText = ref('')
 const showCursor = ref(true)
@@ -271,6 +288,7 @@ const loading = ref(false)
 const error = ref('')
 const selectedGroups = ref<any[]>([])
 const selectedGroupIds = ref<number[]>([])
+const validationErrors = ref<Record<string, string>>({})
 
 
 const danceGroups = ref<any[]>([])
@@ -324,15 +342,30 @@ const updateSelectedGroups = () => {
 }
 
 const proceedToDetails = () => {
-  if (selectedGroups.value.length > 0) {
-    setTimeout(() => {
-      currentStep.value = 'group-details'
-    }, 300)
+  // Clear previous errors
+  validationErrors.value = {}
+  
+  if (selectedGroups.value.length === 0) {
+    validationErrors.value.groups = 'Vous devez sélectionner au moins un groupe de danse'
+    return
   }
+  
+  setTimeout(() => {
+    currentStep.value = 'group-details'
+  }, 300)
 }
 
 const handleFinalSubmit = async () => {
+  // Clear previous errors
+  validationErrors.value = {}
   error.value = ''
+  
+  // Validate that at least one group is selected
+  if (selectedGroups.value.length === 0) {
+    validationErrors.value.groups = 'Vous devez sélectionner au moins un groupe de danse'
+    return
+  }
+  
   loading.value = true
 
   try {
@@ -393,8 +426,8 @@ const handleFinalSubmit = async () => {
 
 onMounted(async () => {
   // Vérifier les données des étapes précédentes
-  const step1Data = useCookie('registration-step1').value
-  const healthData = useCookie('registration-health').value
+  const step1Data = useCookie('registration-step1').value as Step1Data | null
+  const healthData = useCookie('registration-health').value as HealthData | null
   const step2Data = useCookie('registration-step2').value
   const step3Data = useCookie('registration-step3').value
   

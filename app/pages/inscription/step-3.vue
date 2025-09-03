@@ -170,28 +170,42 @@
         <!-- Contact Name Input -->
         <div v-if="currentStep === 'contact-name'" class="space-y-4 sm:space-y-6">
           <div class="space-y-4">
-            <input
-              v-model="form.firstName"
-              type="text"
-              class="answer-input"
-              placeholder="Prénom du contact"
-              :disabled="loading"
-              required
-            />
-            <input
-              v-model="form.lastName"
-              type="text"
-              class="answer-input"
-              placeholder="Nom de famille du contact"
-              @keyup.enter="handleNameSubmit"
-              :disabled="loading"
-              required
-            />
+            <div>
+              <input
+                v-model="form.firstName"
+                type="text"
+                class="answer-input"
+                :class="{ 'border-red-500 border-2': validationErrors.firstName }"
+                placeholder="Prénom du contact"
+                @input="validationErrors.firstName = ''"
+                :disabled="loading"
+                required
+              />
+              <div v-if="validationErrors.firstName" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+                {{ validationErrors.firstName }}
+              </div>
+            </div>
+            <div>
+              <input
+                v-model="form.lastName"
+                type="text"
+                class="answer-input"
+                :class="{ 'border-red-500 border-2': validationErrors.lastName }"
+                placeholder="Nom de famille du contact"
+                @keyup.enter="handleNameSubmit"
+                @input="validationErrors.lastName = ''"
+                :disabled="loading"
+                required
+              />
+              <div v-if="validationErrors.lastName" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+                {{ validationErrors.lastName }}
+              </div>
+            </div>
           </div>
           
           <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
             <button
-              @click="handleBack"
+              @click="currentStep = 'add-more'"
               class="btn-secondary w-full sm:w-auto"
               :disabled="loading"
             >
@@ -222,11 +236,16 @@
               v-model="form.phone"
               type="tel"
               class="answer-input"
+              :class="{ 'border-red-500 border-2': validationErrors.phone }"
               placeholder="06 12 34 56 78"
               @keyup.enter="handlePhoneSubmit"
+              @input="validationErrors.phone = ''"
               :disabled="loading"
               required
             />
+            <div v-if="validationErrors.phone" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+              {{ validationErrors.phone }}
+            </div>
           </div>
           
           <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
@@ -261,9 +280,10 @@
             <select
               v-model="form.relationship"
               class="answer-input"
+              :class="{ 'border-red-500 border-2': validationErrors.relationship }"
               :disabled="loading"
               required
-              @change="handleRelationshipSubmit"
+              @change="validationErrors.relationship = ''; handleRelationshipSubmit()"
             >
               <option value="">Sélectionner la relation</option>
               <option value="Parent">Parent</option>
@@ -274,6 +294,9 @@
               <option value="Voisin(e)">Voisin(e)</option>
               <option value="Autre proche">Autre proche</option>
             </select>
+            <div v-if="validationErrors.relationship" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+              {{ validationErrors.relationship }}
+            </div>
           </div>
           
           <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
@@ -395,12 +418,27 @@ definePageMeta({
 // @ts-ignore - Nuxt auto-import
 const { user } = useAuth()
 
+// Types pour les contacts
+interface Contact {
+  firstName: string
+  lastName: string
+  phone: string
+  relationship: string
+  type: string
+}
+
+interface Step1Data {
+  firstName: string
+  lastName: string
+  birthDate: string
+}
+
 const currentStep = ref('greeting')
 const displayText = ref('')
 const showCursor = ref(true)
 const loading = ref(false)
 const error = ref('')
-const contacts = ref([])
+const contacts = ref<Contact[]>([])
 const form = ref({
   firstName: '',
   lastName: '',
@@ -408,6 +446,23 @@ const form = ref({
   relationship: '',
   type: ''
 })
+const validationErrors = ref<Record<string, string>>({})
+
+// Validation functions
+const validateName = (name: string, fieldName: string): string | null => {
+  if (!name) return `${fieldName} est obligatoire`
+  if (name.length < 2) return `${fieldName} doit contenir au moins 2 caractères`
+  if (name.length > 50) return `${fieldName} ne peut pas dépasser 50 caractères`
+  if (!/^[a-zA-ZÀ-ÿ\s'-]+$/.test(name)) return `${fieldName} contient des caractères invalides`
+  return null
+}
+
+const validatePhone = (phone: string): string | null => {
+  const phoneRegex = /^(?:(?:\+|00)33[\s.-]?(?:\(0\))?|0)[1-9](?:[\s.-]?\d{2}){4}$/
+  if (!phone) return 'Le numéro de téléphone est obligatoire'
+  if (!phoneRegex.test(phone.replace(/\s/g, ''))) return 'Format de téléphone invalide (ex: 06 12 34 56 78)'
+  return null
+}
 
 const fullText = "Excellent ! On avance bien dans ton inscription ! 🎯 Pour ta sécurité, j'ai maintenant besoin d'ajouter tes contacts d'urgence. C'est important en cas de besoin ! 🚨"
 
@@ -432,6 +487,7 @@ const typeText = () => {
 
 const addAnotherContact = () => {
   form.value = { firstName: '', lastName: '', phone: '', relationship: '', type: '' }
+  validationErrors.value = {}
   currentStep.value = 'contact-name'
 }
 
@@ -446,14 +502,40 @@ const removeContact = (index: number) => {
 }
 
 const handleNameSubmit = () => {
-  if (!form.value.firstName || !form.value.lastName) return
+  // Clear previous errors
+  validationErrors.value = {}
+  
+  // Validate names
+  let hasError = false
+  
+  const firstNameError = validateName(form.value.firstName, 'Le prénom')
+  if (firstNameError) {
+    validationErrors.value.firstName = firstNameError
+    hasError = true
+  }
+  
+  const lastNameError = validateName(form.value.lastName, 'Le nom')
+  if (lastNameError) {
+    validationErrors.value.lastName = lastNameError
+    hasError = true
+  }
+  
+  if (hasError) return
+  
   setTimeout(() => {
     currentStep.value = 'contact-phone'
   }, 500)
 }
 
 const handlePhoneSubmit = () => {
-  if (!form.value.phone) return
+  // Clear previous errors
+  validationErrors.value = {}
+  
+  const phoneError = validatePhone(form.value.phone)
+  if (phoneError) {
+    validationErrors.value.phone = phoneError
+    return
+  }
   
   // Aller à l'étape de sélection de la relation
   setTimeout(() => {
@@ -462,7 +544,13 @@ const handlePhoneSubmit = () => {
 }
 
 const handleRelationshipSubmit = () => {
-  if (!form.value.relationship) return
+  // Clear previous errors
+  validationErrors.value = {}
+  
+  if (!form.value.relationship) {
+    validationErrors.value.relationship = 'La relation avec le contact est obligatoire'
+    return
+  }
   
   // Aller à l'étape de sélection du type
   setTimeout(() => {
@@ -522,7 +610,7 @@ const handleSubmit = async () => {
 
 onMounted(() => {
   // Vérifier les données des étapes précédentes
-  const step1Data = useCookie('registration-step1').value
+  const step1Data = useCookie('registration-step1').value as Step1Data | null
   const step2Data = useCookie('registration-step2').value
   
   if (!step1Data || !step1Data.firstName) {

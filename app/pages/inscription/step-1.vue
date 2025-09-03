@@ -135,11 +135,16 @@
               v-model="form.firstName"
               type="text"
               class="answer-input"
+              :class="{ 'border-red-500 border-2': validationErrors.firstName }"
               placeholder="Ton prénom"
               @keyup.enter="handleFirstNameSubmit"
+              @input="validationErrors.firstName = ''"
               :disabled="loading"
               required
             />
+            <div v-if="validationErrors.firstName" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+              {{ validationErrors.firstName }}
+            </div>
           </div>
           
           <div class="flex justify-end">
@@ -164,11 +169,16 @@
               v-model="form.email"
               type="email"
               class="answer-input"
+              :class="{ 'border-red-500 border-2': validationErrors.email }"
               placeholder="ton.email@exemple.com"
               @keyup.enter="handleEmailSubmit"
+              @input="validationErrors.email = ''"
               :disabled="loading"
               required
             />
+            <div v-if="validationErrors.email" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+              {{ validationErrors.email }}
+            </div>
           </div>
           
           <div class="flex justify-between items-center">
@@ -204,11 +214,16 @@
               v-model="form.lastName"
               type="text"
               class="answer-input"
+              :class="{ 'border-red-500 border-2': validationErrors.lastName }"
               placeholder="Ton nom"
               @keyup.enter="handleLastNameSubmit"
+              @input="validationErrors.lastName = ''"
               :disabled="loading"
               required
             />
+            <div v-if="validationErrors.lastName" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+              {{ validationErrors.lastName }}
+            </div>
           </div>
           
           <div class="flex justify-between items-center">
@@ -244,13 +259,18 @@
               v-model="form.birthDate"
               type="date"
               class="answer-input date-input"
+              :class="{ 'border-red-500 border-2': validationErrors.birthDate }"
               placeholder="jj/mm/aaaa"
               @keyup.enter="handleBirthDateSubmit"
+              @input="validationErrors.birthDate = ''"
               :disabled="loading"
               required
             />
             <span v-if="!form.birthDate" class="date-placeholder">jj/mm/aaaa</span>
-            <div v-if="form.birthDate && isMinor" class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-700 text-sm">
+            <div v-if="validationErrors.birthDate" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+              {{ validationErrors.birthDate }}
+            </div>
+            <div v-if="form.birthDate && isMinor && !validationErrors.birthDate" class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-700 text-sm">
               ℹ️ Tu es mineur(e), nous aurons besoin des informations de ton responsable légal à l'étape suivante.
             </div>
           </div>
@@ -284,32 +304,53 @@
         <!-- Address Input -->
         <div v-if="currentStep === 'address'" class="space-y-6">
           <div class="space-y-4">
-            <input
-              v-model="form.address"
-              type="text"
-              class="answer-input"
-              placeholder="12 rue de la Danse"
-              :disabled="loading"
-              required
-            />
+            <div>
+              <input
+                v-model="form.address"
+                type="text"
+                class="answer-input"
+                :class="{ 'border-red-500 border-2': validationErrors.address }"
+                placeholder="12 rue de la Danse"
+                @input="validationErrors.address = ''"
+                :disabled="loading"
+                required
+              />
+              <div v-if="validationErrors.address" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+                {{ validationErrors.address }}
+              </div>
+            </div>
             <div class="grid grid-cols-2 gap-4">
-              <input
-                v-model="form.city"
-                type="text"
-                class="answer-input"
-                placeholder="Ville"
-                :disabled="loading"
-                required
-              />
-              <input
-                v-model="form.postalCode"
-                type="text"
-                class="answer-input"
-                placeholder="Code postal"
-                pattern="[0-9]{5}"
-                :disabled="loading"
-                required
-              />
+              <div>
+                <input
+                  v-model="form.city"
+                  type="text"
+                  class="answer-input"
+                  :class="{ 'border-red-500 border-2': validationErrors.city }"
+                  placeholder="Ville"
+                  @input="validationErrors.city = ''"
+                  :disabled="loading"
+                  required
+                />
+                <div v-if="validationErrors.city" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+                  {{ validationErrors.city }}
+                </div>
+              </div>
+              <div>
+                <input
+                  v-model="form.postalCode"
+                  type="text"
+                  class="answer-input"
+                  :class="{ 'border-red-500 border-2': validationErrors.postalCode }"
+                  placeholder="Code postal"
+                  pattern="[0-9]{5}"
+                  @input="validationErrors.postalCode = ''"
+                  :disabled="loading"
+                  required
+                />
+                <div v-if="validationErrors.postalCode" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+                  {{ validationErrors.postalCode }}
+                </div>
+              </div>
             </div>
           </div>
           
@@ -346,11 +387,16 @@
               v-model="form.phone"
               type="tel"
               class="answer-input"
+              :class="{ 'border-red-500 border-2': validationErrors.phone }"
               placeholder="06 12 34 56 78"
               @keyup.enter="handlePhoneSubmit"
+              @input="validationErrors.phone = ''"
               :disabled="loading"
               required
             />
+            <div v-if="validationErrors.phone" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+              {{ validationErrors.phone }}
+            </div>
           </div>
           
           <div class="flex justify-between items-center">
@@ -385,6 +431,8 @@
             <select
               v-model="form.schoolLevel"
               class="answer-input"
+              :class="{ 'border-red-500 border-2': validationErrors.schoolLevel }"
+              @change="validationErrors.schoolLevel = ''"
               :disabled="loading"
               required
             >
@@ -404,6 +452,9 @@
               <option value="POST_BAC">Post-Bac</option>
               <option value="ADULTE">Adulte</option>
             </select>
+            <div v-if="validationErrors.schoolLevel" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+              {{ validationErrors.schoolLevel }}
+            </div>
           </div>
           
           <div class="flex justify-between items-center">
@@ -438,6 +489,8 @@
             <select
               v-model="form.tshirtSize"
               class="answer-input"
+              :class="{ 'border-red-500 border-2': validationErrors.tshirtSize }"
+              @change="validationErrors.tshirtSize = ''"
               :disabled="loading"
               required
             >
@@ -449,6 +502,9 @@
               <option value="XL">XL</option>
               <option value="XXL">XXL</option>
             </select>
+            <div v-if="validationErrors.tshirtSize" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+              {{ validationErrors.tshirtSize }}
+            </div>
           </div>
           
           <div class="flex justify-between items-center">
@@ -619,6 +675,47 @@ interface CheckExistingResponse {
   dancer?: DancerInfo
 }
 
+// Validation functions
+const validateEmail = (email: string): string | null => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!email) return 'L\'email est obligatoire'
+  if (!emailRegex.test(email)) return 'Format d\'email invalide'
+  return null
+}
+
+const validatePhone = (phone: string): string | null => {
+  const phoneRegex = /^(?:(?:\+|00)33[\s.-]?(?:\(0\))?|0)[1-9](?:[\s.-]?\d{2}){4}$/
+  if (!phone) return 'Le numéro de téléphone est obligatoire'
+  if (!phoneRegex.test(phone.replace(/\s/g, ''))) return 'Format de téléphone invalide (ex: 06 12 34 56 78)'
+  return null
+}
+
+const validatePostalCode = (postalCode: string): string | null => {
+  const postalCodeRegex = /^\d{5}$/
+  if (!postalCode) return 'Le code postal est obligatoire'
+  if (!postalCodeRegex.test(postalCode)) return 'Le code postal doit contenir 5 chiffres'
+  return null
+}
+
+const validateBirthDate = (birthDate: string): string | null => {
+  if (!birthDate) return 'La date de naissance est obligatoire'
+  const birth = new Date(birthDate)
+  const today = new Date()
+  const hundredYearsAgo = new Date(today.getFullYear() - 100, today.getMonth(), today.getDate())
+  
+  if (birth > today) return 'La date de naissance ne peut pas être dans le futur'
+  if (birth < hundredYearsAgo) return 'Date de naissance invalide'
+  return null
+}
+
+const validateName = (name: string, fieldName: string): string | null => {
+  if (!name) return `${fieldName} est obligatoire`
+  if (name.length < 2) return `${fieldName} doit contenir au moins 2 caractères`
+  if (name.length > 50) return `${fieldName} ne peut pas dépasser 50 caractères`
+  if (!/^[a-zA-ZÀ-ÿ\s'-]+$/.test(name)) return `${fieldName} contient des caractères invalides`
+  return null
+}
+
 // @ts-ignore - Nuxt auto-import
 const { user } = useAuth()
 
@@ -627,6 +724,7 @@ const displayText = ref('')
 const showCursor = ref(true)
 const loading = ref(false)
 const error = ref('')
+const validationErrors = ref<Record<string, string>>({})
 
 const form = ref({
   email: user.value?.email || '',
@@ -698,56 +796,118 @@ const typeText = () => {
 }
 
 const handleFirstNameSubmit = () => {
-  if (!form.value.firstName) return
+  const error = validateName(form.value.firstName, 'Le prénom')
+  if (error) {
+    validationErrors.value.firstName = error
+    return
+  }
+  validationErrors.value.firstName = ''
   setTimeout(() => {
     currentStep.value = 'email'
   }, 500)
 }
 
 const handleEmailSubmit = () => {
-  if (!form.value.email) return
+  const error = validateEmail(form.value.email)
+  if (error) {
+    validationErrors.value.email = error
+    return
+  }
+  validationErrors.value.email = ''
   setTimeout(() => {
     currentStep.value = 'lastName'
   }, 500)
 }
 
 const handleLastNameSubmit = () => {
-  if (!form.value.lastName) return
+  const error = validateName(form.value.lastName, 'Le nom')
+  if (error) {
+    validationErrors.value.lastName = error
+    return
+  }
+  validationErrors.value.lastName = ''
   setTimeout(() => {
     currentStep.value = 'birthDate'
   }, 500)
 }
 
 const handleBirthDateSubmit = () => {
-  if (!form.value.birthDate) return
+  const error = validateBirthDate(form.value.birthDate)
+  if (error) {
+    validationErrors.value.birthDate = error
+    return
+  }
+  validationErrors.value.birthDate = ''
   setTimeout(() => {
     currentStep.value = 'address'
   }, 500)
 }
 
 const handleAddressSubmit = () => {
-  if (!form.value.address || !form.value.city || !form.value.postalCode) return
+  let hasError = false
+  
+  // Validate address
+  if (!form.value.address || form.value.address.length < 5) {
+    validationErrors.value.address = 'L\'adresse doit contenir au moins 5 caractères'
+    hasError = true
+  } else {
+    validationErrors.value.address = ''
+  }
+  
+  // Validate city
+  const cityError = validateName(form.value.city, 'La ville')
+  if (cityError) {
+    validationErrors.value.city = cityError
+    hasError = true
+  } else {
+    validationErrors.value.city = ''
+  }
+  
+  // Validate postal code
+  const postalError = validatePostalCode(form.value.postalCode)
+  if (postalError) {
+    validationErrors.value.postalCode = postalError
+    hasError = true
+  } else {
+    validationErrors.value.postalCode = ''
+  }
+  
+  if (hasError) return
+  
   setTimeout(() => {
     currentStep.value = 'phone'
   }, 500)
 }
 
 const handlePhoneSubmit = () => {
-  if (!form.value.phone) return
+  const error = validatePhone(form.value.phone)
+  if (error) {
+    validationErrors.value.phone = error
+    return
+  }
+  validationErrors.value.phone = ''
   setTimeout(() => {
     currentStep.value = 'schoolLevel'
   }, 500)
 }
 
 const handleSchoolLevelSubmit = () => {
-  if (!form.value.schoolLevel) return
+  if (!form.value.schoolLevel) {
+    validationErrors.value.schoolLevel = 'Le niveau scolaire est obligatoire'
+    return
+  }
+  validationErrors.value.schoolLevel = ''
   setTimeout(() => {
     currentStep.value = 'tshirtSize'
   }, 500)
 }
 
 const handleTshirtSizeSubmit = () => {
-  if (!form.value.tshirtSize) return
+  if (!form.value.tshirtSize) {
+    validationErrors.value.tshirtSize = 'La taille de T-shirt est obligatoire'
+    return
+  }
+  validationErrors.value.tshirtSize = ''
   setTimeout(() => {
     currentStep.value = 'otherInfo'
   }, 500)

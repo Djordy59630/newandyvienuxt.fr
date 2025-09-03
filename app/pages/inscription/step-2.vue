@@ -134,51 +134,81 @@
         <!-- Guardian Info Form -->
         <div v-if="currentStep === 'guardian-info'" class="space-y-6">
           <div class="space-y-4">
-            <input
-              v-model="form.firstName"
-              type="text"
-              class="answer-input"
-              placeholder="Prénom du responsable légal"
-              :disabled="loading"
-              required
-            />
-            <input
-              v-model="form.lastName"
-              type="text"
-              class="answer-input"
-              placeholder="Nom de famille du responsable légal"
-              :disabled="loading"
-              required
-            />
-            <input
-              v-model="form.email"
-              type="email"
-              class="answer-input"
-              placeholder="parent@exemple.com"
-              @keyup.enter="handleEmailSubmit"
-              :disabled="loading"
-              required
-            />
-            <select
-              v-model="form.relationship"
-              class="answer-input"
-              :disabled="loading"
-              required
-            >
-              <option value="Parent">Parent</option>
-              <option value="Tuteur">Tuteur</option>
-              <option value="Grand-parent">Grand-parent</option>
-              <option value="Oncle/Tante">Oncle/Tante</option>
-              <option value="Autre">Autre</option>
-            </select>
+            <div>
+              <input
+                v-model="form.firstName"
+                type="text"
+                class="answer-input"
+                :class="{ 'border-red-500 border-2': validationErrors.firstName }"
+                placeholder="Prénom du responsable légal"
+                @input="validationErrors.firstName = ''"
+                :disabled="loading"
+                required
+              />
+              <div v-if="validationErrors.firstName" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+                {{ validationErrors.firstName }}
+              </div>
+            </div>
+            <div>
+              <input
+                v-model="form.lastName"
+                type="text"
+                class="answer-input"
+                :class="{ 'border-red-500 border-2': validationErrors.lastName }"
+                placeholder="Nom de famille du responsable légal"
+                @input="validationErrors.lastName = ''"
+                :disabled="loading"
+                required
+              />
+              <div v-if="validationErrors.lastName" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+                {{ validationErrors.lastName }}
+              </div>
+            </div>
+            <div>
+              <input
+                v-model="form.email"
+                type="email"
+                class="answer-input"
+                :class="{ 'border-red-500 border-2': validationErrors.email }"
+                placeholder="parent@exemple.com"
+                @keyup.enter="handleEmailSubmit"
+                @input="validationErrors.email = ''"
+                :disabled="loading"
+                required
+              />
+              <div v-if="validationErrors.email" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+                {{ validationErrors.email }}
+              </div>
+            </div>
+            <div>
+              <select
+                v-model="form.relationship"
+                class="answer-input"
+                :class="{ 'border-red-500 border-2': validationErrors.relationship }"
+                @change="validationErrors.relationship = ''"
+                :disabled="loading"
+                required
+              >
+                <option value="">Sélectionner la relation</option>
+                <option value="Parent">Parent</option>
+                <option value="Tuteur">Tuteur</option>
+                <option value="Grand-parent">Grand-parent</option>
+                <option value="Oncle/Tante">Oncle/Tante</option>
+                <option value="Autre">Autre</option>
+              </select>
+              <div v-if="validationErrors.relationship" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+                {{ validationErrors.relationship }}
+              </div>
+            </div>
             
             <!-- Autorisation parentale -->
-            <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 mt-4">
+            <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 mt-4" :class="{ 'border-red-500': validationErrors.authorized }">
               <label class="flex items-start space-x-3 cursor-pointer">
                 <input
                   v-model="form.authorized"
                   type="checkbox"
                   class="mt-1 w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 focus:ring-2"
+                  @change="validationErrors.authorized = ''"
                   :disabled="loading"
                   required
                 />
@@ -190,6 +220,9 @@
                   </p>
                 </div>
               </label>
+              <div v-if="validationErrors.authorized" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+                {{ validationErrors.authorized }}
+              </div>
             </div>
           </div>
           
@@ -245,8 +278,36 @@ const displayText = ref('')
 const showCursor = ref(true)
 const loading = ref(false)
 const error = ref('')
+const validationErrors = ref<Record<string, string>>({})
+
+// Validation functions
+const validateEmail = (email: string): string | null => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!email) return 'L\'email est obligatoire'
+  if (!emailRegex.test(email)) return 'Format d\'email invalide'
+  return null
+}
+
+const validateName = (name: string, fieldName: string): string | null => {
+  if (!name) return `${fieldName} est obligatoire`
+  if (name.length < 2) return `${fieldName} doit contenir au moins 2 caractères`
+  if (name.length > 50) return `${fieldName} ne peut pas dépasser 50 caractères`
+  if (!/^[a-zA-ZÀ-ÿ\s'-]+$/.test(name)) return `${fieldName} contient des caractères invalides`
+  return null
+}
 const isMinor = ref<boolean | null>(null)
-const step1Data = ref({})
+const step1Data = ref<{
+  firstName?: string
+  lastName?: string
+  birthDate?: string
+}>({})
+
+// Type pour les cookies
+interface Step1Data {
+  firstName: string
+  lastName: string
+  birthDate: string
+}
 
 const form = ref({
   firstName: '',
@@ -302,7 +363,42 @@ const handleNoGuardianSubmit = async () => {
 }
 
 const handleEmailSubmit = async () => {
-  if (!form.value.email) return
+  // Clear previous errors
+  validationErrors.value = {}
+  
+  // Validate all fields for guardian info
+  let hasError = false
+  
+  const firstNameError = validateName(form.value.firstName, 'Le prénom')
+  if (firstNameError) {
+    validationErrors.value.firstName = firstNameError
+    hasError = true
+  }
+  
+  const lastNameError = validateName(form.value.lastName, 'Le nom')
+  if (lastNameError) {
+    validationErrors.value.lastName = lastNameError
+    hasError = true
+  }
+  
+  const emailError = validateEmail(form.value.email)
+  if (emailError) {
+    validationErrors.value.email = emailError
+    hasError = true
+  }
+  
+  if (!form.value.relationship) {
+    validationErrors.value.relationship = 'La relation avec l\'enfant est obligatoire'
+    hasError = true
+  }
+  
+  if (!form.value.authorized) {
+    validationErrors.value.authorized = 'L\'autorisation parentale est obligatoire'
+    hasError = true
+  }
+  
+  if (hasError) return
+  
   await handleSubmit(true)
 }
 
@@ -342,7 +438,7 @@ const handleSubmit = async (isMinorValue: boolean) => {
 
 onMounted(() => {
   // Vérifier les données de l'étape 1
-  const step1Cookie = useCookie('registration-step1').value
+  const step1Cookie = useCookie('registration-step1').value as Step1Data | null
   if (!step1Cookie || !step1Cookie.firstName) {
     navigateTo('/inscription/step-1')
     return

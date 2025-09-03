@@ -144,6 +144,7 @@
                   type="radio"
                   value="negative"
                   class="mt-1 h-5 w-5 text-green-600 focus:ring-green-500"
+                  @change="validationErrors.healthStatus = ''"
                 />
                 <div class="text-gray-700 text-sm sm:text-base leading-relaxed">
                   <p class="font-semibold text-green-700">✅ Toutes mes réponses sont NÉGATIVES</p>
@@ -162,6 +163,7 @@
                   type="radio"
                   value="positive"
                   class="mt-1 h-5 w-5 text-orange-600 focus:ring-orange-500"
+                  @change="validationErrors.healthStatus = ''"
                 />
                 <div class="text-gray-700 text-sm sm:text-base leading-relaxed">
                   <p class="font-semibold text-orange-700">⚠️ Une ou plusieurs réponses sont POSITIVES</p>
@@ -182,6 +184,7 @@
                   type="checkbox"
                   class="mt-1 h-5 w-5"
                   :class="healthStatus === 'negative' ? 'text-green-600 focus:ring-green-500' : 'text-orange-600 focus:ring-orange-500'"
+                  @change="validationErrors.confirmation = ''"
                 />
                 <div class="text-sm leading-relaxed"
                   :class="healthStatus === 'negative' ? 'text-green-700' : 'text-orange-700'"
@@ -213,9 +216,16 @@
               </div>
             </div>
 
-            <div v-if="!healthStatus || !healthConfirmation" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <!-- Validation errors -->
+            <div v-if="validationErrors.healthStatus" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
               <p class="text-red-700 text-sm">
-                ⚠️ Vous devez sélectionner votre situation et confirmer pour continuer.
+                ⚠️ {{ validationErrors.healthStatus }}
+              </p>
+            </div>
+            
+            <div v-if="validationErrors.confirmation" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p class="text-red-700 text-sm">
+                ⚠️ {{ validationErrors.confirmation }}
               </p>
             </div>
           </div>
@@ -272,11 +282,19 @@ definePageMeta({
   middleware: ['auth', 'no-admin']
 })
 
+// Type pour les données de l'étape 1
+interface Step1Data {
+  firstName: string
+  lastName: string
+  birthDate: string
+}
+
 const loading = ref(false)
 const error = ref('')
 const healthStatus = ref('') // 'negative' ou 'positive'
 const healthConfirmation = ref(false)
 const showImageModal = ref(false)
+const validationErrors = ref<Record<string, string>>({})
 
 const goBack = () => {
   navigateTo('/inscription/step-1')
@@ -291,12 +309,25 @@ const closeImageModal = () => {
 }
 
 const handleContinue = async () => {
-  if (!healthStatus.value || !healthConfirmation.value) {
-    error.value = 'Vous devez sélectionner votre situation et confirmer votre déclaration'
+  // Clear previous errors
+  validationErrors.value = {}
+  error.value = ''
+  
+  // Validate health status selection
+  if (!healthStatus.value) {
+    validationErrors.value.healthStatus = 'Vous devez sélectionner votre situation de santé'
+  }
+  
+  // Validate confirmation checkbox
+  if (!healthConfirmation.value) {
+    validationErrors.value.confirmation = 'Vous devez confirmer avoir lu et compris le questionnaire'
+  }
+  
+  // If there are validation errors, don't proceed
+  if (Object.keys(validationErrors.value).length > 0) {
     return
   }
 
-  error.value = ''
   loading.value = true
 
   try {
@@ -329,7 +360,7 @@ const handleContinue = async () => {
 
 onMounted(() => {
   // Vérifier les données de l'étape 1
-  const step1Data = useCookie('registration-step1').value
+  const step1Data = useCookie('registration-step1').value as Step1Data | null
   
   if (!step1Data || !step1Data.firstName) {
     navigateTo('/inscription/step-1')
