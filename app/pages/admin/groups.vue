@@ -9,32 +9,39 @@
     <!-- Navigation Header -->
     <nav class="relative z-20 bg-white/10 backdrop-blur-xl border-b border-white/20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16 lg:h-20">
+        <div class="flex justify-between items-center h-16 sm:h-18 lg:h-20">
           <!-- Logo -->
-          <div class="flex items-center">
-            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="flex items-center min-w-0 flex-1 sm:flex-none">
+            <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
               </svg>
             </div>
-            <span class="ml-3 lg:ml-4 text-xl lg:text-2xl font-black text-white tracking-tight">
-              Gestion des Groupes
+            <span class="ml-2 sm:ml-3 lg:ml-4 text-lg sm:text-xl lg:text-2xl font-black text-white tracking-tight truncate">
+              <span class="hidden sm:inline">Gestion des Groupes</span>
+              <span class="sm:hidden">Groupes</span>
             </span>
           </div>
 
           <!-- Actions -->
-          <div class="flex items-center space-x-4">
+          <div class="flex items-center space-x-2 sm:space-x-3 lg:space-x-4 flex-shrink-0">
             <NuxtLink
               to="/admin/panel"
-              class="px-4 py-2 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all duration-200 backdrop-blur-sm border border-white/20"
+              class="px-2 py-2 sm:px-3 sm:py-2 lg:px-4 lg:py-2 bg-white/10 text-white rounded-lg sm:rounded-xl hover:bg-white/20 transition-all duration-200 backdrop-blur-sm border border-white/20 text-xs sm:text-sm lg:text-base"
             >
-              ← Panel Admin
+              <span class="hidden sm:inline">← Panel Admin</span>
+              <span class="sm:hidden">←</span>
             </NuxtLink>
             <button
               @click="logout"
-              class="px-4 py-2 bg-red-500/20 text-white rounded-xl hover:bg-red-500/30 transition-all duration-200 backdrop-blur-sm border border-red-500/30"
+              class="px-2 py-2 sm:px-3 sm:py-2 lg:px-4 lg:py-2 bg-red-500/20 text-white rounded-lg sm:rounded-xl hover:bg-red-500/30 transition-all duration-200 backdrop-blur-sm border border-red-500/30 text-xs sm:text-sm lg:text-base"
             >
-              Déconnexion
+              <span class="hidden sm:inline">Déconnexion</span>
+              <span class="sm:hidden">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+              </span>
             </button>
           </div>
         </div>
@@ -44,19 +51,20 @@
     <!-- Main Content -->
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Header -->
-      <div class="flex justify-between items-center mb-8">
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 space-y-4 sm:space-y-0">
         <div>
-          <h1 class="text-3xl font-bold text-white mb-2">Gestion des Groupes de Danse</h1>
-          <p class="text-orange-100/80">Créer, modifier et gérer les groupes disponibles pour les inscriptions</p>
+          <h1 class="text-2xl sm:text-3xl font-bold text-white mb-2">Gestion des Groupes de Danse</h1>
+          <p class="text-orange-100/80 text-sm sm:text-base">Créer, modifier et gérer les groupes disponibles pour les inscriptions</p>
         </div>
         <button
           @click="openCreateModal"
-          class="bg-gradient-to-r from-green-500/20 to-emerald-500/20 hover:from-green-500/30 hover:to-emerald-500/30 backdrop-blur-xl text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 border border-green-500/30 inline-flex items-center space-x-2"
+          class="bg-gradient-to-r from-green-500/20 to-emerald-500/20 hover:from-green-500/30 hover:to-emerald-500/30 backdrop-blur-xl text-white font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded-xl sm:rounded-2xl transition-all duration-300 border border-green-500/30 inline-flex items-center justify-center space-x-2 text-sm sm:text-base"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
           </svg>
-          <span>Nouveau Groupe</span>
+          <span class="hidden sm:inline">Nouveau Groupe</span>
+          <span class="sm:hidden">Nouveau</span>
         </button>
       </div>
 
@@ -122,34 +130,100 @@
           </button>
         </div>
 
-        <div v-else class="overflow-x-auto">
+        <!-- Mobile: Card Layout -->
+        <div class="block sm:hidden space-y-4 p-4">
+          <div v-for="group in groups" :key="group.id" class="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+            <!-- Group name and status -->
+            <div class="flex justify-between items-start mb-3">
+              <div class="flex-1 min-w-0">
+                <h3 class="text-white font-medium text-sm truncate">{{ group.name }}</h3>
+                <p class="text-orange-100/60 text-xs mt-1 line-clamp-2">{{ group.description }}</p>
+              </div>
+              <span 
+                class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ml-2 flex-shrink-0"
+                :class="group.isActive ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'"
+              >
+                {{ group.isActive ? 'Actif' : 'Inactif' }}
+              </span>
+            </div>
+            
+            <!-- Group details -->
+            <div class="grid grid-cols-2 gap-3 mb-4 text-xs">
+              <div>
+                <span class="text-orange-100/60">Horaire:</span>
+                <p class="text-white mt-1">{{ group.schedule }}</p>
+              </div>
+              <div>
+                <span class="text-orange-100/60">Tranche d'âge:</span>
+                <p class="text-white mt-1">{{ group.ageGroup }}</p>
+              </div>
+              <div>
+                <span class="text-orange-100/60">Restrictions:</span>
+                <p class="text-white mt-1">
+                  <span v-if="group.ageMin || group.ageMax">
+                    {{ group.ageMin || '?' }} - {{ group.ageMax || '?' }} ans
+                  </span>
+                  <span v-else class="text-orange-100/60">Non défini</span>
+                </p>
+              </div>
+              <div>
+                <span class="text-orange-100/60">Inscrits:</span>
+                <p class="text-white mt-1">{{ group.registrationCount }}</p>
+              </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="flex space-x-2">
+              <button
+                @click="editGroup(group)"
+                class="flex-1 bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 px-3 py-2 rounded-lg transition-colors text-sm"
+              >
+                Modifier
+              </button>
+              <button
+                @click="confirmDelete(group)"
+                :disabled="group.registrationCount > 0"
+                class="flex-1 bg-red-500/20 text-red-300 hover:bg-red-500/30 px-3 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                :title="group.registrationCount > 0 ? 'Impossible de supprimer : des inscriptions existent' : 'Supprimer le groupe'"
+              >
+                Supprimer
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop: Table Layout -->
+        <div class="hidden sm:block overflow-x-auto">
           <table class="w-full">
             <thead class="bg-white/5">
               <tr>
-                <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Groupe</th>
-                <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Horaire</th>
-                <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Tranche d'âge</th>
-                <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Restrictions d'âge</th>
-                <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Statut</th>
-                <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Inscrits</th>
-                <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Actions</th>
+                <th class="px-4 py-3 sm:px-6 sm:py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Groupe</th>
+                <th class="px-4 py-3 sm:px-6 sm:py-4 text-left text-xs font-medium text-white uppercase tracking-wider hidden lg:table-cell">Horaire</th>
+                <th class="px-4 py-3 sm:px-6 sm:py-4 text-left text-xs font-medium text-white uppercase tracking-wider hidden md:table-cell">Tranche d'âge</th>
+                <th class="px-4 py-3 sm:px-6 sm:py-4 text-left text-xs font-medium text-white uppercase tracking-wider hidden xl:table-cell">Restrictions d'âge</th>
+                <th class="px-4 py-3 sm:px-6 sm:py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Statut</th>
+                <th class="px-4 py-3 sm:px-6 sm:py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Inscrits</th>
+                <th class="px-4 py-3 sm:px-6 sm:py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-white/10">
               <tr v-for="group in groups" :key="group.id" class="hover:bg-white/5">
-                <td class="px-6 py-4">
+                <td class="px-4 py-3 sm:px-6 sm:py-4">
                   <div>
                     <div class="text-sm font-medium text-white">{{ group.name }}</div>
                     <div class="text-sm text-orange-100/60 max-w-xs truncate">{{ group.description }}</div>
+                    <!-- Show mobile info on small screens -->
+                    <div class="text-xs text-orange-100/60 mt-1 lg:hidden">{{ group.schedule }}</div>
+                    <div class="text-xs text-orange-100/60 mt-1 md:hidden">{{ group.ageGroup }}</div>
                   </div>
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-4 py-3 sm:px-6 sm:py-4 hidden lg:table-cell">
                   <div class="text-sm text-white">{{ group.schedule }}</div>
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-4 py-3 sm:px-6 sm:py-4 hidden md:table-cell">
                   <div class="text-sm text-white">{{ group.ageGroup }}</div>
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-4 py-3 sm:px-6 sm:py-4 hidden xl:table-cell">
                   <div class="text-sm text-white">
                     <span v-if="group.ageMin || group.ageMax">
                       {{ group.ageMin || '?' }} - {{ group.ageMax || '?' }} ans
@@ -157,7 +231,7 @@
                     <span v-else class="text-orange-100/60">Non défini</span>
                   </div>
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-4 py-3 sm:px-6 sm:py-4">
                   <span 
                     class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
                     :class="group.isActive ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'"
@@ -165,24 +239,26 @@
                     {{ group.isActive ? 'Actif' : 'Inactif' }}
                   </span>
                 </td>
-                <td class="px-6 py-4">
+                <td class="px-4 py-3 sm:px-6 sm:py-4">
                   <div class="text-sm text-white">{{ group.registrationCount }}</div>
                 </td>
-                <td class="px-6 py-4 text-sm font-medium space-x-2">
-                  <button
-                    @click="editGroup(group)"
-                    class="bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 px-3 py-1 rounded-lg transition-colors"
-                  >
-                    Modifier
-                  </button>
-                  <button
-                    @click="confirmDelete(group)"
-                    :disabled="group.registrationCount > 0"
-                    class="bg-red-500/20 text-red-300 hover:bg-red-500/30 px-3 py-1 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    :title="group.registrationCount > 0 ? 'Impossible de supprimer : des inscriptions existent' : 'Supprimer le groupe'"
-                  >
-                    Supprimer
-                  </button>
+                <td class="px-4 py-3 sm:px-6 sm:py-4 text-sm font-medium">
+                  <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                    <button
+                      @click="editGroup(group)"
+                      class="bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 px-2 py-1 sm:px-3 sm:py-1 rounded-lg transition-colors text-xs sm:text-sm"
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      @click="confirmDelete(group)"
+                      :disabled="group.registrationCount > 0"
+                      class="bg-red-500/20 text-red-300 hover:bg-red-500/30 px-2 py-1 sm:px-3 sm:py-1 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm"
+                      :title="group.registrationCount > 0 ? 'Impossible de supprimer : des inscriptions existent' : 'Supprimer le groupe'"
+                    >
+                      Supprimer
+                    </button>
+                  </div>
                 </td>
               </tr>
             </tbody>

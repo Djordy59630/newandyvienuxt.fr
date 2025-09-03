@@ -8,68 +8,73 @@
 
     <!-- Header avec navigation -->
     <div class="relative z-20 bg-white/10 backdrop-blur-xl border-b border-white/20 sticky top-0 z-40">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-4">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+          <div class="flex items-center space-x-3 sm:space-x-4">
             <NuxtLink 
               to="/admin/panel" 
-              class="flex items-center space-x-2 text-white hover:text-orange-200 transition-colors"
+              class="flex items-center space-x-2 text-white hover:text-orange-200 transition-colors text-sm sm:text-base"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
               </svg>
-              <span>Retour au panel</span>
+              <span class="hidden sm:inline">Retour au panel</span>
+              <span class="sm:hidden">Retour</span>
             </NuxtLink>
-            <div class="h-6 w-px bg-white/20"></div>
-            <h1 class="text-xl font-bold text-white">Détail de l'inscription</h1>
+            <div class="h-4 sm:h-6 w-px bg-white/20"></div>
+            <h1 class="text-lg sm:text-xl font-bold text-white">Détail de l'inscription</h1>
           </div>
           
           <!-- Actions -->
-          <div class="flex flex-wrap gap-3" v-if="registration">
+          <div class="flex flex-wrap gap-2 sm:gap-3" v-if="registration">
             <button
               @click="printRegistration"
-              class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+              class="px-3 py-2 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
               </svg>
-              <span>Imprimer</span>
+              <span class="hidden sm:inline">Imprimer</span>
+              <span class="sm:hidden">Print</span>
             </button>
             
             <button
               v-if="registration.status !== 'APPROVED'"
               @click="updateStatus('APPROVED')"
               :disabled="loading"
-              class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center space-x-2"
+              class="px-3 py-2 sm:px-4 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
               </svg>
-              <span>{{ registration.status === 'REJECTED' ? 'Approuver finalement' : 'Approuver' }}</span>
+              <span class="hidden sm:inline">{{ registration.status === 'REJECTED' ? 'Approuver finalement' : 'Approuver' }}</span>
+              <span class="sm:hidden">✓</span>
             </button>
             
             <button
               v-if="registration.status !== 'REJECTED'"
               @click="updateStatus('REJECTED')"
               :disabled="loading"
-              class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 flex items-center space-x-2"
+              class="px-3 py-2 sm:px-4 sm:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
-              <span>{{ registration.status === 'APPROVED' ? 'Rejeter finalement' : 'Rejeter' }}</span>
+              <span class="hidden sm:inline">{{ registration.status === 'APPROVED' ? 'Rejeter finalement' : 'Rejeter' }}</span>
+              <span class="sm:hidden">✗</span>
             </button>
             
             <button
               v-if="registration.status !== 'SUBMITTED'"
               @click="updateStatus('SUBMITTED')"
               :disabled="loading"
-              class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 flex items-center space-x-2"
+              class="px-3 py-2 sm:px-4 sm:py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span>Remettre en attente</span>
+              <span class="hidden sm:inline">Remettre en attente</span>
+              <span class="sm:hidden">⏳</span>
             </button>
           </div>
         </div>
