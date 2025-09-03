@@ -37,6 +37,8 @@ export interface DanceGroup {
   isActive: boolean
   createdAt: Date
   updatedAt: Date
+  ageMin: number
+  ageMax: number
 }
 
 export interface Registration {
