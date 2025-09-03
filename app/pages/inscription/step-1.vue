@@ -93,11 +93,11 @@
               <span v-if="showCursor" class="cursor">|</span>
             </div>
             <div v-else>
-              <p v-if="currentStep === 'firstName'" class="text-gray-800 text-lg leading-relaxed">
-                Parfait ! Pour commencer, quel est ton prénom ?
+              <p v-if="currentStep === 'email'" class="text-gray-800 text-lg leading-relaxed">
+                Parfait ! Pour commencer, j'ai besoin de ton adresse email.
               </p>
-              <p v-else-if="currentStep === 'email'" class="text-gray-800 text-lg leading-relaxed">
-                Merci {{ form.firstName }} ! J'ai besoin de ton adresse email.
+              <p v-else-if="currentStep === 'firstName'" class="text-gray-800 text-lg leading-relaxed">
+                Merci ! Maintenant, quel est ton prénom ?
               </p>
               <p v-else-if="currentStep === 'lastName'" class="text-gray-800 text-lg leading-relaxed">
                 Parfait ! Et ton nom de famille ?
@@ -128,40 +128,6 @@
         </div>
 
         <!-- Response Area -->
-        <!-- First Name Input -->
-        <div v-if="currentStep === 'firstName'" class="space-y-6">
-          <div>
-            <input
-              v-model="form.firstName"
-              type="text"
-              class="answer-input"
-              :class="{ 'border-red-500 border-2': validationErrors.firstName }"
-              placeholder="Ton prénom"
-              @keyup.enter="handleFirstNameSubmit"
-              @input="validationErrors.firstName = ''"
-              :disabled="loading"
-              required
-            />
-            <div v-if="validationErrors.firstName" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
-              {{ validationErrors.firstName }}
-            </div>
-          </div>
-          
-          <div class="flex justify-end">
-            <button
-              @click="handleFirstNameSubmit"
-              :disabled="loading || !form.firstName"
-              class="btn-primary"
-            >
-              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
-              <span v-else>Continuer</span>
-              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-
         <!-- Email Input -->
         <div v-if="currentStep === 'email'" class="space-y-6">
           <div>
@@ -181,9 +147,43 @@
             </div>
           </div>
           
+          <div class="flex justify-end">
+            <button
+              @click="handleEmailSubmit"
+              :disabled="loading || !form.email"
+              class="btn-primary"
+            >
+              <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+              <span v-else>Continuer</span>
+              <svg v-if="!loading" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- First Name Input -->
+        <div v-if="currentStep === 'firstName'" class="space-y-6">
+          <div>
+            <input
+              v-model="form.firstName"
+              type="text"
+              class="answer-input"
+              :class="{ 'border-red-500 border-2': validationErrors.firstName }"
+              placeholder="Ton prénom"
+              @keyup.enter="handleFirstNameSubmit"
+              @input="validationErrors.firstName = ''"
+              :disabled="loading"
+              required
+            />
+            <div v-if="validationErrors.firstName" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
+              {{ validationErrors.firstName }}
+            </div>
+          </div>
+          
           <div class="flex justify-between items-center">
             <button
-              @click="currentStep = 'firstName'"
+              @click="currentStep = 'email'"
               class="btn-secondary"
               :disabled="loading"
             >
@@ -194,8 +194,8 @@
             </button>
             
             <button
-              @click="handleEmailSubmit"
-              :disabled="loading || !form.email"
+              @click="handleFirstNameSubmit"
+              :disabled="loading || !form.firstName"
               class="btn-primary"
             >
               <div v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
@@ -228,7 +228,7 @@
           
           <div class="flex justify-between items-center">
             <button
-              @click="currentStep = 'email'"
+              @click="currentStep = 'firstName'"
               class="btn-secondary"
               :disabled="loading"
             >
@@ -788,23 +788,11 @@ const typeText = () => {
       clearInterval(interval)
       if (!hasExistingRegistration.value) {
         setTimeout(() => {
-          currentStep.value = 'firstName'
+          currentStep.value = 'email'
         }, 800)
       }
     }
   }, 20)
-}
-
-const handleFirstNameSubmit = () => {
-  const error = validateName(form.value.firstName, 'Le prénom')
-  if (error) {
-    validationErrors.value.firstName = error
-    return
-  }
-  validationErrors.value.firstName = ''
-  setTimeout(() => {
-    currentStep.value = 'email'
-  }, 500)
 }
 
 const handleEmailSubmit = () => {
@@ -814,6 +802,18 @@ const handleEmailSubmit = () => {
     return
   }
   validationErrors.value.email = ''
+  setTimeout(() => {
+    currentStep.value = 'firstName'
+  }, 500)
+}
+
+const handleFirstNameSubmit = () => {
+  const error = validateName(form.value.firstName, 'Le prénom')
+  if (error) {
+    validationErrors.value.firstName = error
+    return
+  }
+  validationErrors.value.firstName = ''
   setTimeout(() => {
     currentStep.value = 'lastName'
   }, 500)
