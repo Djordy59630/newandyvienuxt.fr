@@ -19,32 +19,45 @@
     <!-- Navigation Header -->
     <nav class="relative z-20 bg-white/10 backdrop-blur-xl border-b border-white/20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-20">
+        <div class="flex justify-between items-center h-16 sm:h-20">
           <!-- Logo -->
           <div class="flex items-center">
-            <div class="w-12 h-12 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
             </div>
-            <span class="ml-4 text-2xl font-black text-white tracking-tight">
+            <span class="ml-3 sm:ml-4 text-xl sm:text-2xl font-black text-white tracking-tight">
               <span class="bg-gradient-to-r from-white via-orange-200 to-red-200 bg-clip-text text-transparent">
                 SQUARE630
               </span>
             </span>
           </div>
 
-          <!-- User Menu -->
-          <div class="flex items-center space-x-6">
-            <div class="text-white/90 font-medium">
-              Bonjour, <span class="font-bold text-white">{{ user?.email }}</span>
+          <!-- Mobile menu button -->
+          <button
+            @click="mobileMenuOpen = !mobileMenuOpen"
+            class="md:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+          >
+            <svg v-if="!mobileMenuOpen" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+            <svg v-else class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+
+          <!-- Desktop User Menu -->
+          <div class="hidden md:flex items-center space-x-4 lg:space-x-6">
+            <div class="text-white/90 font-medium text-sm lg:text-base">
+              Bonjour, <span class="font-bold text-white">{{ user?.email?.split('@')[0] }}</span>
             </div>
             
             <!-- Admin Panel Link (only for admins) -->
             <NuxtLink
               v-if="user?.role === 'admin'"
               to="/admin/panel"
-              class="bg-gradient-to-r from-orange-500/20 to-red-500/20 hover:from-orange-500/30 hover:to-red-500/30 backdrop-blur-xl text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 border border-orange-500/30 inline-flex items-center space-x-2"
+              class="bg-gradient-to-r from-orange-500/20 to-red-500/20 hover:from-orange-500/30 hover:to-red-500/30 backdrop-blur-xl text-white font-semibold py-2 px-4 lg:py-3 lg:px-6 rounded-xl lg:rounded-2xl transition-all duration-300 transform hover:-translate-y-1 border border-orange-500/30 inline-flex items-center space-x-2 text-sm lg:text-base"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
@@ -54,7 +67,7 @@
             
             <button
               @click="handleLogout"
-              class="bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white font-semibold py-3 px-6 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20 inline-flex items-center space-x-2"
+              class="bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white font-semibold py-2 px-4 lg:py-3 lg:px-6 rounded-xl lg:rounded-2xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20 inline-flex items-center space-x-2 text-sm lg:text-base"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
@@ -63,19 +76,61 @@
             </button>
           </div>
         </div>
+
+        <!-- Mobile menu -->
+        <Transition
+          enter-active-class="transition duration-200 ease-out"
+          enter-from-class="opacity-0 transform -translate-y-2"
+          enter-to-class="opacity-100 transform translate-y-0"
+          leave-active-class="transition duration-150 ease-in"
+          leave-from-class="opacity-100 transform translate-y-0"
+          leave-to-class="opacity-0 transform -translate-y-2"
+        >
+          <div v-if="mobileMenuOpen" class="md:hidden py-4 space-y-3 border-t border-white/20">
+            <div class="text-white/90 font-medium text-sm px-2">
+              Bonjour, <span class="font-bold text-white">{{ user?.email?.split('@')[0] }}</span>
+            </div>
+            
+            <NuxtLink
+              v-if="user?.role === 'admin'"
+              to="/admin/panel"
+              @click="mobileMenuOpen = false"
+              class="block w-full bg-gradient-to-r from-orange-500/20 to-red-500/20 backdrop-blur-xl text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 border border-orange-500/30 text-sm"
+            >
+              <div class="flex items-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+                <span>Panel Admin</span>
+              </div>
+            </NuxtLink>
+            
+            <button
+              @click="handleLogout"
+              class="w-full bg-white/10 backdrop-blur-xl text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 border border-white/20 text-sm text-left"
+            >
+              <div class="flex items-center space-x-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+              </svg>
+                <span>Déconnexion</span>
+              </div>
+            </button>
+          </div>
+        </Transition>
       </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <!-- Header Section -->
-      <div class="mb-12 animate-fade-in text-center">
-        <h1 class="text-5xl font-black text-white mb-4 tracking-tight">
+      <div class="mb-8 sm:mb-12 animate-fade-in text-center">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-3 sm:mb-4 tracking-tight">
           <span class="bg-gradient-to-r from-white via-orange-200 to-red-200 bg-clip-text text-transparent">
             Mon Espace Danseur
           </span>
         </h1>
-        <p class="text-orange-200 text-xl font-medium">
+        <p class="text-orange-200 text-lg sm:text-xl font-medium">
           Association Andyvie • Square630
         </p>
       </div>
@@ -111,7 +166,7 @@
             </div>
 
             <!-- Dates importantes -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
               <div class="bg-gray-50 rounded-xl p-4">
                 <p class="text-sm text-gray-500">Date d'inscription</p>
                 <p class="font-bold text-gray-800">{{ formatDate(registration.registration.dancer.createdAt) }}</p>
@@ -169,7 +224,7 @@
         </div>
 
         <!-- Informations complètes -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           
           <!-- Informations personnelles complètes -->
           <div class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
@@ -189,7 +244,7 @@
               <!-- Identité -->
               <div class="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-xl">
                 <h4 class="font-bold text-gray-800 mb-2">Identité</h4>
-                <div class="grid grid-cols-2 gap-2 text-sm">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                   <div>
                     <span class="text-gray-500">Nom :</span>
                     <span class="font-semibold text-gray-800 ml-2">{{ registration.registration.dancer.lastName }}</span>
@@ -233,7 +288,7 @@
               <!-- Informations supplémentaires -->
               <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl">
                 <h4 class="font-bold text-gray-800 mb-2">Informations complémentaires</h4>
-                <div class="grid grid-cols-2 gap-2 text-sm">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                   <div>
                     <span class="text-gray-500">Niveau scolaire :</span>
                     <span class="font-semibold text-gray-800 ml-2">{{ formatSchoolLevel(registration.registration.dancer.schoolLevel) }}</span>
@@ -287,7 +342,7 @@
                   </div>
                 </div>
                 <p class="text-sm text-gray-600 mb-3 ml-11">{{ group.description }}</p>
-                <div class="ml-11 grid grid-cols-2 gap-2 text-xs">
+                <div class="ml-11 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                   <div>
                     <span class="text-purple-600 font-semibold">📅 Horaire :</span>
                     <span class="text-gray-700 ml-1">{{ group.schedule }}</span>
@@ -303,7 +358,7 @@
         </div>
 
         <!-- Contacts et responsables -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           
           <!-- Responsable légal -->
           <div v-if="registration.registration.guardian" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
@@ -420,7 +475,7 @@
             </svg>
           </div>
           
-          <h2 class="text-3xl font-bold text-gray-800 mb-4">
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">
             <span class="bg-gradient-to-r from-orange-700 to-pink-700 bg-clip-text text-transparent">
               Commencer mon inscription
             </span>
@@ -432,7 +487,7 @@
 
           <button
             @click="startRegistration"
-            class="bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 shadow-2xl hover:shadow-orange-500/20 inline-flex items-center space-x-3"
+            class="bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white font-bold py-3 px-6 sm:py-4 sm:px-8 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 shadow-2xl hover:shadow-orange-500/20 inline-flex items-center space-x-3 text-sm sm:text-base"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
@@ -458,6 +513,7 @@ const { user, logout } = useAuth()
 
 const loading = ref(true)
 const registration = ref<{ hasRegistration: boolean; registration: any | null }>({ hasRegistration: false, registration: null })
+const mobileMenuOpen = ref(false)
 
 const fetchRegistration = async () => {
   try {
