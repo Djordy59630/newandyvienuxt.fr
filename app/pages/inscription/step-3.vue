@@ -99,10 +99,10 @@
                 Quel est le prénom et nom de ton {{ contacts.length === 0 ? 'premier' : contacts.length === 1 ? 'deuxième' : 'prochain' }} contact d'urgence ?
               </p>
               <p v-else-if="currentStep === 'contact-phone'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
-                Merci {{ form.firstName }} ! Quel est son numéro de téléphone ?
+                Merci {{ step1Data?.firstName || '' }} ! Quel est son numéro de téléphone ?
               </p>
               <p v-else-if="currentStep === 'contact-relationship'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
-                Parfait ! Quelle est la relation de {{ form.firstName }} avec toi ?
+                Parfait ! Quelle est la relation de cette personne avec toi ?
               </p>
               <p v-else-if="currentStep === 'contact-type'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
                 Super ! Maintenant dis-moi, ce contact peut-il : récupérer le mineur en fin de cours, être appelé en cas d'urgence, ou les deux ?
@@ -457,6 +457,7 @@ const showCursor = ref(true)
 const loading = ref(false)
 const error = ref('')
 const contacts = ref<Contact[]>([])
+const step1Data = ref<Step1Data | null>(null)
 const form = ref({
   firstName: '',
   lastName: '',
@@ -628,13 +629,16 @@ const handleSubmit = async () => {
 
 onMounted(() => {
   // Vérifier les données des étapes précédentes
-  const step1Data = useCookie('registration-step1').value as Step1Data | null
+  const step1DataCookie = useCookie('registration-step1').value as Step1Data | null
   const step2Data = useCookie('registration-step2').value
   
-  if (!step1Data || !step1Data.firstName) {
+  if (!step1DataCookie || !step1DataCookie.firstName) {
     navigateTo('/inscription/step-1')
     return
   }
+
+  // Assigner les données du danseur à la ref reactive
+  step1Data.value = step1DataCookie
 
   // Démarrer l'animation de frappe
   setTimeout(() => {
