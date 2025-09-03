@@ -104,6 +104,9 @@
               <p v-else-if="currentStep === 'contact-relationship'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
                 Parfait ! Quelle est la relation de cette personne avec toi ?
               </p>
+              <p v-else-if="currentStep === 'confirm-contact'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
+                Parfait ! Je vais ajouter ce contact d'urgence. Tu es prêt(e) ?
+              </p>
               <p v-else-if="currentStep === 'contact-type'" class="text-gray-800 text-base sm:text-lg leading-relaxed">
                 Super ! Maintenant dis-moi, ce contact peut-il : <span v-if="isMinor">récupérer le mineur en fin de cours, être appelé en cas d'urgence, ou les deux</span><span v-else>être appelé en cas d'urgence</span> ?
               </p>
@@ -338,6 +341,56 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
                 Retour
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Confirmation for Adults -->
+        <div v-if="currentStep === 'confirm-contact'" class="space-y-4 sm:space-y-6">
+          <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+            <div class="text-green-700 text-sm">
+              <div class="flex items-center mb-2">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <strong>Contact d'urgence à ajouter :</strong>
+              </div>
+              <div class="space-y-1 ml-7">
+                <div>{{ form.firstName }} {{ form.lastName }}</div>
+                <div>{{ form.phone }}</div>
+                <div>{{ form.relationship }}</div>
+                <div class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full inline-block mt-2">Contact d'urgence uniquement</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <!-- Confirm Button (first on mobile, right on desktop) -->
+            <div class="order-1 sm:order-2">
+              <button
+                @click="handleContactType('EMERGENCY_ONLY')"
+                :disabled="loading"
+                class="btn-primary w-full sm:w-auto"
+              >
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                </svg>
+                Ajouter ce contact
+              </button>
+            </div>
+            
+            <!-- Back Button (second on mobile, left on desktop) -->
+            <div class="order-2 sm:order-1">
+              <button
+                @click="currentStep = 'contact-relationship'"
+                class="btn-secondary w-full sm:w-auto"
+                :disabled="loading"
+              >
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Modifier
               </button>
             </div>
           </div>
@@ -589,10 +642,11 @@ const handleRelationshipSubmit = () => {
     return
   }
   
-  // Si la personne est majeure, setter automatiquement EMERGENCY_ONLY et passer à add-more
+  // Si la personne est majeure, setter automatiquement EMERGENCY_ONLY et passer à confirmation
   if (!isMinor.value) {
+    form.value.type = 'EMERGENCY_ONLY'
     setTimeout(() => {
-      handleContactType('EMERGENCY_ONLY')
+      currentStep.value = 'confirm-contact'
     }, 300)
   } else {
     // Si mineur, aller à l'étape de sélection du type
