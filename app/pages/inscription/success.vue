@@ -77,11 +77,22 @@
             
             <h2 class="text-lg sm:text-xl font-bold text-gray-900">Message de Damien.C</h2>
             <p class="text-gray-700 text-base sm:text-lg leading-relaxed">
-              Bravo ! 🎊 Ton inscription à Square630 a été enregistrée avec succès ! J'ai bien sauvegardé toutes tes informations en base de données. 
+              Bravo ! 🎊 Ta <strong>pré-inscription</strong> à Square630 a été enregistrée avec succès ! J'ai bien sauvegardé toutes tes informations en base de données. 
             </p>
-            <p class="text-gray-600 text-xs sm:text-sm">
-              Tu recevras bientôt un email de confirmation avec tous les détails de ton inscription. L'équipe Square630 reviendra vers toi rapidement !
-            </p>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+              <div class="flex">
+                <svg class="w-5 h-5 text-blue-400 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <div class="text-blue-700 text-sm">
+                  <p class="font-semibold mb-2">Prochaines étapes :</p>
+                  <ul class="list-disc list-inside space-y-1">
+                    <li><strong>Passe à Lasso Andyvie</strong> pour finaliser ton inscription</li>
+                    <li>Consulte régulièrement <strong>ton tableau de bord</strong> pour suivre l'état de ton inscription</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
