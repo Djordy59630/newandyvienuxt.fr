@@ -187,7 +187,7 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-white/10">
-                <tr v-for="registration in filteredRegistrations" :key="registration.id" class="hover:bg-white/5">
+                <tr v-for="registration in paginatedRegistrations" :key="registration.id" class="hover:bg-white/5">
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
                       <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center">
@@ -228,6 +228,71 @@
             </table>
           </div>
         </div>
+        
+        <!-- Pagination -->
+        <div v-if="showPagination" class="px-6 py-4 bg-white/5 border-t border-white/10">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <!-- Info pagination -->
+            <div class="text-sm text-white">
+              Affichage {{ ((currentPage - 1) * itemsPerPage) + 1 }} à {{ Math.min(currentPage * itemsPerPage, filteredRegistrations.length) }} sur {{ filteredRegistrations.length }} inscription{{ filteredRegistrations.length > 1 ? 's' : '' }}
+            </div>
+            
+            <!-- Navigation pagination -->
+            <div class="flex items-center space-x-2">
+              <button
+                @click="previousPage"
+                :disabled="currentPage === 1"
+                class="px-3 py-2 text-sm bg-white/10 text-white rounded-lg hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-sm border border-white/20"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              
+              <!-- Numéros de page -->
+              <div class="flex items-center space-x-1">
+                <button
+                  v-for="page in Math.min(5, totalPages)"
+                  :key="page"
+                  @click="goToPage(page)"
+                  :class="[
+                    'px-3 py-2 text-sm rounded-lg backdrop-blur-sm border',
+                    currentPage === page
+                      ? 'bg-orange-500 text-white border-orange-500'
+                      : 'bg-white/10 text-white border-white/20 hover:bg-white/20'
+                  ]"
+                >
+                  {{ page }}
+                </button>
+                
+                <span v-if="totalPages > 5" class="text-white">...</span>
+                
+                <button
+                  v-if="totalPages > 5 && currentPage !== totalPages"
+                  @click="goToPage(totalPages)"
+                  :class="[
+                    'px-3 py-2 text-sm rounded-lg backdrop-blur-sm border',
+                    currentPage === totalPages
+                      ? 'bg-orange-500 text-white border-orange-500'
+                      : 'bg-white/10 text-white border-white/20 hover:bg-white/20'
+                  ]"
+                >
+                  {{ totalPages }}
+                </button>
+              </div>
+              
+              <button
+                @click="nextPage"
+                :disabled="currentPage === totalPages"
+                class="px-3 py-2 text-sm bg-white/10 text-white rounded-lg hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-sm border border-white/20"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -248,6 +313,10 @@ const loading = ref(true)
 const selectedStatus = ref('')
 const searchTerm = ref('')
 
+// Pagination
+const currentPage = ref(1)
+const itemsPerPage = 10
+
 // Stats
 const stats = computed(() => {
   const total = registrations.value.length
@@ -256,6 +325,21 @@ const stats = computed(() => {
   const rejected = registrations.value.filter(r => r.status === 'REJECTED').length
   
   return { total, pending, approved, rejected }
+})
+
+// Pagination computed
+const totalPages = computed(() => {
+  return Math.ceil(filteredRegistrations.value.length / itemsPerPage)
+})
+
+const paginatedRegistrations = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return filteredRegistrations.value.slice(start, end)
+})
+
+const showPagination = computed(() => {
+  return filteredRegistrations.value.length > itemsPerPage
 })
 
 // Methods
@@ -290,6 +374,25 @@ const filterRegistrations = () => {
   }
 
   filteredRegistrations.value = filtered
+  currentPage.value = 1 // Reset to first page when filtering
+}
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+  }
+}
+
+const previousPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--
+  }
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++
+  }
 }
 
 
