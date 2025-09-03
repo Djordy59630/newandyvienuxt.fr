@@ -95,11 +95,116 @@
             </svg>
           </div>
           <div class="bg-white/95 backdrop-blur-sm rounded-2xl rounded-tl-md p-4 sm:p-6 shadow-xl border border-white/20 flex-1">
-            <p class="text-gray-800 text-base sm:text-lg leading-relaxed mb-4">
-              Avant de continuer, nous devons vérifier ton questionnaire santé ! 🏥 C'est obligatoire pour la pratique sportive. Prends quelques minutes pour consulter le formulaire ci-dessous.
+            <p class="text-gray-800 text-base sm:text-lg leading-relaxed mb-6">
+              Avant de continuer, nous devons vérifier ton questionnaire santé ! 🏥 C'est obligatoire pour la pratique sportive.
             </p>
             
-            <!-- Health Form Image -->
+            <!-- Health Declaration Section moved here -->
+            <div class="mb-6">
+              <h3 class="text-lg font-bold text-gray-900 mb-4">Déclaration sur l'honneur</h3>
+              
+              <p class="text-gray-700 mb-4">
+                Après avoir pris connaissance du questionnaire santé ci-dessous, veuillez indiquer votre situation :
+              </p>
+
+              <!-- Options de réponse -->
+              <div class="space-y-3 mb-6">
+                <!-- Option 1: Toutes négatives -->
+                <label class="flex items-start space-x-3 cursor-pointer p-4 rounded-xl border-2 transition-all"
+                  :class="healthStatus === 'negative' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:bg-gray-50'"
+                >
+                  <input
+                    v-model="healthStatus"
+                    type="radio"
+                    value="negative"
+                    class="mt-1 h-5 w-5 text-green-600 focus:ring-green-500"
+                    @change="validationErrors.healthStatus = ''"
+                  />
+                  <div class="text-gray-700 text-sm sm:text-base leading-relaxed">
+                    <p class="font-semibold text-green-700">✅ Toutes mes réponses sont NÉGATIVES</p>
+                    <p class="text-sm text-gray-600 mt-1">
+                      Je certifie avoir répondu NON à toutes les questions du questionnaire santé.
+                    </p>
+                  </div>
+                </label>
+
+                <!-- Option 2: Au moins une positive -->
+                <label class="flex items-start space-x-3 cursor-pointer p-4 rounded-xl border-2 transition-all"
+                  :class="healthStatus === 'positive' ? 'border-orange-500 bg-orange-50' : 'border-gray-200 hover:bg-gray-50'"
+                >
+                  <input
+                    v-model="healthStatus"
+                    type="radio"
+                    value="positive"
+                    class="mt-1 h-5 w-5 text-orange-600 focus:ring-orange-500"
+                    @change="validationErrors.healthStatus = ''"
+                  />
+                  <div class="text-gray-700 text-sm sm:text-base leading-relaxed">
+                    <p class="font-semibold text-orange-700">⚠️ Une ou plusieurs réponses sont POSITIVES</p>
+                    <p class="text-sm text-gray-600 mt-1">
+                      J'ai répondu OUI à au moins une question. Je comprends que je dois fournir un certificat médical d'aptitude à la pratique sportive.
+                    </p>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Confirmation checkbox -->
+              <div v-if="healthStatus" class="mb-6 p-4 rounded-xl"
+                :class="healthStatus === 'negative' ? 'bg-green-50 border border-green-200' : 'bg-orange-50 border border-orange-200'"
+              >
+                <label class="flex items-start space-x-3 cursor-pointer">
+                  <input
+                    v-model="healthConfirmation"
+                    type="checkbox"
+                    class="mt-1 h-5 w-5"
+                    :class="healthStatus === 'negative' ? 'text-green-600 focus:ring-green-500' : 'text-orange-600 focus:ring-orange-500'"
+                    @change="validationErrors.confirmation = ''"
+                  />
+                  <div class="text-sm leading-relaxed"
+                    :class="healthStatus === 'negative' ? 'text-green-700' : 'text-orange-700'"
+                  >
+                    <p class="font-semibold">Je confirme :</p>
+                    <ul class="list-disc list-inside space-y-1 mt-1">
+                      <li>Avoir lu et compris le questionnaire santé</li>
+                      <li v-if="healthStatus === 'negative'">
+                        Que toutes mes réponses sont négatives et que je peux pratiquer sans certificat médical
+                      </li>
+                      <li v-else>
+                        Que je dois fournir un <strong>certificat médical d'aptitude</strong> à la pratique sportive
+                      </li>
+                    </ul>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Alert si certificat nécessaire -->
+              <div v-if="healthStatus === 'positive' && healthConfirmation" class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div class="flex">
+                  <svg class="w-5 h-5 text-yellow-400 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>
+                  <div class="text-yellow-700 text-sm">
+                    <p class="font-semibold">Certificat médical requis</p>
+                    <p class="mt-1">Vous devrez transmettre votre certificat médical d'aptitude à la pratique de la danse pour finaliser votre inscription.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Validation errors -->
+              <div v-if="validationErrors.healthStatus" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p class="text-red-700 text-sm">
+                  ⚠️ {{ validationErrors.healthStatus }}
+                </p>
+              </div>
+              
+              <div v-if="validationErrors.confirmation" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p class="text-red-700 text-sm">
+                  ⚠️ {{ validationErrors.confirmation }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Health Form Image moved below -->
             <div class="mb-6 bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
               <img 
                 src="/assets/4 CERFA-Questionnaire-Santé-2024-2025.jpg" 
@@ -110,7 +215,7 @@
               <p class="text-xs text-gray-500 text-center mt-2">Cliquez sur l'image pour l'agrandir</p>
             </div>
 
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <div class="flex">
                 <svg class="w-5 h-5 text-blue-400 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -124,112 +229,8 @@
           </div>
         </div>
 
-        <!-- Health Declaration -->
+        <!-- Continue Button Section -->
         <div class="space-y-6">
-          <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Déclaration sur l'honneur</h3>
-            
-            <p class="text-gray-700 mb-4">
-              Après avoir pris connaissance du questionnaire santé, veuillez indiquer votre situation :
-            </p>
-
-            <!-- Options de réponse -->
-            <div class="space-y-3">
-              <!-- Option 1: Toutes négatives -->
-              <label class="flex items-start space-x-3 cursor-pointer p-4 rounded-xl border-2 transition-all"
-                :class="healthStatus === 'negative' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:bg-gray-50'"
-              >
-                <input
-                  v-model="healthStatus"
-                  type="radio"
-                  value="negative"
-                  class="mt-1 h-5 w-5 text-green-600 focus:ring-green-500"
-                  @change="validationErrors.healthStatus = ''"
-                />
-                <div class="text-gray-700 text-sm sm:text-base leading-relaxed">
-                  <p class="font-semibold text-green-700">✅ Toutes mes réponses sont NÉGATIVES</p>
-                  <p class="text-sm text-gray-600 mt-1">
-                    Je certifie avoir répondu NON à toutes les questions du questionnaire santé.
-                  </p>
-                </div>
-              </label>
-
-              <!-- Option 2: Au moins une positive -->
-              <label class="flex items-start space-x-3 cursor-pointer p-4 rounded-xl border-2 transition-all"
-                :class="healthStatus === 'positive' ? 'border-orange-500 bg-orange-50' : 'border-gray-200 hover:bg-gray-50'"
-              >
-                <input
-                  v-model="healthStatus"
-                  type="radio"
-                  value="positive"
-                  class="mt-1 h-5 w-5 text-orange-600 focus:ring-orange-500"
-                  @change="validationErrors.healthStatus = ''"
-                />
-                <div class="text-gray-700 text-sm sm:text-base leading-relaxed">
-                  <p class="font-semibold text-orange-700">⚠️ Une ou plusieurs réponses sont POSITIVES</p>
-                  <p class="text-sm text-gray-600 mt-1">
-                    J'ai répondu OUI à au moins une question. Je comprends que je dois fournir un certificat médical d'aptitude à la pratique sportive.
-                  </p>
-                </div>
-              </label>
-            </div>
-
-            <!-- Confirmation checkbox -->
-            <div v-if="healthStatus" class="mt-6 p-4 rounded-xl"
-              :class="healthStatus === 'negative' ? 'bg-green-50 border border-green-200' : 'bg-orange-50 border border-orange-200'"
-            >
-              <label class="flex items-start space-x-3 cursor-pointer">
-                <input
-                  v-model="healthConfirmation"
-                  type="checkbox"
-                  class="mt-1 h-5 w-5"
-                  :class="healthStatus === 'negative' ? 'text-green-600 focus:ring-green-500' : 'text-orange-600 focus:ring-orange-500'"
-                  @change="validationErrors.confirmation = ''"
-                />
-                <div class="text-sm leading-relaxed"
-                  :class="healthStatus === 'negative' ? 'text-green-700' : 'text-orange-700'"
-                >
-                  <p class="font-semibold">Je confirme :</p>
-                  <ul class="list-disc list-inside space-y-1 mt-1">
-                    <li>Avoir lu et compris le questionnaire santé</li>
-                    <li v-if="healthStatus === 'negative'">
-                      Que toutes mes réponses sont négatives et que je peux pratiquer sans certificat médical
-                    </li>
-                    <li v-else>
-                      Que je dois fournir un <strong>certificat médical d'aptitude</strong> à la pratique sportive
-                    </li>
-                  </ul>
-                </div>
-              </label>
-            </div>
-
-            <!-- Alert si certificat nécessaire -->
-            <div v-if="healthStatus === 'positive' && healthConfirmation" class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <div class="flex">
-                <svg class="w-5 h-5 text-yellow-400 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                </svg>
-                <div class="text-yellow-700 text-sm">
-                  <p class="font-semibold">Certificat médical requis</p>
-                  <p class="mt-1">Vous devrez transmettre votre certificat médical d'aptitude à la pratique de la danse pour finaliser votre inscription.</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Validation errors -->
-            <div v-if="validationErrors.healthStatus" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p class="text-red-700 text-sm">
-                ⚠️ {{ validationErrors.healthStatus }}
-              </p>
-            </div>
-            
-            <div v-if="validationErrors.confirmation" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p class="text-red-700 text-sm">
-                ⚠️ {{ validationErrors.confirmation }}
-              </p>
-            </div>
-          </div>
-          
           <!-- Continue Button -->
           <div class="flex justify-center">
             <button
