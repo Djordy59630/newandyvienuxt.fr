@@ -22,7 +22,8 @@
       "Bash(curl:*)",
       "Bash(npx eslint:*)",
       "Bash(node:*)",
-      "Read(c:\\wamp64\\www\\newandyvienuxt.fr\\app\\pages\\renouvellement/**)"
+      "Read(c:\\wamp64\\www\\newandyvienuxt.fr\\app\\pages\\renouvellement/**)",
+      "Read(c:\\wamp64\\www\\newandyvienuxt.fr/**)"
     ],
     "deny": [],
     "ask": []

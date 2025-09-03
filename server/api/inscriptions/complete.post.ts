@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { dancers_schoolLevel, PrismaClient } from '@prisma/client'
 import jwt from 'jsonwebtoken'
 
 const prisma = new PrismaClient()
@@ -26,7 +26,6 @@ export default defineEventHandler(async (event) => {
     const currentSchoolYear = month >= 9 ? `${year}-${year + 1}` : `${year - 1}-${year}`
 
     // Vérifier si l'utilisateur a déjà une inscription COMPLETE pour l'année scolaire actuelle
-    // @ts-expect-error - Modèle Prisma généré
     const existingCompleteRegistration = await prisma.registration.findFirst({
       where: { 
         dancer: {
@@ -47,7 +46,6 @@ export default defineEventHandler(async (event) => {
     }
 
     // Supprimer les inscriptions DRAFT existantes pour ce user (permet de recommencer)
-    // @ts-expect-error - Modèle Prisma généré
     const existingDraftDancer = await prisma.dancer.findFirst({
       where: { userId: userId }
     })
@@ -122,7 +120,6 @@ export default defineEventHandler(async (event) => {
     }
 
     // 1. Créer le danseur
-    // @ts-expect-error - Modèle Prisma généré
     const dancer = await prisma.dancer.create({
       data: {
         userId: userId,
@@ -134,7 +131,7 @@ export default defineEventHandler(async (event) => {
         postalCode: step1.postalCode,
         city: step1.city || 'Non spécifié',
         phone: step1.phone,
-        schoolLevel: convertSchoolLevel(step1.schoolLevel || 'ADULTE'),
+        schoolLevel: convertSchoolLevel(step1.schoolLevel || 'ADULTE') as dancers_schoolLevel,
         tShirtSize: step1.tShirtSize || 'M',
         otherInfo: step1.otherInfo || null,
       }
@@ -143,7 +140,6 @@ export default defineEventHandler(async (event) => {
     // Stocker le statut de santé dans otherInfo ou une note
     if (health.requiresCertificate) {
       // Mettre à jour le danseur pour noter qu'un certificat médical est requis
-      // @ts-expect-error - Modèle Prisma généré
       await prisma.dancer.update({
         where: { id: dancer.id },
         data: {
@@ -154,7 +150,6 @@ export default defineEventHandler(async (event) => {
 
     // 2. Créer le responsable légal si mineur
     if (step2 && step2.guardianEmail) {
-      // @ts-expect-error - Modèle Prisma généré  
       await prisma.guardian.create({
         data: {
           dancerId: dancer.id,
@@ -174,7 +169,6 @@ export default defineEventHandler(async (event) => {
     // 3. Créer les contacts d'urgence
     if (step3 && step3.emergencyContacts && step3.emergencyContacts.length > 0) {
       for (const contact of step3.emergencyContacts) {
-        // @ts-expect-error - Modèle Prisma généré
         await prisma.emergencyContact.create({
           data: {
             dancerId: dancer.id,
@@ -192,13 +186,11 @@ export default defineEventHandler(async (event) => {
     if (step4 && step4.selectedDanceGroups && step4.selectedDanceGroups.length > 0) {
       for (const group of step4.selectedDanceGroups) {
         // Vérifier si le groupe existe, sinon le créer
-        // @ts-expect-error - Modèle Prisma généré
         let danceGroup = await prisma.danceGroup.findFirst({
           where: { name: group.name }
         })
 
         if (!danceGroup) {
-          // @ts-expect-error - Modèle Prisma généré
           danceGroup = await prisma.danceGroup.create({
             data: {
               name: group.name,
@@ -211,7 +203,6 @@ export default defineEventHandler(async (event) => {
         }
 
         // Créer l'inscription
-        // @ts-expect-error - Modèle Prisma généré
         await prisma.registration.create({
           data: {
             dancerId: dancer.id,
