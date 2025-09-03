@@ -68,6 +68,7 @@ export default defineEventHandler(async (event) => {
         const dancer = registration.dancer
         return {
           id: dancer.id,
+          registrationId: registration.id,
           firstName: dancer.firstName,
           lastName: dancer.lastName,
           email: dancer.email,
