@@ -150,13 +150,17 @@
                     <input v-model="editableData.firstName" 
                            type="text" 
                            placeholder="Prénom"
-                           class="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-xl font-bold"
+                           class="bg-white/10 border rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-xl font-bold"
+                           :class="validationErrors.firstName ? 'border-red-500' : 'border-white/20'"
                     />
+                    <p v-if="validationErrors.firstName" class="text-red-400 text-xs mt-1">{{ validationErrors.firstName }}</p>
                     <input v-model="editableData.lastName" 
                            type="text" 
                            placeholder="Nom de famille"
-                           class="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-xl font-bold"
+                           class="bg-white/10 border rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-xl font-bold"
+                           :class="validationErrors.lastName ? 'border-red-500' : 'border-white/20'"
                     />
+                    <p v-if="validationErrors.lastName" class="text-red-400 text-xs mt-1">{{ validationErrors.lastName }}</p>
                   </div>
                   <h2 v-else class="text-2xl font-bold text-white">
                     {{ registration.dancer.firstName }} {{ registration.dancer.lastName }}
@@ -371,29 +375,133 @@
               </div>
 
               <!-- Contacts d'urgence -->
-              <div v-if="registration.dancer.emergencyContacts && registration.dancer.emergencyContacts.length > 0">
-                <h4 class="text-orange-100/80 font-medium mb-3">Contacts d'urgence</h4>
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <h4 class="text-orange-100/80 font-medium">Contacts d'urgence</h4>
+                  <button v-if="editMode" 
+                          @click="addEmergencyContact"
+                          class="px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Ajouter
+                  </button>
+                </div>
+                
+                <div v-if="!editMode && (!registration.dancer.emergencyContacts || registration.dancer.emergencyContacts.length === 0)" class="text-orange-100/60 text-sm">
+                  Aucun contact d'urgence enregistré
+                </div>
+                
                 <div class="space-y-3">
-                  <div v-for="(contact, index) in registration.dancer.emergencyContacts" :key="contact.id"
+                  <!-- Contacts existants -->
+                  <div v-for="(contact, index) in (editMode ? editableEmergencyContacts : registration.dancer.emergencyContacts)" :key="contact.id || index"
                        class="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-                    <div class="flex items-center gap-2 mb-3">
-                      <div class="w-6 h-6 bg-red-500/30 rounded-full flex items-center justify-center">
-                        <span class="text-red-200 text-xs font-bold">{{ index + 1 }}</span>
+                    <div class="flex items-center justify-between mb-3">
+                      <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 bg-red-500/30 rounded-full flex items-center justify-center">
+                          <span class="text-red-200 text-xs font-bold">{{ index + 1 }}</span>
+                        </div>
+                        <span v-if="!editMode" class="text-white font-medium">{{ contact.firstName }} {{ contact.lastName }}</span>
                       </div>
-                      <span class="text-white font-medium">{{ contact.firstName }} {{ contact.lastName }}</span>
+                      <button v-if="editMode" 
+                              @click="removeEmergencyContact(index)"
+                              class="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-xs">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
                     </div>
+                    
+                    <div v-if="editMode" class="space-y-3 mb-3">
+                      <div>
+                        <label class="text-xs font-medium text-orange-100/60 uppercase tracking-wide">Type de contact</label>
+                        <select v-model="contact.type" 
+                                class="mt-1 w-full bg-white/10 border border-white/20 rounded px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
+                          <option value="EMERGENCY_AND_PICKUP" class="text-gray-900">Urgence et récupération</option>
+                          <option value="EMERGENCY_ONLY" class="text-gray-900">Urgence seulement</option>
+                          <option value="PICKUP_ONLY" class="text-gray-900">Récupération seulement</option>
+                        </select>
+                      </div>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <input v-model="contact.firstName" 
+                                 type="text" 
+                                 placeholder="Prénom"
+                                 class="w-full bg-white/10 border rounded px-3 py-2 text-white placeholder-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                 :class="validationErrors[`contact_${index}`]?.firstName ? 'border-red-500' : 'border-white/20'"
+                          />
+                          <p v-if="validationErrors[`contact_${index}`]?.firstName" class="text-red-400 text-xs mt-1">
+                            {{ validationErrors[`contact_${index}`].firstName }}
+                          </p>
+                        </div>
+                        <div>
+                          <input v-model="contact.lastName" 
+                                 type="text" 
+                                 placeholder="Nom"
+                                 class="w-full bg-white/10 border rounded px-3 py-2 text-white placeholder-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                 :class="validationErrors[`contact_${index}`]?.lastName ? 'border-red-500' : 'border-white/20'"
+                          />
+                          <p v-if="validationErrors[`contact_${index}`]?.lastName" class="text-red-400 text-xs mt-1">
+                            {{ validationErrors[`contact_${index}`].lastName }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                       <div>
+                        <label class="text-xs font-medium text-orange-100/60 uppercase tracking-wide">Type</label>
+                        <p v-if="!editMode" class="text-orange-100/80 mt-1">
+                          {{ contact.type === 'EMERGENCY_AND_PICKUP' ? 'Urgence et récupération' :
+                             contact.type === 'EMERGENCY_ONLY' ? 'Urgence seulement' :
+                             contact.type === 'PICKUP_ONLY' ? 'Récupération seulement' : contact.type }}
+                        </p>
+                      </div>
+                      <div>
                         <label class="text-xs font-medium text-orange-100/60 uppercase tracking-wide">Relation</label>
-                        <p class="text-orange-100/80 mt-1">{{ contact.relationship }}</p>
+                        <div v-if="editMode">
+                          <input v-model="contact.relationship" 
+                                 type="text" 
+                                 placeholder="Relation (ex: Mère, Père, Ami...)"
+                                 class="mt-1 w-full bg-white/10 border rounded px-3 py-2 text-white placeholder-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                 :class="validationErrors[`contact_${index}`]?.relationship ? 'border-red-500' : 'border-white/20'"
+                          />
+                          <p v-if="validationErrors[`contact_${index}`]?.relationship" class="text-red-400 text-xs mt-1">
+                            {{ validationErrors[`contact_${index}`].relationship }}
+                          </p>
+                        </div>
+                        <p v-else class="text-orange-100/80 mt-1">{{ contact.relationship }}</p>
                       </div>
                       <div>
                         <label class="text-xs font-medium text-orange-100/60 uppercase tracking-wide">Téléphone</label>
-                        <p class="text-orange-100/80 mt-1">{{ contact.phone }}</p>
+                        <div v-if="editMode">
+                          <input v-model="contact.phone" 
+                                 type="tel" 
+                                 placeholder="Téléphone"
+                                 class="mt-1 w-full bg-white/10 border rounded px-3 py-2 text-white placeholder-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                 :class="validationErrors[`contact_${index}`]?.phone ? 'border-red-500' : 'border-white/20'"
+                          />
+                          <p v-if="validationErrors[`contact_${index}`]?.phone" class="text-red-400 text-xs mt-1">
+                            {{ validationErrors[`contact_${index}`].phone }}
+                          </p>
+                        </div>
+                        <p v-else class="text-orange-100/80 mt-1">{{ contact.phone }}</p>
                       </div>
-                      <div v-if="contact.email" class="sm:col-span-2">
-                        <label class="text-xs font-medium text-orange-100/60 uppercase tracking-wide">Email</label>
-                        <p class="text-orange-100/80 mt-1">{{ contact.email }}</p>
+                      <div>
+                        <label class="text-xs font-medium text-orange-100/60 uppercase tracking-wide">Email (optionnel)</label>
+                        <div v-if="editMode">
+                          <input v-model="contact.email" 
+                                 type="email" 
+                                 placeholder="Email (optionnel)"
+                                 class="mt-1 w-full bg-white/10 border rounded px-3 py-2 text-white placeholder-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                 :class="validationErrors[`contact_${index}`]?.email ? 'border-red-500' : 'border-white/20'"
+                          />
+                          <p v-if="validationErrors[`contact_${index}`]?.email" class="text-red-400 text-xs mt-1">
+                            {{ validationErrors[`contact_${index}`].email }}
+                          </p>
+                        </div>
+                        <p v-else-if="contact.email" class="text-orange-100/80 mt-1">{{ contact.email }}</p>
+                        <p v-else class="text-orange-100/60 mt-1 text-xs">Non renseigné</p>
                       </div>
                     </div>
                   </div>
@@ -509,6 +617,8 @@ const editMode = ref(false)
 const savingChanges = ref(false)
 const editableData = ref({})
 const originalData = ref({})
+const editableEmergencyContacts = ref([])
+const validationErrors = ref({})
 const toast = ref({
   show: false,
   message: ''
@@ -982,6 +1092,9 @@ const toggleEditMode = () => {
     originalData.value = JSON.parse(JSON.stringify(registration.value.dancer))
     editableData.value = JSON.parse(JSON.stringify(registration.value.dancer))
     
+    // Copier les contacts d'urgence pour l'édition
+    editableEmergencyContacts.value = JSON.parse(JSON.stringify(registration.value.dancer.emergencyContacts || []))
+    
     // Formater la date pour l'input date
     if (editableData.value.birthDate) {
       const date = new Date(editableData.value.birthDate)
@@ -996,18 +1109,146 @@ const cancelEdit = () => {
   editMode.value = false
   editableData.value = {}
   originalData.value = {}
+  editableEmergencyContacts.value = []
+  validationErrors.value = {}
+}
+
+const validateDancerData = () => {
+  const errors = {}
+  
+  // Validation prénom
+  if (!editableData.value.firstName || editableData.value.firstName.trim() === '') {
+    errors.firstName = 'Le prénom est obligatoire'
+  } else if (editableData.value.firstName.length < 2) {
+    errors.firstName = 'Le prénom doit contenir au moins 2 caractères'
+  }
+  
+  // Validation nom
+  if (!editableData.value.lastName || editableData.value.lastName.trim() === '') {
+    errors.lastName = 'Le nom est obligatoire'
+  } else if (editableData.value.lastName.length < 2) {
+    errors.lastName = 'Le nom doit contenir au moins 2 caractères'
+  }
+  
+  // Validation email
+  if (editableData.value.email && editableData.value.email.trim() !== '') {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(editableData.value.email)) {
+      errors.email = 'L\'adresse email n\'est pas valide'
+    }
+  }
+  
+  // Validation téléphone
+  if (editableData.value.phone && editableData.value.phone.trim() !== '') {
+    const phoneRegex = /^[\d\s\-\.\+\(\)]{10,}$/
+    if (!phoneRegex.test(editableData.value.phone)) {
+      errors.phone = 'Le numéro de téléphone n\'est pas valide'
+    }
+  }
+  
+  // Validation date de naissance
+  if (editableData.value.birthDate) {
+    const birthDate = new Date(editableData.value.birthDate)
+    const today = new Date()
+    if (birthDate > today) {
+      errors.birthDate = 'La date de naissance ne peut pas être dans le futur'
+    }
+  }
+  
+  // Validation adresse
+  if (editableData.value.address && editableData.value.address.length < 5) {
+    errors.address = 'L\'adresse doit contenir au moins 5 caractères'
+  }
+  
+  // Validation code postal
+  if (editableData.value.postalCode) {
+    const postalCodeRegex = /^\d{5}$/
+    if (!postalCodeRegex.test(editableData.value.postalCode)) {
+      errors.postalCode = 'Le code postal doit contenir 5 chiffres'
+    }
+  }
+  
+  // Validation ville
+  if (editableData.value.city && editableData.value.city.length < 2) {
+    errors.city = 'La ville doit contenir au moins 2 caractères'
+  }
+  
+  return errors
+}
+
+const validateEmergencyContacts = () => {
+  const errors = {}
+  
+  editableEmergencyContacts.value.forEach((contact, index) => {
+    const contactErrors = {}
+    
+    // Validation prénom
+    if (!contact.firstName || contact.firstName.trim() === '') {
+      contactErrors.firstName = 'Le prénom est obligatoire'
+    }
+    
+    // Validation nom
+    if (!contact.lastName || contact.lastName.trim() === '') {
+      contactErrors.lastName = 'Le nom est obligatoire'
+    }
+    
+    // Validation téléphone
+    if (!contact.phone || contact.phone.trim() === '') {
+      contactErrors.phone = 'Le téléphone est obligatoire'
+    } else {
+      const phoneRegex = /^[\d\s\-\.\+\(\)]{10,}$/
+      if (!phoneRegex.test(contact.phone)) {
+        contactErrors.phone = 'Le numéro de téléphone n\'est pas valide'
+      }
+    }
+    
+    // Validation relation
+    if (!contact.relationship || contact.relationship.trim() === '') {
+      contactErrors.relationship = 'La relation est obligatoire'
+    }
+    
+    // Validation email (optionnel mais format validé si fourni)
+    if (contact.email && contact.email.trim() !== '') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(contact.email)) {
+        contactErrors.email = 'L\'adresse email n\'est pas valide'
+      }
+    }
+    
+    if (Object.keys(contactErrors).length > 0) {
+      errors[`contact_${index}`] = contactErrors
+    }
+  })
+  
+  return errors
 }
 
 const saveChanges = async () => {
+  // Valider les données
+  const dancerErrors = validateDancerData()
+  const contactErrors = validateEmergencyContacts()
+  
+  validationErrors.value = { ...dancerErrors, ...contactErrors }
+  
+  // Si il y a des erreurs, arrêter la sauvegarde
+  if (Object.keys(validationErrors.value).length > 0) {
+    showToast('Veuillez corriger les erreurs dans le formulaire', 'error')
+    return
+  }
+  
   savingChanges.value = true
   
   try {
+    // Sauvegarder les informations du danseur
     const response = await $fetch(`/api/admin/dancers/${registration.value.dancer.id}`, {
       method: 'PUT',
       body: editableData.value
     })
     
     if (response.success) {
+      // Sauvegarder les contacts d'urgence modifiés
+      await saveEmergencyContacts()
+      
       await refresh()
       editMode.value = false
       showToast('Modifications sauvegardées avec succès')
@@ -1019,6 +1260,70 @@ const saveChanges = async () => {
     showToast('Erreur lors de la sauvegarde', 'error')
   } finally {
     savingChanges.value = false
+  }
+}
+
+const addEmergencyContact = () => {
+  editableEmergencyContacts.value.push({
+    id: null,
+    type: 'EMERGENCY_AND_PICKUP',
+    firstName: '',
+    lastName: '',
+    relationship: '',
+    phone: '',
+    email: ''
+  })
+}
+
+const removeEmergencyContact = (index) => {
+  editableEmergencyContacts.value.splice(index, 1)
+}
+
+const saveEmergencyContacts = async () => {
+  const originalContacts = registration.value.dancer.emergencyContacts || []
+  const editedContacts = editableEmergencyContacts.value
+  
+  // Supprimer les contacts qui ont été enlevés
+  for (const originalContact of originalContacts) {
+    const stillExists = editedContacts.find(c => c.id === originalContact.id)
+    if (!stillExists) {
+      await $fetch(`/api/admin/emergency-contacts/${originalContact.id}`, {
+        method: 'DELETE'
+      })
+    }
+  }
+  
+  // Ajouter ou modifier les contacts
+  for (const contact of editedContacts) {
+    if (contact.firstName && contact.lastName && contact.phone && contact.relationship) {
+      if (contact.id) {
+        // Modifier un contact existant
+        await $fetch(`/api/admin/emergency-contacts/${contact.id}`, {
+          method: 'PUT',
+          body: {
+            type: contact.type,
+            firstName: contact.firstName,
+            lastName: contact.lastName,
+            relationship: contact.relationship,
+            phone: contact.phone,
+            email: contact.email || null
+          }
+        })
+      } else {
+        // Ajouter un nouveau contact
+        await $fetch(`/api/admin/dancers/${registration.value.dancer.id}/emergency-contacts`, {
+          method: 'POST',
+          body: {
+            type: contact.type,
+            firstName: contact.firstName,
+            lastName: contact.lastName,
+            relationship: contact.relationship,
+            phone: contact.phone,
+            email: contact.email || null
+          }
+        })
+      }
+    }
   }
 }
 </script>
