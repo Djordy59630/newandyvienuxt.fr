@@ -66,54 +66,54 @@
         </div>
 
         <!-- Progress Steps -->
-        <div class="mb-12">
-          <div class="flex justify-center space-x-8">
+        <div class="mb-8 md:mb-12">
+          <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8">
             <div class="flex items-center">
-              <div :class="`w-12 h-12 rounded-2xl flex items-center justify-center font-bold transition-all duration-300 ${
+              <div :class="`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center font-bold transition-all duration-300 ${
                 currentStep >= 1 
                   ? 'bg-gradient-to-br from-orange-500 to-red-500 text-white shadow-lg' 
                   : 'bg-white/10 text-white/60 backdrop-blur-xl border border-white/20'
               }`">
                 1
               </div>
-              <span class="ml-3 text-sm font-medium text-white">Informations personnelles</span>
+              <span class="ml-2 sm:ml-3 text-xs sm:text-sm font-medium text-white">Informations personnelles</span>
             </div>
             <div class="flex items-center">
-              <div :class="`w-12 h-12 rounded-2xl flex items-center justify-center font-bold transition-all duration-300 ${
+              <div :class="`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center font-bold transition-all duration-300 ${
                 currentStep >= 2 
                   ? 'bg-gradient-to-br from-orange-500 to-red-500 text-white shadow-lg' 
                   : 'bg-white/10 text-white/60 backdrop-blur-xl border border-white/20'
               }`">
                 2
               </div>
-              <span class="ml-3 text-sm font-medium text-white">Questionnaire santé</span>
+              <span class="ml-2 sm:ml-3 text-xs sm:text-sm font-medium text-white">Questionnaire santé</span>
             </div>
             <div class="flex items-center">
-              <div :class="`w-12 h-12 rounded-2xl flex items-center justify-center font-bold transition-all duration-300 ${
+              <div :class="`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center font-bold transition-all duration-300 ${
                 currentStep >= 3 
                   ? 'bg-gradient-to-br from-orange-500 to-red-500 text-white shadow-lg' 
                   : 'bg-white/10 text-white/60 backdrop-blur-xl border border-white/20'
               }`">
                 3
               </div>
-              <span class="ml-3 text-sm font-medium text-white">Groupes de danse</span>
+              <span class="ml-2 sm:ml-3 text-xs sm:text-sm font-medium text-white">Groupes de danse</span>
             </div>
           </div>
         </div>
 
         <!-- Step 1: Personal Information Review -->
-        <div v-if="currentStep === 1" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
-          <div class="text-center mb-8">
-            <h2 class="text-3xl font-bold bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent mb-4">Vérification des informations</h2>
-            <p class="text-gray-600">Vérifiez vos informations personnelles et celles de vos contacts. Vous pouvez les modifier si nécessaire.</p>
+        <div v-if="currentStep === 1" class="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl border border-white/20">
+          <div class="text-center mb-6 sm:mb-8">
+            <h2 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent mb-4">Vérification des informations</h2>
+            <p class="text-sm sm:text-base text-gray-600">Vérifiez vos informations personnelles et celles de vos contacts. Vous pouvez les modifier si nécessaire.</p>
           </div>
 
           <!-- Personal Info -->
-          <div class="space-y-8">
-            <div class="bg-gray-50 rounded-xl p-6">
-              <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Informations personnelles</h3>
-                <button @click="editPersonalInfo = !editPersonalInfo" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-4 py-2 rounded-xl font-medium transition-all duration-300 shadow-lg">
+          <div class="space-y-6 sm:space-y-8">
+            <div class="bg-gray-50 rounded-xl p-4 sm:p-6">
+              <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-2 sm:space-y-0">
+                <h3 class="text-lg sm:text-xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Informations personnelles</h3>
+                <button @click="editPersonalInfo = !editPersonalInfo" class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-3 sm:px-4 py-2 rounded-xl font-medium transition-all duration-300 shadow-lg text-sm sm:text-base">
                   {{ editPersonalInfo ? 'Annuler' : 'Modifier' }}
                 </button>
               </div>
@@ -337,9 +337,9 @@
         </div>
 
         <!-- Step 2: Health Questionnaire -->
-        <div v-if="currentStep === 2" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
-          <div class="text-center mb-8">
-            <h2 class="text-3xl font-bold bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent mb-4">Questionnaire santé</h2>
+        <div v-if="currentStep === 2" class="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl border border-white/20">
+          <div class="text-center mb-6 sm:mb-8">
+            <h2 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent mb-4">Questionnaire santé</h2>
             <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mx-auto max-w-2xl">
               <div class="flex items-start space-x-3">
                 <svg class="w-6 h-6 text-amber-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -500,10 +500,10 @@
         </div>
 
         <!-- Step 3: Dance Groups Selection -->
-        <div v-if="currentStep === 3" class="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20">
-          <div class="text-center mb-8">
-            <h2 class="text-3xl font-bold bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent mb-4">Choix des groupes de danse</h2>
-            <p class="text-gray-600">Sélectionnez vos groupes de danse pour l'année scolaire {{ currentSchoolYear }}</p>
+        <div v-if="currentStep === 3" class="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl border border-white/20">
+          <div class="text-center mb-6 sm:mb-8">
+            <h2 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent mb-4">Choix des groupes de danse</h2>
+            <p class="text-sm sm:text-base text-gray-600">Sélectionnez vos groupes de danse pour l'année scolaire {{ currentSchoolYear }}</p>
           </div>
 
           <!-- Previous groups -->
