@@ -11,8 +11,8 @@ export default defineEventHandler(async (event) => {
   // Appliquer le rate limiting pour les inscriptions
   await applyRateLimit(event, 'register')
   
-  // Vérifier reCAPTCHA
-  await requireRecaptcha(event, 'register')
+  // Vérifier reCAPTCHA - DÉSACTIVÉ
+  // await requireRecaptcha(event, 'register')
   
   const body = await readBody(event)
   const { email: rawEmail, password: rawPassword } = body
