@@ -30,7 +30,8 @@
       "Bash(taskkill:*)",
       "Bash(dir \"C:\\wamp64\\www\\newandyvienuxt.fr\\server\")",
       "Bash(dir \"C:\\wamp64\\www\\newandyvienuxt.fr\\server\\utils\")",
-      "Bash(dir \"C:\\wamp64\\www\\newandyvienuxt.fr\\server\\middleware\")"
+      "Bash(dir \"C:\\wamp64\\www\\newandyvienuxt.fr\\server\\middleware\")",
+      "Read(/C:\\wamp64\\www\\newandyvienuxt.fr/**)"
     ],
     "deny": [],
     "ask": []
