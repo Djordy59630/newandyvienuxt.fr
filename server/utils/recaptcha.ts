@@ -72,21 +72,7 @@ export async function verifyRecaptcha(token: string, expectedAction?: string): P
  * Middleware pour exiger reCAPTCHA
  */
 export async function requireRecaptcha(event: any, expectedAction?: string): Promise<void> {
-  // En développement, désactiver reCAPTCHA
-  if (process.env.NODE_ENV === 'development') {
-    console.warn('⚠️ reCAPTCHA middleware désactivé en développement')
-    return
-  }
-  
-  const recaptchaToken = getHeader(event, 'x-recaptcha-token') || 
-                        (await readBody(event))?.recaptchaToken
-  
-  const isValid = await verifyRecaptcha(recaptchaToken, expectedAction)
-  
-  if (!isValid) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Vérification reCAPTCHA échouée. Veuillez réessayer.'
-    })
-  }
+  // reCAPTCHA désactivé globalement
+  console.warn('⚠️ reCAPTCHA middleware désactivé')
+  return
 }
