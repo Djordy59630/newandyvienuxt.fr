@@ -27,7 +27,10 @@
       "Bash(move C:wamp64wwwnewandyvienuxt.frservermiddlewarerateLimiter.ts C:wamp64wwwnewandyvienuxt.frserverutilsrateLimiter.ts)",
       "Bash(dir C:wamp64wwwnewandyvienuxt.frserver)",
       "Bash(copy:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(dir \"C:\\wamp64\\www\\newandyvienuxt.fr\\server\")",
+      "Bash(dir \"C:\\wamp64\\www\\newandyvienuxt.fr\\server\\utils\")",
+      "Bash(dir \"C:\\wamp64\\www\\newandyvienuxt.fr\\server\\middleware\")"
     ],
     "deny": [],
     "ask": []

@@ -37,6 +37,44 @@
               <span class="hidden sm:inline">Imprimer</span>
               <span class="sm:hidden">Print</span>
             </button>
+
+            <button
+              v-if="!editMode"
+              @click="toggleEditMode"
+              class="px-3 py-2 sm:px-4 sm:py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              <span class="hidden sm:inline">Modifier</span>
+              <span class="sm:hidden">Edit</span>
+            </button>
+
+            <button
+              v-if="editMode"
+              @click="saveChanges"
+              :disabled="savingChanges"
+              class="px-3 py-2 sm:px-4 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base"
+            >
+              <div v-if="savingChanges" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+              <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="hidden sm:inline">Sauvegarder</span>
+              <span class="sm:hidden">Save</span>
+            </button>
+
+            <button
+              v-if="editMode"
+              @click="cancelEdit"
+              class="px-3 py-2 sm:px-4 sm:py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              <span class="hidden sm:inline">Annuler</span>
+              <span class="sm:hidden">Cancel</span>
+            </button>
             
             <button
               v-if="registration.status !== 'APPROVED'"
@@ -108,7 +146,19 @@
                   </span>
                 </div>
                 <div>
-                  <h2 class="text-2xl font-bold text-white">
+                  <div v-if="editMode" class="grid grid-cols-2 gap-3 mb-2">
+                    <input v-model="editableData.firstName" 
+                           type="text" 
+                           placeholder="Prénom"
+                           class="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-xl font-bold"
+                    />
+                    <input v-model="editableData.lastName" 
+                           type="text" 
+                           placeholder="Nom de famille"
+                           class="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-xl font-bold"
+                    />
+                  </div>
+                  <h2 v-else class="text-2xl font-bold text-white">
                     {{ registration.dancer.firstName }} {{ registration.dancer.lastName }}
                   </h2>
                   <p class="text-orange-100/60">Inscription #{{ registration.id }}</p>
@@ -157,44 +207,130 @@
                 <div class="space-y-4">
                   <div>
                     <label class="text-xs font-medium text-orange-100/60 uppercase tracking-wide">Date de naissance</label>
-                    <p class="text-white mt-1">{{ formatDate(registration.dancer.birthDate) }}</p>
+                    <input v-if="editMode" 
+                           v-model="editableData.birthDate" 
+                           type="date" 
+                           class="mt-1 block w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    />
+                    <p v-else class="text-white mt-1">{{ formatDate(registration.dancer.birthDate) }}</p>
                   </div>
                   <div>
                     <label class="text-xs font-medium text-orange-100/60 uppercase tracking-wide">Email</label>
-                    <p class="text-white mt-1">{{ registration.dancer.user?.email }}</p>
+                    <input v-if="editMode" 
+                           v-model="editableData.email" 
+                           type="email" 
+                           class="mt-1 block w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    />
+                    <p v-else class="text-white mt-1">{{ registration.dancer.user?.email }}</p>
                   </div>
                   <div>
                     <label class="text-xs font-medium text-orange-100/60 uppercase tracking-wide">Téléphone</label>
-                    <p class="text-white mt-1">{{ registration.dancer.phone || 'Non renseigné' }}</p>
+                    <input v-if="editMode" 
+                           v-model="editableData.phone" 
+                           type="tel" 
+                           class="mt-1 block w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    />
+                    <p v-else class="text-white mt-1">{{ registration.dancer.phone || 'Non renseigné' }}</p>
                   </div>
                 </div>
                 <div class="space-y-4">
                   <div>
                     <label class="text-xs font-medium text-orange-100/60 uppercase tracking-wide">Adresse</label>
-                    <p class="text-white mt-1">{{ registration.dancer.address }}</p>
-                    <p class="text-orange-100/80 text-sm">{{ registration.dancer.postalCode }} {{ registration.dancer.city }}</p>
+                    <input v-if="editMode" 
+                           v-model="editableData.address" 
+                           type="text" 
+                           class="mt-1 block w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    />
+                    <div v-if="editMode" class="grid grid-cols-2 gap-2 mt-2">
+                      <input v-model="editableData.postalCode" 
+                             type="text" 
+                             placeholder="Code postal"
+                             class="block w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      />
+                      <input v-model="editableData.city" 
+                             type="text" 
+                             placeholder="Ville"
+                             class="block w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div v-else>
+                      <p class="text-white mt-1">{{ registration.dancer.address }}</p>
+                      <p class="text-orange-100/80 text-sm">{{ registration.dancer.postalCode }} {{ registration.dancer.city }}</p>
+                    </div>
                   </div>
                   <div>
                     <label class="text-xs font-medium text-orange-100/60 uppercase tracking-wide">Niveau scolaire</label>
-                    <p class="text-white mt-1">{{ registration.dancer.schoolLevel || 'Non renseigné' }}</p>
+                    <select v-if="editMode" 
+                            v-model="editableData.schoolLevel" 
+                            class="mt-1 block w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    >
+                      <option value="" class="text-gray-900">-- Sélectionner --</option>
+                      <option value="CP" class="text-gray-900">CP</option>
+                      <option value="CE1" class="text-gray-900">CE1</option>
+                      <option value="CE2" class="text-gray-900">CE2</option>
+                      <option value="CM1" class="text-gray-900">CM1</option>
+                      <option value="CM2" class="text-gray-900">CM2</option>
+                      <option value="6ème" class="text-gray-900">6ème</option>
+                      <option value="5ème" class="text-gray-900">5ème</option>
+                      <option value="4ème" class="text-gray-900">4ème</option>
+                      <option value="3ème" class="text-gray-900">3ème</option>
+                      <option value="2nde" class="text-gray-900">2nde</option>
+                      <option value="1ère" class="text-gray-900">1ère</option>
+                      <option value="Terminale" class="text-gray-900">Terminale</option>
+                      <option value="Études supérieures" class="text-gray-900">Études supérieures</option>
+                      <option value="Adulte +25 ans" class="text-gray-900">Adulte +25 ans</option>
+                    </select>
+                    <p v-else class="text-white mt-1">{{ registration.dancer.schoolLevel || 'Non renseigné' }}</p>
                   </div>
                   <div>
                     <label class="text-xs font-medium text-orange-100/60 uppercase tracking-wide">Taille T-shirt</label>
-                    <p class="text-white mt-1">{{ registration.dancer.tShirtSize || 'Non renseigné' }}</p>
+                    <select v-if="editMode" 
+                            v-model="editableData.tShirtSize" 
+                            class="mt-1 block w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    >
+                      <option value="" class="text-gray-900">-- Sélectionner --</option>
+                      <option value="6" class="text-gray-900">6 ans</option>
+                      <option value="8" class="text-gray-900">8 ans</option>
+                      <option value="10" class="text-gray-900">10 ans</option>
+                      <option value="12" class="text-gray-900">12 ans</option>
+                      <option value="14" class="text-gray-900">14 ans</option>
+                      <option value="16" class="text-gray-900">16 ans</option>
+                      <option value="XXS" class="text-gray-900">XXS</option>
+                      <option value="XS" class="text-gray-900">XS</option>
+                      <option value="S" class="text-gray-900">S</option>
+                      <option value="M" class="text-gray-900">M</option>
+                      <option value="L" class="text-gray-900">L</option>
+                      <option value="XL" class="text-gray-900">XL</option>
+                      <option value="XXL" class="text-gray-900">XXL</option>
+                      <option value="XXXL" class="text-gray-900">XXXL</option>
+                    </select>
+                    <p v-else class="text-white mt-1">{{ registration.dancer.tShirtSize || 'Non renseigné' }}</p>
                   </div>
                 </div>
               </div>
 
-              <div v-if="registration.dancer.medicalInfo || registration.dancer.otherInfo" class="mt-6 pt-6 border-t border-white/10">
-                <div v-if="registration.dancer.medicalInfo" class="mb-4">
+              <div v-if="editMode || registration.dancer.medicalInfo || registration.dancer.otherInfo" class="mt-6 pt-6 border-t border-white/10">
+                <div class="mb-4">
                   <label class="text-xs font-medium text-orange-100/60 uppercase tracking-wide">Informations médicales</label>
-                  <div class="mt-2 bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-4">
+                  <textarea v-if="editMode" 
+                            v-model="editableData.medicalInfo" 
+                            rows="3" 
+                            placeholder="Informations médicales importantes à signaler..."
+                            class="mt-2 block w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  ></textarea>
+                  <div v-else-if="registration.dancer.medicalInfo" class="mt-2 bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-4">
                     <p class="text-white">{{ registration.dancer.medicalInfo }}</p>
                   </div>
                 </div>
-                <div v-if="registration.dancer.otherInfo">
+                <div>
                   <label class="text-xs font-medium text-orange-100/60 uppercase tracking-wide">Autres informations</label>
-                  <p class="text-white mt-2">{{ registration.dancer.otherInfo }}</p>
+                  <textarea v-if="editMode" 
+                            v-model="editableData.otherInfo" 
+                            rows="3" 
+                            placeholder="Autres informations utiles..."
+                            class="mt-2 block w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  ></textarea>
+                  <p v-else-if="registration.dancer.otherInfo" class="text-white mt-2">{{ registration.dancer.otherInfo }}</p>
                 </div>
               </div>
             </div>
@@ -369,6 +505,10 @@ const { data: registration, pending, error, refresh } = await useFetch(`/api/adm
 })
 
 const loading = ref(false)
+const editMode = ref(false)
+const savingChanges = ref(false)
+const editableData = ref({})
+const originalData = ref({})
 const toast = ref({
   show: false,
   message: ''
@@ -833,6 +973,52 @@ const getStatusText = (status) => {
       return 'Brouillon'
     default:
       return 'Inconnu'
+  }
+}
+
+const toggleEditMode = () => {
+  if (!editMode.value) {
+    // Entrer en mode édition - copier les données actuelles
+    originalData.value = JSON.parse(JSON.stringify(registration.value.dancer))
+    editableData.value = JSON.parse(JSON.stringify(registration.value.dancer))
+    
+    // Formater la date pour l'input date
+    if (editableData.value.birthDate) {
+      const date = new Date(editableData.value.birthDate)
+      editableData.value.birthDate = date.toISOString().split('T')[0]
+    }
+    
+    editMode.value = true
+  }
+}
+
+const cancelEdit = () => {
+  editMode.value = false
+  editableData.value = {}
+  originalData.value = {}
+}
+
+const saveChanges = async () => {
+  savingChanges.value = true
+  
+  try {
+    const response = await $fetch(`/api/admin/dancers/${registration.value.dancer.id}`, {
+      method: 'PUT',
+      body: editableData.value
+    })
+    
+    if (response.success) {
+      await refresh()
+      editMode.value = false
+      showToast('Modifications sauvegardées avec succès')
+    } else {
+      showToast('Erreur lors de la sauvegarde', 'error')
+    }
+  } catch (error) {
+    console.error('Erreur sauvegarde:', error)
+    showToast('Erreur lors de la sauvegarde', 'error')
+  } finally {
+    savingChanges.value = false
   }
 }
 </script>
