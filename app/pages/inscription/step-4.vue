@@ -418,6 +418,7 @@ const handleFinalSubmit = async () => {
     // Récupérer toutes les données des étapes précédentes
     const step1Data = useCookie('registration-step1').value as Step1Data | null
     const healthData = useCookie('registration-health').value as HealthData | null
+    const sportCodeData = useCookie('registration-sportcode').value
     const step2Data = useCookie('registration-step2').value
     const step3Data = useCookie('registration-step3').value as Step3Data | null
     const step4Data = formDataCookie.value
@@ -425,6 +426,7 @@ const handleFinalSubmit = async () => {
     console.log('Envoi des données complètes:', {
       step1: step1Data,
       health: healthData,
+      sportcode: sportCodeData,
       step2: step2Data,
       step3: step3Data,
       step4: step4Data
@@ -438,6 +440,7 @@ const handleFinalSubmit = async () => {
       body: {
         step1: step1Data,
         health: healthData,
+        sportcode: sportCodeData,
         step2: step2Data,
         step3: step3Data,
         step4: step4Data
@@ -448,6 +451,8 @@ const handleFinalSubmit = async () => {
 
     // Nettoyer les cookies après sauvegarde réussie
     useCookie('registration-step1').value = null
+    useCookie('registration-health').value = null
+    useCookie('registration-sportcode').value = null
     useCookie('registration-step2').value = null
     useCookie('registration-step3').value = null
     useCookie('registration-step4').value = null

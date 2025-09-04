@@ -1,4 +1,4 @@
-import { dancers_schoolLevel, PrismaClient } from '@prisma/client'
+import { dancers_schoolLevel, dancers_tShirtSize, PrismaClient } from '@prisma/client'
 import jwt from 'jsonwebtoken'
 
 const prisma = new PrismaClient()
@@ -68,7 +68,7 @@ export default defineEventHandler(async (event) => {
 
     // Récupérer les données du body
     const body = await readBody(event)
-    const { step1, health, step2, step3, step4 } = body
+    const { step1, health, sportcode, step2, step3, step4 } = body
 
     if (!step1 || !health || !step4) {
       throw createError({
@@ -83,6 +83,27 @@ export default defineEventHandler(async (event) => {
         statusCode: 400,
         statusMessage: 'La déclaration sur le questionnaire santé est obligatoire'
       })
+    }
+
+    // Fonction pour convertir les tailles de t-shirt
+    const convertTShirtSize = (size: string): string => {
+      const mapping: Record<string, string> = {
+        '6': 'SIZE_6',
+        '8': 'SIZE_8',
+        '10': 'SIZE_10',
+        '12': 'SIZE_12',
+        '14': 'SIZE_14',
+        '16': 'SIZE_16',
+        'XXS': 'XXS',
+        'XS': 'XS',
+        'S': 'S',
+        'M': 'M',
+        'L': 'L',
+        'XL': 'XL',
+        'XXL': 'XXL',
+        'XXXL': 'XXXL'
+      }
+      return mapping[size] || 'M'
     }
 
     // Fonction pour convertir les anciennes valeurs vers les nouvelles
@@ -132,7 +153,7 @@ export default defineEventHandler(async (event) => {
         city: step1.city || 'Non spécifié',
         phone: step1.phone,
         schoolLevel: convertSchoolLevel(step1.schoolLevel || 'ADULTE') as dancers_schoolLevel,
-        tShirtSize: step1.tshirtSize || step1.tShirtSize || 'M',
+        tShirtSize: convertTShirtSize(step1.tshirtSize || step1.tShirtSize || 'M') as dancers_tShirtSize,
         otherInfo: step1.otherInfo || null,
       }
     })
@@ -211,7 +232,7 @@ export default defineEventHandler(async (event) => {
             dancerId: dancer.id,
             danceGroupId: danceGroup.id,
             schoolYear: currentSchoolYear, // Ajouter l'année scolaire
-            sportCode: null,
+            sportCode: sportcode?.sportCode || null,
             status: 'SUBMITTED', // Marquer comme SUBMITTED car l'inscription est complète
             submittedAt: new Date(),
             reviewedAt: null,

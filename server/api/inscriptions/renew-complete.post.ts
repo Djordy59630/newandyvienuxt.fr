@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const body = await readBody(event)
-    const { schoolYear, personalData, guardianData, emergencyContacts, healthData, selectedGroups } = body
+    const { schoolYear, personalData, guardianData, emergencyContacts, healthData, sportCodeData, selectedGroups } = body
 
     if (!schoolYear || !personalData || !healthData || !selectedGroups || selectedGroups.length === 0) {
       throw createError({
@@ -79,6 +79,27 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    // Fonction pour convertir les tailles de t-shirt
+    const convertTShirtSize = (size: string): string => {
+      const mapping: Record<string, string> = {
+        '6': 'SIZE_6',
+        '8': 'SIZE_8',
+        '10': 'SIZE_10',
+        '12': 'SIZE_12',
+        '14': 'SIZE_14',
+        '16': 'SIZE_16',
+        'XXS': 'XXS',
+        'XS': 'XS',
+        'S': 'S',
+        'M': 'M',
+        'L': 'L',
+        'XL': 'XL',
+        'XXL': 'XXL',
+        'XXXL': 'XXXL'
+      }
+      return mapping[size] || 'M'
+    }
+
     // Fonction pour convertir les niveaux scolaires
     const convertSchoolLevel = (level: string) => {
       const mapping: Record<string, string> = {
@@ -121,7 +142,7 @@ export default defineEventHandler(async (event) => {
       phone: personalData.phone,
       birthDate: personalData.birthDate ? new Date(personalData.birthDate) : existingDancer.birthDate,
       schoolLevel: convertSchoolLevel(personalData.schoolLevel || existingDancer.schoolLevel),
-      tShirtSize: personalData.tShirtSize || existingDancer.tShirtSize,
+      tShirtSize: convertTShirtSize(personalData.tShirtSize || existingDancer.tShirtSize),
       address: personalData.address,
       postalCode: personalData.postalCode,
       city: personalData.city,
@@ -230,7 +251,7 @@ export default defineEventHandler(async (event) => {
           dancerId: existingDancer.id,
           danceGroupId: danceGroup.id,
           schoolYear: schoolYear,
-          sportCode: null,
+          sportCode: sportCodeData?.sportCode || null,
           status: 'SUBMITTED',
           submittedAt: new Date(),
           reviewedAt: null,

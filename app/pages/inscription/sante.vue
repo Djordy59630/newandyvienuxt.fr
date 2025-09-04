@@ -366,8 +366,8 @@ const handleContinue = async () => {
     // Simuler un appel API
     await new Promise(resolve => setTimeout(resolve, 800))
     
-    // Aller à l'étape 2
-    await navigateTo('/inscription/step-2')
+    // Aller à la page code sport
+    await navigateTo('/inscription/code-sport')
     
   } catch (err) {
     error.value = 'Une erreur s\'est produite lors de la sauvegarde'
