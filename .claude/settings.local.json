@@ -23,7 +23,10 @@
       "Bash(npx eslint:*)",
       "Bash(node:*)",
       "Read(c:\\wamp64\\www\\newandyvienuxt.fr\\app\\pages\\renouvellement/**)",
-      "Read(c:\\wamp64\\www\\newandyvienuxt.fr/**)"
+      "Read(c:\\wamp64\\www\\newandyvienuxt.fr/**)",
+      "Bash(move C:wamp64wwwnewandyvienuxt.frservermiddlewarerateLimiter.ts C:wamp64wwwnewandyvienuxt.frserverutilsrateLimiter.ts)",
+      "Bash(dir C:wamp64wwwnewandyvienuxt.frserver)",
+      "Bash(copy:*)"
     ],
     "deny": [],
     "ask": []

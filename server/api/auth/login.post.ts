@@ -1,10 +1,14 @@
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
 import { PrismaClient } from '@prisma/client'
+import { generateJWT } from '~/server/utils/auth'
+import { applyRateLimit } from '~/server/utils/rateLimiter'
 
 const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
+  // Appliquer le rate limiting pour les tentatives de connexion
+  await applyRateLimit(event, 'login')
+  
   const body = await readBody(event)
   const { email, password } = body
 
@@ -39,11 +43,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Générer le token JWT
-    const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      process.env.JWT_SECRET!,
-      { expiresIn: '7d' }
-    )
+    const token = generateJWT(user.id, user.email)
 
     return {
       success: true,

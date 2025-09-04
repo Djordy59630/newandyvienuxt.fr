@@ -1,23 +1,12 @@
 import { dancers_schoolLevel, dancers_tShirtSize, PrismaClient } from '@prisma/client'
-import jwt from 'jsonwebtoken'
+import { getAuthenticatedUser } from '~/server/utils/auth'
 
 const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
   try {
     // Vérifier l'authentification
-    const token = getCookie(event, 'auth-token') || getHeader(event, 'authorization')?.replace('Bearer ', '')
-    
-    if (!token) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Token manquant'
-      })
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as any
-    const userId = decoded.userId
-    const userEmail = decoded.email
+    const { userId, email: userEmail } = getAuthenticatedUser(event)
 
     // Obtenir l'année scolaire actuelle
     const now = new Date()

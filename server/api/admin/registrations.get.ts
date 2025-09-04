@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import jwt from 'jsonwebtoken'
+import { requireAdmin } from '~/server/utils/auth'
 import type { RegistrationWithRelations } from '~/types/database'
 
 const prisma = new PrismaClient()
@@ -7,28 +7,7 @@ const prisma = new PrismaClient()
 export default defineEventHandler(async (event) => {
   try {
     // Vérifier l'authentification et les droits admin
-    const token = getCookie(event, 'auth-token') || getHeader(event, 'authorization')?.replace('Bearer ', '')
-    
-    if (!token) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Token manquant'
-      })
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as { userId: number; email: string }
-    
-    // Vérifier que l'utilisateur est admin
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.userId }
-    })
-
-    if (!user || user.roles !== 'admin') {
-      throw createError({
-        statusCode: 403,
-        statusMessage: 'Accès refusé - Administrateur uniquement'
-      })
-    }
+    await requireAdmin(event, prisma)
 
     // Récupérer toutes les inscriptions avec les détails
     const registrations = await prisma.registration.findMany({

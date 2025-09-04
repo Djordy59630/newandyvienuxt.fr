@@ -1,17 +1,48 @@
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
 import { PrismaClient } from '@prisma/client'
+import { generateJWT } from '~/server/utils/auth'
+import { applyRateLimit } from '~/server/utils/rateLimiter'
+import { validateEmail, validatePassword, sanitizeString } from '~/server/utils/validation'
+import { requireRecaptcha } from '~/server/utils/recaptcha'
 
 const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
+  // Appliquer le rate limiting pour les inscriptions
+  await applyRateLimit(event, 'register')
+  
+  // Vérifier reCAPTCHA
+  await requireRecaptcha(event, 'register')
+  
   const body = await readBody(event)
-  const { email, password } = body
+  const { email: rawEmail, password: rawPassword } = body
 
-  if (!email || !password) {
+  if (!rawEmail || !rawPassword) {
     throw createError({
       statusCode: 400,
       statusMessage: 'Email et mot de passe requis'
+    })
+  }
+  
+  // Nettoyer et valider les données
+  const email = sanitizeString(rawEmail, 254)
+  const password = rawPassword
+  
+  // Valider l'email
+  const emailValidation = validateEmail(email)
+  if (!emailValidation.isValid) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: emailValidation.errors.join(', ')
+    })
+  }
+  
+  // Valider le mot de passe
+  const passwordValidation = validatePassword(password)
+  if (!passwordValidation.isValid) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: passwordValidation.errors.join(', ')
     })
   }
 
@@ -41,11 +72,7 @@ export default defineEventHandler(async (event) => {
     })
 
     // Générer le token JWT
-    const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      process.env.JWT_SECRET!,
-      { expiresIn: '7d' }
-    )
+    const token = generateJWT(user.id, user.email)
 
     return {
       success: true,
@@ -57,7 +84,7 @@ export default defineEventHandler(async (event) => {
       }
     }
   } catch (error: any) {
-    console.error('Erreur inscription:', error)
+    // Ne pas logguer l'erreur complète pour éviter les fuites de données
     throw createError({
       statusCode: error.statusCode || 500,
       statusMessage: error.statusMessage || 'Erreur lors de l\'inscription'
