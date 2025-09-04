@@ -14,7 +14,7 @@ export interface RecaptchaResponse {
 export async function verifyRecaptcha(token: string, expectedAction?: string): Promise<boolean> {
   const secretKey = process.env.RECAPTCHA_SECRET_KEY
   
-  if (!secretKey) {
+  if (!secretKey || secretKey === 'your-recaptcha-secret-key-here') {
     // En développement, on peut désactiver reCAPTCHA
     if (process.env.NODE_ENV === 'development') {
       console.warn('⚠️ reCAPTCHA désactivé en développement')
@@ -72,6 +72,12 @@ export async function verifyRecaptcha(token: string, expectedAction?: string): P
  * Middleware pour exiger reCAPTCHA
  */
 export async function requireRecaptcha(event: any, expectedAction?: string): Promise<void> {
+  // En développement, désactiver reCAPTCHA
+  if (process.env.NODE_ENV === 'development') {
+    console.warn('⚠️ reCAPTCHA middleware désactivé en développement')
+    return
+  }
+  
   const recaptchaToken = getHeader(event, 'x-recaptcha-token') || 
                         (await readBody(event))?.recaptchaToken
   
