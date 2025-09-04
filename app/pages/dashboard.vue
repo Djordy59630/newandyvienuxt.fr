@@ -302,6 +302,10 @@
                     <span class="text-purple-600 font-semibold">👥 Âge :</span>
                     <span class="text-gray-700 ml-1">{{ group.ageGroup }}</span>
                   </div>
+                  <div v-if="group.sportCode" class="sm:col-span-2">
+                    <span class="text-purple-600 font-semibold">🏃 Code sport :</span>
+                    <span class="text-gray-700 ml-1">{{ group.sportCode }}</span>
+                  </div>
                 </div>
               </div>
             </div>

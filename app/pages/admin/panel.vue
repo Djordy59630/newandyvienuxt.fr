@@ -217,6 +217,10 @@
                   <span class="text-orange-100/60">Horaire:</span>
                   <span class="text-white text-xs">{{ registration.danceGroup.schedule }}</span>
                 </div>
+                <div v-if="registration.sportCode" class="flex items-center justify-between">
+                  <span class="text-orange-100/60">Code sport:</span>
+                  <span class="text-white text-xs">{{ registration.sportCode }}</span>
+                </div>
                 <div class="flex items-center justify-between">
                   <span class="text-orange-100/60">Date:</span>
                   <span class="text-white text-xs">{{ formatDate(registration.createdAt) }}</span>
@@ -271,6 +275,7 @@
                   <td class="px-4 py-4 lg:px-6 lg:py-4">
                     <div class="text-sm text-white">{{ registration.danceGroup.name }}</div>
                     <div class="text-xs text-orange-100/60">{{ registration.danceGroup.schedule }}</div>
+                    <div v-if="registration.sportCode" class="text-xs text-orange-300">Sport: {{ registration.sportCode }}</div>
                   </td>
                   <td class="px-4 py-4 lg:px-6 lg:py-4">
                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full" :class="getStatusClass(registration.status)">

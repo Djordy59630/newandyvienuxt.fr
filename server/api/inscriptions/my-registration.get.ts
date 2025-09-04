@@ -78,7 +78,8 @@ export default defineEventHandler(async (event) => {
           schoolYear: reg.schoolYear,
           submittedAt: reg.submittedAt,
           reviewedAt: reg.reviewedAt,
-          notes: reg.notes
+          notes: reg.notes,
+          sportCode: reg.sportCode
         })) || [],
         emergencyContacts: dancer.emergencyContacts?.map((contact: any) => ({
           id: contact.id,
