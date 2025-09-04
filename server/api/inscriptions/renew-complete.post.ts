@@ -47,7 +47,8 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Vérifier qu'il n'y a pas déjà une inscription pour l'année demandée
+    // Vérifier qu'il n'y a pas déjà une inscription active pour l'année demandée
+    // On permet le renouvellement si l'inscription précédente a été rejetée
     const existingRegistration = await prisma.registration.findFirst({
       where: {
         dancer: {
@@ -55,15 +56,16 @@ export default defineEventHandler(async (event) => {
         },
         schoolYear: schoolYear,
         status: {
-          in: ['SUBMITTED', 'APPROVED', 'REJECTED']
+          in: ['SUBMITTED', 'APPROVED'] // On exclut 'REJECTED' pour permettre le renouvellement
         }
       }
     })
 
     if (existingRegistration) {
+      const statusText = existingRegistration.status === 'APPROVED' ? 'approuvée' : 'en attente de validation'
       throw createError({
         statusCode: 409,
-        statusMessage: `Vous avez déjà une inscription pour l'année ${schoolYear}`
+        statusMessage: `Vous avez déjà une inscription ${statusText} pour l'année ${schoolYear}`
       })
     }
 
@@ -245,20 +247,33 @@ export default defineEventHandler(async (event) => {
         })
       }
 
-      // Créer l'inscription pour la nouvelle année scolaire
-      await prisma.registration.create({
-        data: {
+      // Vérifier si une inscription existe déjà pour ce groupe et cette année
+      const existingRegistrationForGroup = await prisma.registration.findFirst({
+        where: {
           dancerId: existingDancer.id,
           danceGroupId: danceGroup.id,
-          schoolYear: schoolYear,
-          sportCode: sportCodeData?.sportCode || null,
-          status: 'SUBMITTED',
-          submittedAt: new Date(),
-          reviewedAt: null,
-          reviewedBy: null,
-          notes: `Renouvellement depuis année précédente. ${healthData.healthStatus === 'positive' ? 'Certificat médical requis.' : ''}`
+          schoolYear: schoolYear
         }
       })
+
+      if (!existingRegistrationForGroup) {
+        // Créer l'inscription pour la nouvelle année scolaire
+        await prisma.registration.create({
+          data: {
+            dancerId: existingDancer.id,
+            danceGroupId: danceGroup.id,
+            schoolYear: schoolYear,
+            sportCode: sportCodeData?.sportCode || null,
+            status: 'SUBMITTED',
+            submittedAt: new Date(),
+            reviewedAt: null,
+            reviewedBy: null,
+            notes: `Renouvellement depuis année précédente. ${healthData.healthStatus === 'positive' ? 'Certificat médical requis.' : ''}`
+          }
+        })
+      } else {
+        console.log(`Registration already exists for dancer ${existingDancer.id} in group ${danceGroup.id} for year ${schoolYear}`)
+      }
     }
 
     return {

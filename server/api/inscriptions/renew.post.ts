@@ -78,22 +78,24 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Vérifier s'il n'y a pas déjà une inscription pour l'année demandée
+    // Vérifier s'il n'y a pas déjà une inscription active pour l'année demandée
+    // On permet le renouvellement si l'inscription précédente a été rejetée
     // @ts-expect-error - Modèle Prisma généré
     const existingRegistration = await prisma.registration.findFirst({
       where: {
         dancerId: dancer.id,
         schoolYear: schoolYear,
         status: {
-          in: ['SUBMITTED', 'APPROVED', 'REJECTED']
+          in: ['SUBMITTED', 'APPROVED'] // On exclut 'REJECTED' pour permettre le renouvellement
         }
       }
     })
 
     if (existingRegistration) {
+      const statusText = existingRegistration.status === 'APPROVED' ? 'approuvée' : 'en attente de validation'
       throw createError({
         statusCode: 409,
-        statusMessage: `Vous avez déjà une inscription pour l'année ${schoolYear}`
+        statusMessage: `Vous avez déjà une inscription ${statusText} pour l'année ${schoolYear}`
       })
     }
 

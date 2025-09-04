@@ -813,9 +813,27 @@ const loadData = async () => {
       throw new Error('Impossible de récupérer les données de renouvellement')
     }
 
-    // Load available dance groups
-    const groupsData = await $fetch('/api/dance-groups')
+    // Calculate dancer's age and load available dance groups filtered by age
+    let dancerAge = null
+    if (dancerData.value?.birthDate) {
+      const birthDate = new Date(dancerData.value.birthDate)
+      const today = new Date()
+      let age = today.getFullYear() - birthDate.getFullYear()
+      const monthDiff = today.getMonth() - birthDate.getMonth()
+      
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--
+      }
+      dancerAge = age
+      console.log('Calculated dancer age:', dancerAge)
+    }
+
+    // Load available dance groups filtered by dancer's age
+    const groupsData = await $fetch('/api/dance-groups', {
+      query: dancerAge !== null ? { age: dancerAge } : {}
+    })
     availableGroups.value = groupsData?.groups || []
+    console.log('Available groups after age filtering:', availableGroups.value.length)
 
   } catch (error) {
     console.error('Error loading renewal data:', error)
@@ -851,7 +869,7 @@ const selectSameGroup = (previousGroup) => {
   }
 }
 
-const validatePersonalInfoAndContinue = () => {
+const validatePersonalInfoAndContinue = async () => {
   if (editPersonalInfo.value) {
     // Validate required fields
     const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'birthDate', 'schoolLevel', 'tShirtSize', 'address', 'postalCode', 'city']
@@ -860,6 +878,45 @@ const validatePersonalInfoAndContinue = () => {
     if (missingFields.length > 0) {
       alert(`Veuillez remplir tous les champs obligatoires : ${missingFields.join(', ')}`)
       return
+    }
+
+    // If birth date was changed, recalculate age and reload groups
+    const originalBirthDate = dancerData.value?.birthDate ? new Date(dancerData.value.birthDate).toISOString().split('T')[0] : ''
+    if (editForm.value.birthDate !== originalBirthDate) {
+      console.log('Birth date changed, reloading groups...')
+      
+      // Calculate new age
+      const birthDate = new Date(editForm.value.birthDate)
+      const today = new Date()
+      let age = today.getFullYear() - birthDate.getFullYear()
+      const monthDiff = today.getMonth() - birthDate.getMonth()
+      
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--
+      }
+      
+      console.log('New dancer age:', age)
+      
+      // Reload groups with new age filter
+      try {
+        const groupsData = await $fetch('/api/dance-groups', {
+          query: { age }
+        })
+        availableGroups.value = groupsData?.groups || []
+        console.log('Reloaded groups after age change:', availableGroups.value.length)
+        
+        // Clear selected groups if they're no longer available
+        const originalSelectedCount = selectedGroups.value.length
+        selectedGroups.value = selectedGroups.value.filter(selectedGroup => 
+          availableGroups.value.some(availableGroup => availableGroup.id === selectedGroup.id)
+        )
+        
+        if (selectedGroups.value.length !== originalSelectedCount) {
+          console.log('Some selected groups were removed due to age restrictions')
+        }
+      } catch (error) {
+        console.error('Error reloading groups:', error)
+      }
     }
   }
   
@@ -921,7 +978,7 @@ const submitRenewal = async () => {
     // Use edited emergency contacts if available, otherwise use original data
     const emergencyContactsToSend = editEmergencyContacts.value ? editEmergencyContactsForm.value : emergencyContacts.value
 
-    const { data: result } = await useFetch('/api/inscriptions/renew-complete', {
+    const result = await $fetch('/api/inscriptions/renew-complete', {
       method: 'POST',
       body: {
         schoolYear: currentSchoolYear.value,
@@ -939,7 +996,7 @@ const submitRenewal = async () => {
       }
     })
 
-    if (result.value?.success) {
+    if (result?.success) {
       // Redirect to success page
       router.push('/renouvellement/succes')
     }

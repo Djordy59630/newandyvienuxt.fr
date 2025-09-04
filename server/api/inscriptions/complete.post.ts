@@ -1,5 +1,5 @@
 import { dancers_schoolLevel, dancers_tShirtSize, PrismaClient } from '@prisma/client'
-import { getAuthenticatedUser } from '~/server/utils/auth'
+import jwt from 'jsonwebtoken'
 
 const prisma = new PrismaClient()
 
@@ -14,7 +14,8 @@ export default defineEventHandler(async (event) => {
     const month = now.getMonth() + 1
     const currentSchoolYear = month >= 9 ? `${year}-${year + 1}` : `${year - 1}-${year}`
 
-    // Vérifier si l'utilisateur a déjà une inscription COMPLETE pour l'année scolaire actuelle
+    // Vérifier si l'utilisateur a déjà une inscription active pour l'année scolaire actuelle
+    // On permet une nouvelle inscription si la précédente a été rejetée
     const existingCompleteRegistration = await prisma.registration.findFirst({
       where: { 
         dancer: {
@@ -22,15 +23,16 @@ export default defineEventHandler(async (event) => {
         },
         schoolYear: currentSchoolYear,
         status: {
-          in: ['SUBMITTED', 'APPROVED', 'REJECTED']
+          in: ['SUBMITTED', 'APPROVED'] // On exclut 'REJECTED' pour permettre une nouvelle inscription
         }
       }
     })
 
     if (existingCompleteRegistration) {
+      const statusText = existingCompleteRegistration.status === 'APPROVED' ? 'approuvée' : 'en attente de validation'
       throw createError({
         statusCode: 409,
-        statusMessage: 'Vous avez déjà une demande d\'inscription validée. Un seul dossier par utilisateur est autorisé.'
+        statusMessage: `Vous avez déjà une inscription ${statusText}. Un seul dossier actif par utilisateur est autorisé.`
       })
     }
 
