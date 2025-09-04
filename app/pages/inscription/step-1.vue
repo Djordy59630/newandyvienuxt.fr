@@ -712,6 +712,28 @@
 
       </div>
     </div>
+
+    <!-- Easter Egg Popup pour David -->
+    <div v-if="showEasterEgg" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div class="bg-white rounded-3xl p-8 mx-4 max-w-md shadow-2xl big-bounce">
+        <div class="text-center">
+          <div class="text-6xl mb-4">🥙</div>
+          <h3 class="text-2xl font-bold text-gray-800 mb-4">Bonjour David !</h3>
+          <p class="text-gray-600 mb-6">
+            Arrête de manger trop de kebab ! 😄
+          </p>
+          <p class="text-sm text-gray-500 italic mb-6">
+            T & D
+          </p>
+          <button 
+            @click="closeEasterEgg"
+            class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-2xl font-semibold hover:from-orange-600 hover:to-red-600 transition-all duration-300 transform hover:scale-105"
+          >
+            Oui oui, j'ai compris ! 😅
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -787,6 +809,7 @@ const showCursor = ref(true)
 const loading = ref(false)
 const error = ref('')
 const validationErrors = ref<Record<string, string>>({})
+const showEasterEgg = ref(false)
 
 const form = ref({
   email: user.value?.email || '',
@@ -888,6 +911,20 @@ const handleLastNameSubmit = () => {
     return
   }
   validationErrors.value.lastName = ''
+  
+  // Easter egg pour David Regnard 🥙
+  if (form.value.firstName.toLowerCase().trim() === 'david' && form.value.lastName.toLowerCase().trim() === 'regnard') {
+    showEasterEgg.value = true
+    // La popup reste affichée jusqu'à ce que David clique
+  } else {
+    setTimeout(() => {
+      currentStep.value = 'birthDate'
+    }, 500)
+  }
+}
+
+const closeEasterEgg = () => {
+  showEasterEgg.value = false
   setTimeout(() => {
     currentStep.value = 'birthDate'
   }, 500)
@@ -1209,5 +1246,46 @@ input[type="date"].date-input:valid::-webkit-datetime-edit {
 
 .animate-pulse-slow {
   animation: pulse-slow 3s ease-in-out infinite;
+}
+
+@keyframes bounce-around {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg);
+  }
+  10% {
+    transform: translate(300px, -200px) rotate(36deg);
+  }
+  20% {
+    transform: translate(-200px, -300px) rotate(72deg);
+  }
+  30% {
+    transform: translate(400px, 100px) rotate(108deg);
+  }
+  40% {
+    transform: translate(-300px, 200px) rotate(144deg);
+  }
+  50% {
+    transform: translate(200px, -100px) rotate(180deg);
+  }
+  60% {
+    transform: translate(-400px, -150px) rotate(216deg);
+  }
+  70% {
+    transform: translate(350px, 250px) rotate(252deg);
+  }
+  80% {
+    transform: translate(-150px, -250px) rotate(288deg);
+  }
+  90% {
+    transform: translate(100px, 150px) rotate(324deg);
+  }
+  100% {
+    transform: translate(0px, 0px) rotate(360deg);
+  }
+}
+
+.big-bounce {
+  animation: bounce-around 45s ease-in-out infinite;
+  transform-origin: center center;
 }
 </style>

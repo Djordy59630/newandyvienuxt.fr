@@ -26,7 +26,8 @@
       "Read(c:\\wamp64\\www\\newandyvienuxt.fr/**)",
       "Bash(move C:wamp64wwwnewandyvienuxt.frservermiddlewarerateLimiter.ts C:wamp64wwwnewandyvienuxt.frserverutilsrateLimiter.ts)",
       "Bash(dir C:wamp64wwwnewandyvienuxt.frserver)",
-      "Bash(copy:*)"
+      "Bash(copy:*)",
+      "Bash(taskkill:*)"
     ],
     "deny": [],
     "ask": []
