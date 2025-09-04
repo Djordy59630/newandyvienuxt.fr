@@ -480,7 +480,7 @@
               <option value="PREMIERE">Première</option>
               <option value="TERMINALE">Terminale</option>
               <option value="POST_BAC">Post-Bac</option>
-              <option value="ADULTE">Adulte</option>
+              <option value="ADULTE">Adulte +25 ans</option>
             </select>
             <div v-if="validationErrors.schoolLevel" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
               {{ validationErrors.schoolLevel }}
@@ -531,12 +531,20 @@
               required
             >
               <option value="">Choisis ta taille</option>
+              <option value="6">6</option>
+              <option value="8">8</option>
+              <option value="10">10</option>
+              <option value="12">12</option>
+              <option value="14">14</option>
+              <option value="16">16</option>
+              <option value="XXS">XXS</option>
               <option value="XS">XS</option>
               <option value="S">S</option>
               <option value="M">M</option>
               <option value="L">L</option>
               <option value="XL">XL</option>
               <option value="XXL">XXL</option>
+              <option value="XXXL">XXXL</option>
             </select>
             <div v-if="validationErrors.tshirtSize" class="mt-2 text-red-600 text-sm bg-red-50 p-2 rounded-lg">
               {{ validationErrors.tshirtSize }}
