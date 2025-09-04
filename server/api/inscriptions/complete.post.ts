@@ -6,7 +6,30 @@ const prisma = new PrismaClient()
 export default defineEventHandler(async (event) => {
   try {
     // Vérifier l'authentification
-    const { userId, email: userEmail } = getAuthenticatedUser(event)
+    const token = getCookie(event, 'auth-token') || getHeader(event, 'authorization')?.replace('Bearer ', '')
+    
+    if (!token) {
+      throw createError({
+        statusCode: 401,
+        statusMessage: 'Token manquant'
+      })
+    }
+
+    let decoded: any
+    let userId: number
+    let userEmail: string
+    
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as any
+      userId = decoded.userId
+      userEmail = decoded.email
+    } catch (jwtError) {
+      console.error('JWT Error:', jwtError)
+      throw createError({
+        statusCode: 401,
+        statusMessage: 'Token invalide ou expiré'
+      })
+    }
 
     // Obtenir l'année scolaire actuelle
     const now = new Date()

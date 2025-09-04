@@ -5,6 +5,8 @@ const prisma = new PrismaClient()
 
 export default defineEventHandler(async (event) => {
   try {
+    console.log('=== DÉBUT renew-complete.post.ts ===')
+    
     // Vérifier l'authentification
     const token = getCookie(event, 'auth-token') || getHeader(event, 'authorization')?.replace('Bearer ', '')
     
@@ -32,7 +34,15 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event)
     const { schoolYear, personalData, guardianData, emergencyContacts, healthData, sportCodeData, selectedGroups } = body
 
+    console.log('Données reçues:', {
+      schoolYear,
+      personalData: personalData ? 'OK' : 'MISSING',
+      selectedGroups: selectedGroups ? selectedGroups.length : 'MISSING',
+      userId
+    })
+
     if (!schoolYear || !personalData || !healthData || !selectedGroups || selectedGroups.length === 0) {
+      console.error('Données manquantes:', { schoolYear, personalData: !!personalData, healthData: !!healthData, selectedGroups: selectedGroups?.length })
       throw createError({
         statusCode: 400,
         statusMessage: 'Données de renouvellement incomplètes'
@@ -247,17 +257,21 @@ export default defineEventHandler(async (event) => {
         })
       }
 
-      // Vérifier si une inscription existe déjà pour ce groupe et cette année
-      const existingRegistrationForGroup = await prisma.registration.findFirst({
+      // Vérifier si une inscription ACTIVE existe déjà pour ce groupe et cette année
+      // On permet de créer une nouvelle inscription même s'il y en a une rejetée
+      const existingActiveRegistrationForGroup = await prisma.registration.findFirst({
         where: {
           dancerId: existingDancer.id,
           danceGroupId: danceGroup.id,
-          schoolYear: schoolYear
+          schoolYear: schoolYear,
+          status: {
+            in: ['SUBMITTED', 'APPROVED'] // On exclut 'REJECTED'
+          }
         }
       })
 
-      if (!existingRegistrationForGroup) {
-        // Créer l'inscription pour la nouvelle année scolaire
+      if (!existingActiveRegistrationForGroup) {
+        // Créer une nouvelle inscription (même s'il y en a une rejetée, on garde l'historique)
         await prisma.registration.create({
           data: {
             dancerId: existingDancer.id,
@@ -271,11 +285,13 @@ export default defineEventHandler(async (event) => {
             notes: `Renouvellement depuis année précédente. ${healthData.healthStatus === 'positive' ? 'Certificat médical requis.' : ''}`
           }
         })
+        console.log(`Created new registration for dancer ${existingDancer.id} in group ${danceGroup.id} for year ${schoolYear}`)
       } else {
-        console.log(`Registration already exists for dancer ${existingDancer.id} in group ${danceGroup.id} for year ${schoolYear}`)
+        console.log(`Active registration already exists for dancer ${existingDancer.id} in group ${danceGroup.id} for year ${schoolYear} (status: ${existingActiveRegistrationForGroup.status})`)
       }
     }
 
+    console.log('=== Renouvellement terminé avec succès ===')
     return {
       success: true,
       message: 'Renouvellement effectué avec succès',

@@ -938,11 +938,17 @@ const validatePersonalInfoAndContinue = async () => {
 }
 
 const submitRenewal = async () => {
+  console.log('=== DÉBUT submitRenewal ===')
+  console.log('selectedGroups.length:', selectedGroups.value.length)
+  console.log('healthDeclaration:', healthForm.value.healthDeclaration)
+  
   if (selectedGroups.value.length === 0 || !healthForm.value.healthDeclaration) {
+    console.log('Validation échouée - arrêt de la soumission')
     return
   }
 
   try {
+    console.log('Début de la soumission...')
     submitting.value = true
 
     // Use edited data if available, otherwise use original data
@@ -978,6 +984,16 @@ const submitRenewal = async () => {
     // Use edited emergency contacts if available, otherwise use original data
     const emergencyContactsToSend = editEmergencyContacts.value ? editEmergencyContactsForm.value : emergencyContacts.value
 
+    console.log('Données à envoyer:', {
+      schoolYear: currentSchoolYear.value,
+      personalData: personalData ? 'OK' : 'MISSING',
+      guardianData: guardianDataToSend ? 'OK' : 'NULL',
+      emergencyContacts: emergencyContactsToSend ? emergencyContactsToSend.length : 'MISSING',
+      healthData: healthForm.value,
+      selectedGroups: selectedGroups.value.length
+    })
+
+    console.log('Appel API /api/inscriptions/renew-complete...')
     const result = await $fetch('/api/inscriptions/renew-complete', {
       method: 'POST',
       body: {
@@ -995,15 +1011,20 @@ const submitRenewal = async () => {
         }))
       }
     })
+    
+    console.log('Réponse API:', result)
 
     if (result?.success) {
+      console.log('Renouvellement réussi, redirection vers page de succès')
       // Redirect to success page
       router.push('/renouvellement/succes')
+    } else {
+      console.error('API returned success: false', result)
     }
 
   } catch (error) {
-    console.error('Error submitting renewal:', error)
-    // Show error message to user
+    console.error('Erreur lors de la soumission du renouvellement:', error)
+    alert('Erreur lors du renouvellement: ' + (error.data?.message || error.message || 'Erreur inconnue'))
   } finally {
     submitting.value = false
   }

@@ -105,7 +105,6 @@ model Registration {
   danceGroup DanceGroup @relation(fields: [danceGroupId], references: [id])
   reviewer   User?      @relation("ReviewedBy", fields: [reviewedBy], references: [id])
 
-  @@unique([dancerId, danceGroupId, schoolYear])
   @@index([danceGroupId], map: "registrations_danceGroupId_fkey")
   @@index([reviewedBy], map: "registrations_reviewedBy_fkey")
   @@index([schoolYear])
