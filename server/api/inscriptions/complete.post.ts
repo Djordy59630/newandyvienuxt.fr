@@ -100,32 +100,37 @@ export default defineEventHandler(async (event) => {
     }
 
     // Fonction pour convertir les tailles de t-shirt
-    const convertTShirtSize = (size: string): string => {
-      // Si c'est déjà une valeur enum valide, la retourner directement
-      const validEnumValues = ['SIZE_6', 'SIZE_8', 'SIZE_10', 'SIZE_12', 'SIZE_14', 'SIZE_16', 
-                               'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
-      if (validEnumValues.includes(size)) {
-        return size
+    const convertTShirtSize = (size: string): dancers_tShirtSize => {
+      // Créer un mapping explicite vers l'enum Prisma
+      const mapping: Record<string, dancers_tShirtSize> = {
+        '6': dancers_tShirtSize.SIZE_6,
+        '8': dancers_tShirtSize.SIZE_8,
+        '10': dancers_tShirtSize.SIZE_10,
+        '12': dancers_tShirtSize.SIZE_12,
+        '14': dancers_tShirtSize.SIZE_14,
+        '16': dancers_tShirtSize.SIZE_16,
+        'SIZE_6': dancers_tShirtSize.SIZE_6,
+        'SIZE_8': dancers_tShirtSize.SIZE_8,
+        'SIZE_10': dancers_tShirtSize.SIZE_10,
+        'SIZE_12': dancers_tShirtSize.SIZE_12,
+        'SIZE_14': dancers_tShirtSize.SIZE_14,
+        'SIZE_16': dancers_tShirtSize.SIZE_16,
+        'XXS': dancers_tShirtSize.XXS,
+        'XS': dancers_tShirtSize.XS,
+        'S': dancers_tShirtSize.S,
+        'M': dancers_tShirtSize.M,
+        'L': dancers_tShirtSize.L,
+        'XL': dancers_tShirtSize.XL,
+        'XXL': dancers_tShirtSize.XXL,
+        'XXXL': dancers_tShirtSize.XXXL
       }
       
-      // Sinon, convertir les valeurs numériques ou autres formats
-      const mapping: Record<string, string> = {
-        '6': 'SIZE_6',
-        '8': 'SIZE_8',
-        '10': 'SIZE_10',
-        '12': 'SIZE_12',
-        '14': 'SIZE_14',
-        '16': 'SIZE_16',
-        'XXS': 'XXS',
-        'XS': 'XS',
-        'S': 'S',
-        'M': 'M',
-        'L': 'L',
-        'XL': 'XL',
-        'XXL': 'XXL',
-        'XXXL': 'XXXL'
+      const result = mapping[size]
+      if (!result) {
+        console.warn(`Taille de t-shirt non reconnue: ${size}, utilisation de M par défaut`)
+        return dancers_tShirtSize.M
       }
-      return mapping[size] || 'M'
+      return result
     }
 
     // Fonction pour convertir les anciennes valeurs vers les nouvelles
@@ -163,6 +168,16 @@ export default defineEventHandler(async (event) => {
     }
 
     // 1. Créer le danseur
+    const tShirtSizeInput = step1.tShirtSize || step1.tshirtSize || 'M'
+    const convertedTShirtSize = convertTShirtSize(tShirtSizeInput)
+    
+    // Log pour debug en production
+    console.log('TShirt size conversion:', {
+      input: tShirtSizeInput,
+      converted: convertedTShirtSize,
+      enumValues: Object.values(dancers_tShirtSize)
+    })
+    
     const dancer = await prisma.dancer.create({
       data: {
         userId: userId,
@@ -175,7 +190,7 @@ export default defineEventHandler(async (event) => {
         city: step1.city || 'Non spécifié',
         phone: step1.phone,
         schoolLevel: convertSchoolLevel(step1.schoolLevel || 'ADULTE') as dancers_schoolLevel,
-        tShirtSize: convertTShirtSize(step1.tShirtSize || step1.tshirtSize || 'M') as dancers_tShirtSize,
+        tShirtSize: convertedTShirtSize,
         otherInfo: step1.otherInfo || null,
       }
     })
