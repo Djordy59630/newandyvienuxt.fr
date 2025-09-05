@@ -38,7 +38,8 @@
       "Read(/C:\\wamp64\\www\\newandyvienuxt.fr\\server/**)",
       "Read(/C:\\wamp64\\www\\newandyvienuxt.fr\\server\\api\\inscriptions/**)",
       "Read(/C:\\wamp64\\www\\newandyvienuxt.fr\\server\\api\\inscriptions/**)",
-      "Read(/C:\\wamp64\\www\\newandyvienuxt.fr\\server\\api\\inscriptions/**)"
+      "Read(/C:\\wamp64\\www\\newandyvienuxt.fr\\server\\api\\inscriptions/**)",
+      "Read(/C:\\wamp64\\www\\newandyvienuxt.fr\\app\\pages\\inscription/**)"
     ],
     "deny": [],
     "ask": []

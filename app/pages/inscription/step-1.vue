@@ -94,34 +94,34 @@
             </div>
             <div v-else>
               <p v-if="currentStep === 'email'" class="text-gray-800 text-lg leading-relaxed">
-                Parfait ! Pour commencer, j'ai besoin de ton adresse email.
+                Parfait ! Pour commencer, j'ai besoin de l'adresse email du danseur.
               </p>
               <p v-else-if="currentStep === 'firstName'" class="text-gray-800 text-lg leading-relaxed">
-                Merci ! Maintenant, quel est ton prénom ?
+                Merci ! Maintenant, quel est le prénom du danseur ?
               </p>
               <p v-else-if="currentStep === 'lastName'" class="text-gray-800 text-lg leading-relaxed">
-                Parfait ! Et ton nom de famille ?
+                Parfait ! Et le nom de famille du danseur ?
               </p>
               <p v-else-if="currentStep === 'birthDate'" class="text-gray-800 text-lg leading-relaxed">
-                Super ! Maintenant, quelle est ta date de naissance ?
+                Super ! Maintenant, quelle est la date de naissance du danseur ?
               </p>
               <p v-else-if="currentStep === 'address'" class="text-gray-800 text-lg leading-relaxed">
-                Merci ! Où habites-tu ? J'ai besoin de ton adresse complète.
+                Merci ! Où habite le danseur ? J'ai besoin de son adresse complète.
               </p>
               <p v-else-if="currentStep === 'phone'" class="text-gray-800 text-lg leading-relaxed">
-                Parfait ! Quel est ton numéro de téléphone ?
+                Parfait ! Quel est le numéro de téléphone du danseur ?
               </p>
               <p v-else-if="currentStep === 'schoolLevel'" class="text-gray-800 text-lg leading-relaxed">
-                Génial ! Quel est ton niveau scolaire actuel ?
+                Génial ! Quel est le niveau scolaire actuel du danseur ?
               </p>
               <p v-else-if="currentStep === 'tshirtSize'" class="text-gray-800 text-lg leading-relaxed">
-                Super ! Quelle est ta taille de t-shirt ?
+                Super ! Quelle est la taille de t-shirt du danseur ?
               </p>
               <p v-else-if="currentStep === 'otherInfo'" class="text-gray-800 text-lg leading-relaxed">
-                Presque fini ! Y a-t-il d'autres informations que tu souhaites nous communiquer ?
+                Presque fini ! Y a-t-il d'autres informations concernant le danseur que vous souhaitez nous communiquer ?
               </p>
               <p v-else-if="currentStep === 'final'" class="text-gray-800 text-lg leading-relaxed">
-                Excellent ! J'ai toutes tes informations de base. Prêt(e) à continuer ?
+                Excellent ! J'ai toutes les informations de base du danseur. Prêt(e) à continuer ?
               </p>
             </div>
           </div>
@@ -136,7 +136,7 @@
               type="email"
               class="answer-input"
               :class="{ 'border-red-500 border-2': validationErrors.email }"
-              placeholder="ton.email@exemple.com"
+              placeholder="email.danseur@exemple.com"
               @keyup.enter="handleEmailSubmit"
               @input="validationErrors.email = ''"
               :disabled="loading"
@@ -170,7 +170,7 @@
               type="text"
               class="answer-input"
               :class="{ 'border-red-500 border-2': validationErrors.firstName }"
-              placeholder="Ton prénom"
+              placeholder="Prénom du danseur"
               @keyup.enter="handleFirstNameSubmit"
               @input="validationErrors.firstName = ''"
               :disabled="loading"
@@ -221,7 +221,7 @@
               type="text"
               class="answer-input"
               :class="{ 'border-red-500 border-2': validationErrors.lastName }"
-              placeholder="Ton nom"
+              placeholder="Nom du danseur"
               @keyup.enter="handleLastNameSubmit"
               @input="validationErrors.lastName = ''"
               :disabled="loading"
@@ -283,7 +283,7 @@
               {{ validationErrors.birthDate }}
             </div>
             <div v-if="form.birthDate && isMinor && !validationErrors.birthDate" class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-700 text-sm">
-              ℹ️ Tu es mineur(e), nous aurons besoin des informations de ton responsable légal à l'étape suivante.
+              ℹ️ Le danseur est mineur(e), nous aurons besoin des informations de son responsable légal à l'étape suivante.
             </div>
           </div>
           
@@ -466,7 +466,7 @@
               :disabled="loading"
               required
             >
-              <option value="">Sélectionne ton niveau</option>
+              <option value="">Sélectionne le niveau du danseur</option>
               <option value="CP">CP</option>
               <option value="CE1">CE1</option>
               <option value="CE2">CE2</option>
@@ -530,7 +530,7 @@
               :disabled="loading"
               required
             >
-              <option value="">Choisis ta taille</option>
+              <option value="">Choisis la taille du danseur</option>
               <option value="6">6</option>
               <option value="8">8</option>
               <option value="10">10</option>
@@ -589,7 +589,7 @@
             <textarea
               v-model="form.otherInfo"
               class="answer-input"
-              placeholder="Partage-nous toute information que tu juges utile (allergies, besoins spéciaux, etc.)"
+              placeholder="Partagez-nous toute information concernant le danseur que vous jugez utile (allergies, besoins spéciaux, etc.)"
               rows="4"
               :disabled="loading"
             ></textarea>
@@ -636,7 +636,7 @@
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
-                <strong>Récapitulatif de tes informations :</strong>
+                <strong>Récapitulatif des informations du danseur :</strong>
               </div>
               <div class="space-y-1">
                 <div>{{ form.firstName }} {{ form.lastName }}</div>
@@ -687,7 +687,7 @@
         <div v-if="hasExistingRegistration && currentStep === 'greeting'" class="space-y-6 mt-8">
           <div class="bg-orange-50 border border-orange-200 rounded-xl p-6">
             <h3 class="text-lg font-semibold text-orange-800 mb-2">Inscription déjà existante</h3>
-            <p class="text-orange-700 mb-4">Tu as déjà une demande d'inscription en cours. Si tu souhaites la modifier, contacte l'administration.</p>
+            <p class="text-orange-700 mb-4">Vous avez déjà une demande d'inscription en cours. Si vous souhaitez la modifier, contactez l'administration.</p>
             <div class="flex space-x-4">
               <button
                 @click="navigateTo('/dashboard')"
@@ -825,7 +825,7 @@ const form = ref({
   otherInfo: ''
 })
 
-const fullText = ref("Salut ! Moi c'est Damien.C, ton assistant virtuel pour Square630 ! 🤖✨ Je vais t'accompagner dans ton inscription étape par étape. C'est parti, commençons par faire connaissance ! 😊")
+const fullText = ref("Salut ! Moi c'est Damien.C, ton assistant virtuel pour Square630 ! 🤖✨ Je vais t'accompagner dans l'inscription du danseur étape par étape. C'est parti, commençons par recueillir les informations du danseur ! 😊")
 const hasExistingRegistration = ref(false)
 const existingDancer = ref<DancerInfo | null>(null)
 
@@ -852,7 +852,7 @@ const checkExistingRegistration = async () => {
     if (response.hasExistingRegistration && response.dancer) {
       hasExistingRegistration.value = true
       existingDancer.value = response.dancer
-      fullText.value = `Bonjour ${response.dancer.firstName} ! 👋 Je vois que tu as déjà une demande d'inscription en cours. Tu ne peux avoir qu'un seul dossier d'inscription par compte. Si tu souhaites modifier ton inscription, contacte l'administration. 📧`
+      fullText.value = `Bonjour ${response.dancer.firstName} ! 👋 Je vois que vous avez déjà une demande d'inscription en cours. Vous ne pouvez avoir qu'un seul dossier d'inscription par compte. Si vous souhaitez modifier votre inscription, contactez l'administration. 📧`
       typeText()
       return true
     }
