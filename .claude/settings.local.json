@@ -33,7 +33,11 @@
       "Bash(dir \"C:\\wamp64\\www\\newandyvienuxt.fr\\server\\middleware\")",
       "Read(/C:\\wamp64\\www\\newandyvienuxt.fr/**)",
       "Read(/C:\\wamp64\\www\\newandyvienuxt.fr\\server\\utils/**)",
-      "Read(/C:\\wamp64\\www\\newandyvienuxt.fr\\server\\api\\auth/**)"
+      "Read(/C:\\wamp64\\www\\newandyvienuxt.fr\\server\\api\\auth/**)",
+      "Read(/C:\\wamp64\\www\\newandyvienuxt.fr\\prisma/**)",
+      "Read(/C:\\wamp64\\www\\newandyvienuxt.fr\\server/**)",
+      "Read(/C:\\wamp64\\www\\newandyvienuxt.fr\\server\\api\\inscriptions/**)",
+      "Read(/C:\\wamp64\\www\\newandyvienuxt.fr\\server\\api\\inscriptions/**)"
     ],
     "deny": [],
     "ask": []

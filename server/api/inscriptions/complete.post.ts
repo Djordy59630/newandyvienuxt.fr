@@ -101,6 +101,14 @@ export default defineEventHandler(async (event) => {
 
     // Fonction pour convertir les tailles de t-shirt
     const convertTShirtSize = (size: string): string => {
+      // Si c'est déjà une valeur enum valide, la retourner directement
+      const validEnumValues = ['SIZE_6', 'SIZE_8', 'SIZE_10', 'SIZE_12', 'SIZE_14', 'SIZE_16', 
+                               'XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
+      if (validEnumValues.includes(size)) {
+        return size
+      }
+      
+      // Sinon, convertir les valeurs numériques ou autres formats
       const mapping: Record<string, string> = {
         '6': 'SIZE_6',
         '8': 'SIZE_8',
@@ -167,7 +175,7 @@ export default defineEventHandler(async (event) => {
         city: step1.city || 'Non spécifié',
         phone: step1.phone,
         schoolLevel: convertSchoolLevel(step1.schoolLevel || 'ADULTE') as dancers_schoolLevel,
-        tShirtSize: convertTShirtSize(step1.tshirtSize || step1.tShirtSize || 'M') as dancers_tShirtSize,
+        tShirtSize: convertTShirtSize(step1.tShirtSize || step1.tshirtSize || 'M') as dancers_tShirtSize,
         otherInfo: step1.otherInfo || null,
       }
     })
